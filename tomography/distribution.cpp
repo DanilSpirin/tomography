@@ -102,9 +102,9 @@ double ChepmanLayer::value(const point R, const double time) const {
     double longitute = R.R[0], latitude = R.R[1], h = R.R[2]-Re;
 	
 	double zenith;	//zenith = cos зенитного угла
-	double angle;	//часовой угол Солнца(НА ГРИНВИЧСКОМ МЕРИДИАНЕ!! ) т.е. к нему нужно добавить долготу ! 
+	double angle;	//часовой угол Солнца (на гринвиче) т.е. к нему нужно добавить долготу !
 	double declination; //склонение Солнца
-	double UT = ((double)time-dt)/60.0/60.0;	//всемирное время
+	double UT = ((double)time-dt)/60.0/60.0;    //всемирное время
 	double ksi;
     
 	declination = asin(sin(23.45/180.0*pi)*sin(2*pi/365.0*(double(d) - 82.0))); //осуществлен перевод в радианы
