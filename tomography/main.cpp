@@ -72,7 +72,7 @@ int main (int argc, const char * argv[]) {
 //            (*j).integral = integral(*j, &chepmanLayer);
 //        }
 //    }
-//    
+
     Solution solution;
     solution.setLimits(-10.0, 40.0, 30.0, 70.0, timeStart, timeFinish);
 

@@ -30,9 +30,11 @@ vector<float> computeVectorResidual(const Grid &x, const vector<VectorSparse> &A
 
 // Критерий отбора для файлов
 int sel(const struct dirent *d);
+
 // Сканирование указанной директории
-//vector<vector<Ray> > getData(char *p);
 vector<vector<Ray> > getData(const char *p, int timeStart = 0, int timeFinish = 24);
+
+// Координаты станций
 list<pair<double, double>> getStationList(vector<vector<Ray>> data);
 
 

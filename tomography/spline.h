@@ -16,7 +16,7 @@ public:
     void build(const double *x, const double *y, std::size_t n); // построение сплайна по n точкам (x, y)
     double operator() (double x); // возвращает значение в точке x
 private:
-    //структура описывающая сплайн на каждом сегменте сетки 
+    //структура, описывающая сплайн на каждом сегменте сетки
     struct SplineTuple{
         double a, b, c, d, x;
     };

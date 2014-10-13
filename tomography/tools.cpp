@@ -171,7 +171,7 @@ void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<float
     limit = (iterations*2*secondRes - iterations*firstRes)/iterations;
     cout << limit << endl;
     currentRes = secondRes;
-    while (currentRes/limit > 1+error) {
+    while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
         currentRes = computeResidual(grid, matrix, integrals)/initialResidual;
         counter++;
@@ -196,7 +196,7 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
     latitude.toRadian();
     longitude.toRadian();
     double reconstructionSum = 0, modelSum = 0;
-    int density = 100;
+    int density = 100; // Количество точек по оси, по которым строится область
     for (int t = timeStart; t < timeFinish; ++t) {
         for (int i = 0; i <= density; ++i) {
             for (int j = 0; j <= density; ++j) {
