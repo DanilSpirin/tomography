@@ -26,7 +26,7 @@ int timeStart, timeFinish;
 string pathToData = "/Users/imaginary/Documents/Science/2012_103_10/";
 string pathToProcessedData = pathToData + "tec_processed_model/";
 
-int main (int argc, const char * argv[]) {
+int main(int argc, const char * argv[]) {
     ofstream crudeOut, accurateOut, sumOut, modelOut;
     
     Rectangle integral;
@@ -224,4 +224,3 @@ int main (int argc, const char * argv[]) {
     delete chepmanLayer.coordinateTransformation;
     return 0;
 }
-
