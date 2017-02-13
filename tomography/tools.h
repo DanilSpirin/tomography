@@ -1,13 +1,4 @@
-//
-//  tools.h
-//  vector_3D_task
-//
-//  Created by Даниил Спирин on 19.05.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef vector_3D_task_tools_h
-#define vector_3D_task_tools_h
+#pragma once
 
 #include "vector_sparse.h"
 #include "grid.h"
@@ -45,5 +36,3 @@ double degreeToRadian(double degree);
 double radianToDegree(double radian);
 
 list<int> createListOfIntervals(int first, int last);
-
-#endif

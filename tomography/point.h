@@ -1,13 +1,4 @@
-//
-//  point.h
-//  vector_3D_task
-//
-//  Created by Даниил Спирин on 11.05.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef vector_3D_task_point_h
-#define vector_3D_task_point_h
+#pragma once
 
 static const double Re = 6371; // средний радиус земли
 static const double pi = 3.14159265; // число пи
@@ -28,4 +19,3 @@ double operator * (const point &a, const point& b);
 
 std::ostream& operator << (std::ostream& out, point& a);
 std::istream& operator >> (std::istream& in, point& a);
-#endif

@@ -1,11 +1,3 @@
-//
-//  vector_sparse.cpp
-//  vector_3D_task
-//
-//  Created by Даниил Спирин on 11.05.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
 #include <iostream>
 #include "vector_sparse.h"
 

@@ -1,14 +1,4 @@
-//
-//  solution.h
-//  tomography
-//
-//  Created by Даниил Спирин on 17.11.13.
-//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef tomography_solution_h
-#define tomography_solution_h
-
+#pragma once
 #include "grid.h"
 #include "tools.h"
 
@@ -27,5 +17,3 @@ public:
     void find();
     void print();
 };
-
-#endif

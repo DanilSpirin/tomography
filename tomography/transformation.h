@@ -1,14 +1,4 @@
-//
-//  transformation.h
-//  model
-//
-//  Created by Даниил Спирин on 12.09.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef model_transformation_h
-#define model_transformation_h
-
+#pragma once
 #include "point.h"
 
 
@@ -24,5 +14,3 @@ public:
     void forward(point &R);
     void backward(point &R);
 };
-
-#endif

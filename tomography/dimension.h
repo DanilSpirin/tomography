@@ -1,13 +1,4 @@
-//
-//  dimension.h
-//  model
-//
-//  Created by Даниил Спирин on 29.05.13.
-//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef model_dimension_h
-#define model_dimension_h
+#pragma once
 
 struct Dimension {
     double left, right;
@@ -20,5 +11,3 @@ struct Dimension {
 private:
     bool inDegrees;
 };
-
-#endif

@@ -1,13 +1,4 @@
-//
-//  distribution.h
-//  model
-//
-//  Created by Даниил Спирин on 12.09.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef model_distribution_h
-#define model_distribution_h
+#pragma once
 
 #include <vector>
 
@@ -62,5 +53,3 @@ private:
     vector<Spot> spots;
     vector<Wave> waves;
 };
-
-#endif

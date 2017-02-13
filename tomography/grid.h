@@ -1,14 +1,4 @@
-//
-//  grid.h
-//  vector_3D_task
-//
-//  Created by Даниил Спирин on 11.05.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-#ifndef vector_3D_task_grid_h
-#define vector_3D_task_grid_h
-
+#pragma once
 
 #include <vector>
 #include "vector_sparse.h"
@@ -32,5 +22,3 @@ private:
     void expand();
     void expander(double &left, double &right, size_t &intervals);
 };
-
-#endif
