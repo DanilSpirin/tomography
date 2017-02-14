@@ -177,11 +177,11 @@ void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<float
 
 
 double degreeToRadian(double degree){
-    return degree/180*pi;
+    return degree / 180 * pi;
 }
 
 double radianToDegree(double radian) {
-    return radian*180/pi;
+    return radian * 180 / pi;
 }
 
 void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatrix, vector<float> integrals, bool useSecondGrid, ElectronDensityDistribution *model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {

@@ -51,8 +51,9 @@ void Solution::find() {
         }
         
     }
-    else
+    else {
         cout << "No grids, can't solve" << endl;
+    }
 }
 
 void Solution::print() {
@@ -80,8 +81,12 @@ void Solution::print() {
                 for (auto it = grids.begin(); it != grids.end(); ++it) {
                     sum += (*it)(phi, theta, time);
                 }
-                if (sum < min) min = sum;
-                if (sum > max) max = sum;
+                if (sum < min) {
+                    min = sum;
+                }
+                if (sum > max) {
+                    max = sum;
+                }
                 
                 out << sum;
                 (y != density) ? (out << " ") : (out << endl);

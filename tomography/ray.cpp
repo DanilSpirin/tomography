@@ -30,7 +30,9 @@ void Ray::computeCross() {
 }
 void Ray::computeAngles() {
     double ac = (cross * (satellite - station)) / sqrt((cross * cross) * ((satellite - station) * (satellite - station)));
-    if (ac > 1) ac = 1;
+    if (ac > 1) {
+        ac = 1;
+    }
     angle = acos(ac);
     thetta = asin(cross.R[2] / (Re + h));
     phi = atan2(cross.R[1], cross.R[0]);

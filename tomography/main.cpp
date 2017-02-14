@@ -11,11 +11,11 @@
 #include "solution.h"
 
 bool useSecondGrid = true;
-bool calcParametrs = true;
+bool calcParametrs = false;
 
 int timeStart, timeFinish;
 
-string pathToData = "/Users/imaginary/Documents/Science/2012_103_10/";
+string pathToData = "/Users/imaginary/Documents/Science/2003_302_1/";
 string pathToProcessedData = pathToData + "tec_processed_model/";
 
 int main(int argc, const char * argv[]) {
@@ -28,10 +28,6 @@ int main(int argc, const char * argv[]) {
     chepmanLayer.addSpot(point(2.5, 45), 12, pi/6, 300, 0.2);
     chepmanLayer.addSpot(point(12, 40), 12, pi/4, 300, 0.2);
     
-//    chepmanLayer.addSpot(point(25, 45), 12, pi/12, 150, 0.4);
-//    chepmanLayer.addSpot(point(-5, 40), 12, pi/6, 300, 0.3);
-//    chepmanLayer.addSpot(point(10, 50), 12, pi/3, 250, 0.1);
-
     chepmanLayer.addWave(point(10, 40, Re), 32400, 1500, 0.3); // 25 minutes
     chepmanLayer.addWave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
     chepmanLayer.addWave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
@@ -39,7 +35,7 @@ int main(int argc, const char * argv[]) {
 
     timeStart = 0, timeFinish = 24;
     
-    list<int> crudeIntervalsDim = createListOfIntervals(2, 2);
+    list<int> crudeIntervalsDim = createListOfIntervals(8, 8);
     list<int> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
     list<int> accIntervalsDim = createListOfIntervals(36, 36);
     list<int> accIntervalsTime = createListOfIntervals(240, 240);
@@ -159,11 +155,19 @@ int main(int argc, const char * argv[]) {
                     crudeValue = crude(phi, theta, time);
                     modelValue = integral(L, &chepmanLayer);
                     
-                    if (crudeValue < crudeMin) crudeMin = crudeValue;
-                    if (crudeValue > crudeMax) crudeMax = crudeValue;
+                    if (crudeValue < crudeMin) {
+                        crudeMin = crudeValue;
+                    }
+                    if (crudeValue > crudeMax) {
+                        crudeMax = crudeValue;
+                    }
                     
-                    if (modelValue < modelMin) modelMin = modelValue;
-                    if (modelValue > modelMax) modelMax = modelValue;
+                    if (modelValue < modelMin) {
+                        modelMin = modelValue;
+                    }
+                    if (modelValue > modelMax) {
+                        modelMax = modelValue;
+                    }
                     
                     crudeOut << crudeValue;                
                     (j != density) ? (crudeOut << " ") : (crudeOut << endl);
@@ -176,11 +180,19 @@ int main(int argc, const char * argv[]) {
                         accurateValue = accurate(phi, theta, time);
                         sumValue = crudeValue + accurateValue;
                         
-                        if (accurateValue < accurateMin) accurateMin = accurateValue;
-                        if (accurateValue > accurateMax) accurateMax = accurateValue;
+                        if (accurateValue < accurateMin) {
+                            accurateMin = accurateValue;
+                        }
+                        if (accurateValue > accurateMax) {
+                            accurateMax = accurateValue;
+                        }
                         
-                        if (sumValue < sumMin) sumMin = sumValue;
-                        if (sumValue > sumMax) sumMax = sumValue;
+                        if (sumValue < sumMin) {
+                            sumMin = sumValue;
+                        }
+                        if (sumValue > sumMax) {
+                            sumMax = sumValue;
+                        }
                         
                         accurateOut << accurateValue;
                         (j != density) ? (accurateOut << " ") : (accurateOut << endl);

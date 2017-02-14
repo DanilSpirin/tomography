@@ -30,14 +30,16 @@ VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
     VectorSparse c;
     int i1 = 0, i2 = 0;
     while(i1 < a.getSize() || i2 < b.getSize()) {
-		if(i1<a.getSize() && (i2==b.getSize() || a.number[i1]<b.number[i2])) {
-			c.add(a.phi[i1],a.number[i1]);
+		if(i1 < a.getSize() && (i2 == b.getSize() || a.number[i1] < b.number[i2])) {
+			c.add(a.phi[i1], a.number[i1]);
 			i1++;
-		} else if (i2 < b.getSize() && (i1==a.getSize() || b.number[i2]<a.number[i1])) {
-			c.add(-b.phi[i2],b.number[i2]);
+		}
+        else if (i2 < b.getSize() && (i1 == a.getSize() || b.number[i2] < a.number[i1])) {
+			c.add(-b.phi[i2], b.number[i2]);
 			i2++;
-		} else {
-			c.add(a.phi[i1]-b.phi[i2],a.number[i1]);
+		}
+        else {
+			c.add(a.phi[i1]-b.phi[i2], a.number[i1]);
 			i1++;
 			i2++;
 		}

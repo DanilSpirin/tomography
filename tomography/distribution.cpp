@@ -51,10 +51,12 @@ Wave::Wave(const Wave &a) {
 }
 double Wave::p(const double r, const double v, const double T) const {
     double r0 = v * T / 2;
-    if (r < r0)
-        return 1/2*(1-cos(pi*r/r0));
-    else
+    if (r < r0) {
+        return 1 / 2 * (1 - cos(pi * r / r0));
+    }
+    else {
         return 1;
+    }
 }
 
 double Wave::f(const double t, const double T, const double n) const {
@@ -67,7 +69,7 @@ double Wave::operator()(const point R_a, const double time) const {
     DecartToGeographic transformation;
     transformation.backward(R);
     transformation.backward(Rc);
-double r = sqrt((R.R[0]-Rc.R[0])*(R.R[0]-Rc.R[0]) + (R.R[1]-Rc.R[1])*(R.R[1]-Rc.R[1]) + (R.R[2]-Rc.R[2])*(R.R[2]-Rc.R[2]));
+    double r = sqrt((R.R[0]-Rc.R[0])*(R.R[0]-Rc.R[0]) + (R.R[1]-Rc.R[1])*(R.R[1]-Rc.R[1]) + (R.R[2]-Rc.R[2])*(R.R[2]-Rc.R[2]));
     double n = 2;
     return p(r, speed, period) * f(r/speed - (time-start), period, n); 
 }

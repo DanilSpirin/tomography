@@ -13,16 +13,18 @@ void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<float> &m
             aa += a[i].getPhi(k)*a[i].getPhi(k);
             ax += a[i].getPhi(k)*x[a[i].getNumber(k)];
         }
-        if (aa == 0)
+        if (aa == 0) {
             continue;
+        }
         t = (m[i] - ax) / aa;
         for (int j = 0; j < a[i].getSize(); ++j) {
             x[a[i].getNumber(j)] += (a[i].getPhi(j) * t);
         }
         if (onlyPositive) {
             for (int j = 0; j < x.size(); ++j) {
-                if (x[j] < 0)
+                if (x[j] < 0) {
                     x[j] = 0;
+                }
             }
         }
     }
@@ -59,7 +61,7 @@ void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<float> &
         sum1 += axy[j]*adx[j];
         sum2 += adx[j]*adx[j];
     }
-    t = -sum1/sum2;
+    t = -sum1 / sum2;
     
     // Вычисляем новый x
     for (int k = 0; k < x.size(); ++k) {

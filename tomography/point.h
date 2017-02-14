@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 static const double Re = 6371; // средний радиус земли
 static const double pi = 3.14159265; // число пи
 static const double h = 300; // высота тонкого слоя
