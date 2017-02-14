@@ -28,7 +28,7 @@ point operator - (const point& a, const point& b) {
 }
 
 double operator * (const point& a, const point& b) {
-    return a.R[0]*b.R[0] + a.R[1]*b.R[1] + a.R[2]*b.R[2];
+    return a.R[0] * b.R[0] + a.R[1] * b.R[1] + a.R[2] * b.R[2];
 }
 
 point operator * (const point& a, const double& b) {
@@ -43,6 +43,14 @@ point operator * (const double& a, const point& b) {
     point c;
     for (int i = 0; i < 3; ++i) {
         c.R[i] = a * b.R[i];
+    }
+    return c;
+}
+
+point operator / (const point& a, const double& b) {
+    point c;
+    for (int i = 0; i < 3; ++i) {
+        c.R[i] = a.R[i] / b;
     }
     return c;
 }

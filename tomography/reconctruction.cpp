@@ -6,12 +6,12 @@
 
 using namespace std;
 
-void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<float> &m, bool onlyPositive) {
+void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive) {
     for (int i = 0; i < m.size(); ++i) {
         double t = 0, aa = 0, ax = 0;
         for (int k = 0; k < a[i].getSize(); ++k) {
-            aa += a[i].getPhi(k)*a[i].getPhi(k);
-            ax += a[i].getPhi(k)*x[a[i].getNumber(k)];
+            aa += a[i].getPhi(k) * a[i].getPhi(k);
+            ax += a[i].getPhi(k) * x[a[i].getNumber(k)];
         }
         if (aa == 0) {
             continue;
@@ -30,14 +30,14 @@ void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<float> &m
     }
 }
 
-void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<float> &m, bool onlyPositive) {
+void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive) {
     // Вычисление приращения dx
     vector<float> dx(x.size(), 0);
     double t = 0;
     for (int i = 0; i < m.size(); ++i) {
         double ax = 0;
         for (int j = 0; j < a[i].getSize(); ++j) {
-            ax += a[i].getPhi(j)*x[a[i].getNumber(j)];
+            ax += a[i].getPhi(j) * x[a[i].getNumber(j)];
         }
         for (int j = 0; j < a[i].getSize() ; ++j) {
             dx[a[i].getNumber(j)] += (m[i] - ax)*a[i].getPhi(j);

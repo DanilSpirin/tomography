@@ -4,14 +4,13 @@
 #include "ray.h"
 #include "transformation.h"
 
-using namespace std;
 
 std::istream& operator >> (std::istream& in, Ray &c) {
     in >> c.station >> c.satellite >> c.time >> c.integral;
     return in;
 }
 std::ostream& operator << (std::ostream& out, Ray c) {
-    out << c.station << endl << c.satellite << " " << c.time << " " << c.integral;
+    out << c.station << '\n' << c.satellite << " " << c.time << " " << c.integral;
     return out;
 }
 

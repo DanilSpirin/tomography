@@ -10,7 +10,7 @@
 #include "tools.h"
 #include "solution.h"
 
-bool useSecondGrid = true;
+bool useSecondGrid = false;
 bool calcParametrs = false;
 
 int timeStart, timeFinish;
@@ -24,16 +24,17 @@ int main(int argc, const char * argv[]) {
     Rectangle integral;
     ChepmanLayer chepmanLayer;
 
-    chepmanLayer.addSpot(point(30, 55), 12, pi/24, 150, 0.5);
-    chepmanLayer.addSpot(point(2.5, 45), 12, pi/6, 300, 0.2);
-    chepmanLayer.addSpot(point(12, 40), 12, pi/4, 300, 0.2);
+    chepmanLayer.addSpot(point(30, 55), 12, pi / 24, 150, 0.5);
+    chepmanLayer.addSpot(point(2.5, 45), 12, pi / 6, 300, 0.2);
+    chepmanLayer.addSpot(point(12, 40), 12, pi / 4, 300, 0.2);
     
     chepmanLayer.addWave(point(10, 40, Re), 32400, 1500, 0.3); // 25 minutes
     chepmanLayer.addWave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
     chepmanLayer.addWave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
 
 
-    timeStart = 0, timeFinish = 24;
+    timeStart = 0;
+    timeFinish = 24;
     
     list<int> crudeIntervalsDim = createListOfIntervals(8, 8);
     list<int> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
@@ -47,14 +48,14 @@ int main(int argc, const char * argv[]) {
     list<pair<double, double>> stations = getStationList(data);
 
     ofstream station((pathToProcessedData + "stations_check.txt").c_str());
-    for (auto i = stations.begin(); i != stations.end(); ++i) {
-        station << radianToDegree((*i).first) << " " << radianToDegree((*i).second) << endl;
+    for (const auto &st : stations) {
+        station << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
     }
     station.close();
-    
-    for (auto i = data.begin(); i < data.end(); ++i) {
-        for (auto j = (*i).begin(); j < (*i).end(); ++j) {
-            (*j).integral = integral(*j, &chepmanLayer);
+
+    for (auto &i : data) {
+        for (auto &j : i) {
+            j.integral = integral(j, chepmanLayer);
         }
     }
 
@@ -74,7 +75,7 @@ int main(int argc, const char * argv[]) {
             time = Dimension(double(timeStart * 3600), double(timeFinish * 3600), intervalsT);
 
             vector<VectorSparse> crudeSleMatrix;
-            vector<float> crudeIntegrals;
+            vector<double> crudeIntegrals;
 
             crude.set(latitude, longitude, time);
             dataToSle(data, crudeSleMatrix, crudeIntegrals, crude);
@@ -83,10 +84,10 @@ int main(int argc, const char * argv[]) {
             solveSle(crude, crudeSleMatrix, crudeIntegrals, 0.15);
 
             if (useSecondGrid) {
-                vector<float> accurateIntegrals;
+                vector<double> accurateIntegrals;
                 accurateIntegrals = computeVectorResidual(crude, crudeSleMatrix, crudeIntegrals);
                 vector<VectorSparse>().swap(crudeSleMatrix);
-                vector<float>().swap(crudeIntegrals);
+                vector<double>().swap(crudeIntegrals);
                 for (int intervalsAcc : accIntervalsDim) {
                     for (int intervalsTime : accIntervalsTime) {
                         latitude = Dimension(-10.0, 40.0, intervalsAcc);
@@ -103,13 +104,13 @@ int main(int argc, const char * argv[]) {
                         solveSle(accurate, accurateSleMatrix, accurateIntegrals, 0.1, false);
 
                         if (calcParametrs) {
-                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true, &chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
+                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true,chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
                         }
                     }
                 }
             }
             else if (calcParametrs) {
-                computeParametrs(crude, accurate, crudeSleMatrix, crudeIntegrals, false, &chepmanLayer, latitude, longitude, time, intervals, intervalsT, initialResidual);
+                computeParametrs(crude, accurate, crudeSleMatrix, crudeIntegrals, false, chepmanLayer, latitude, longitude, time, intervals, intervalsT, initialResidual);
             }
         }
         
@@ -144,7 +145,8 @@ int main(int argc, const char * argv[]) {
                     double theta = longitude.left + (longitude.right - longitude.left) / density * j;
                     double time = t * 3600;
                     
-                    point station(phi, theta, Re), satellite(phi, theta, Re+1000);
+                    point station(phi, theta, Re);
+                    point satellite(phi, theta, Re + 1000);
                     chepmanLayer.coordinateTransformation->backward(station);
                     chepmanLayer.coordinateTransformation->backward(satellite);
                     
@@ -153,7 +155,7 @@ int main(int argc, const char * argv[]) {
                     double crudeValue, modelValue;
                     
                     crudeValue = crude(phi, theta, time);
-                    modelValue = integral(L, &chepmanLayer);
+                    modelValue = integral(L, chepmanLayer);
                     
                     if (crudeValue < crudeMin) {
                         crudeMin = crudeValue;
@@ -170,10 +172,10 @@ int main(int argc, const char * argv[]) {
                     }
                     
                     crudeOut << crudeValue;                
-                    (j != density) ? (crudeOut << " ") : (crudeOut << endl);
+                    (j != density) ? (crudeOut << " ") : (crudeOut << '\n');
                     
                     modelOut << modelValue;
-                    (j != density) ? (modelOut << " ") : (modelOut << endl);
+                    (j != density) ? (modelOut << " ") : (modelOut << '\n');
                     
                     if (useSecondGrid) {
                         double accurateValue, sumValue;
@@ -195,9 +197,9 @@ int main(int argc, const char * argv[]) {
                         }
                         
                         accurateOut << accurateValue;
-                        (j != density) ? (accurateOut << " ") : (accurateOut << endl);
+                        (j != density) ? (accurateOut << " ") : (accurateOut << '\n');
                         sumOut << sumValue;
-                        (j != density) ? (sumOut << " ") : (sumOut << endl);
+                        (j != density) ? (sumOut << " ") : (sumOut << '\n');
                     }
                 }
             }
@@ -214,13 +216,13 @@ int main(int argc, const char * argv[]) {
         
         ofstream gridLimits((pathToProcessedData + "limits.txt").c_str());
 
-        gridLimits  << latitude.left << ' ' << latitude.right << endl
-                    << longitude.left << ' ' << longitude.right << endl
-                    << floor(crudeMin) << ' ' << ceil(crudeMax) << endl 
-                    << floor(modelMin) << ' ' << ceil(modelMax) << endl;
+        gridLimits  << latitude.left << ' ' << latitude.right << '\n'
+                    << longitude.left << ' ' << longitude.right << '\n'
+                    << floor(crudeMin) << ' ' << ceil(crudeMax) << '\n'
+                    << floor(modelMin) << ' ' << ceil(modelMax) << '\n';
         if (useSecondGrid) {
-            gridLimits  << floor(accurateMin) << ' ' << ceil(accurateMax) << endl
-                        << floor(sumMin) << ' ' << ceil(sumMax) << endl;
+            gridLimits  << floor(accurateMin) << ' ' << ceil(accurateMax) << '\n'
+                        << floor(sumMin) << ' ' << ceil(sumMax) << '\n';
         }
         gridLimits.close();
     }

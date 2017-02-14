@@ -16,6 +16,7 @@ point operator - (const point&a, const point& b);
 point operator + (const point&a, const point& b);
 point operator * (const double& a, const point& b);
 point operator * (const point& a, const double& b);
+point operator / (const point& a, const double& b);
 double operator * (const point &a, const point& b);
 
 std::ostream& operator << (std::ostream& out, point& a);

@@ -14,14 +14,14 @@
 extern int timeStart, timeFinish;
 extern string pathToProcessedData;
 
-void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, vector<float> &integrals, const Grid &test) {
+void dataToSle(const vector<vector<Ray>> &data, vector<VectorSparse> &phi, vector<double> &integrals, const Grid &test) {
     phi.clear();
     integrals.clear();
     for (int j = 0; j < data.size(); ++j) {
-        for (int i = 0; i < data[j].size()-1; ++i) {
+        for (int i = 0; i < data[j].size() - 1; ++i) {
 //          Разностная схема
-            phi.push_back((1/cos(data[j][i+1].angle)) * test.basis(data[j][i+1].phi, data[j][i+1].thetta, data[j][i+1].time) - (1/cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
-            integrals.push_back(data[j][i+1].integral - data[j][i].integral);
+            phi.push_back((1 / cos(data[j][i + 1].angle)) * test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) - (1 / cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
+            integrals.push_back(data[j][i + 1].integral - data[j][i].integral);
         }
     }
 }
@@ -29,30 +29,30 @@ void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, vect
 void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, const Grid &test) {
     phi.clear();
     for (int j = 0; j < data.size(); ++j) {
-        for (int i = 0; i < data[j].size()-1; ++i) {
-            phi.push_back((1/cos(data[j][i+1].angle)) * test.basis(data[j][i+1].phi, data[j][i+1].thetta, data[j][i+1].time) - (1/cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
+        for (int i = 0; i < data[j].size() - 1; ++i) {
+            phi.push_back((1 / cos(data[j][i + 1].angle)) * test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) - (1 / cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
         }
     }
 }
 
-double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vector<float> &m) {
+double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vector<double> &m) {
     vector<double> difference(m.size(), 0);
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A[i].getSize(); ++j) {
-            difference[i] += A[i].getPhi(j)*x[A[i].getNumber(j)];
+            difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
         }
         difference[i] -= m[i];
     }
     double sum = 0;
     for (int i = 0; i < difference.size(); ++i) {
-        sum += difference[i]*difference[i];
+        sum += difference[i] * difference[i];
     }
     
     return sqrt(sum);
 }
 
-vector<float> computeVectorResidual(const Grid &x, const vector<VectorSparse> &A, const vector<float> &m) {
-    vector<float> difference(m.size(), 0);
+vector<double> computeVectorResidual(const Grid &x, const vector<VectorSparse> &A, const vector<double> &m) {
+    vector<double> difference(m.size(), 0);
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A[i].getSize(); ++j) {
             difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
@@ -72,14 +72,14 @@ int sel(const struct dirent *d) {
     return p ? 1 : 0;
 }
 vector<vector<Ray> > getData(const char *pathToData, int startTime, int finishTime) {
-    ChepmanLayer chepmanLayer;
-    chepmanLayer.coordinateTransformation = new DecartToGeographic;
+//    ChepmanLayer chepmanLayer;
+//    chepmanLayer.coordinateTransformation = new DecartToGeographic;
     startTime *= 3600;
     finishTime *= 3600;
     dirent **nameList;
     int numberOfBundles = scandir(pathToData, &nameList, sel, 0);
     char temp[100];
-    vector<vector<Ray> > data;
+    vector<vector<Ray>> data;
     
     if (numberOfBundles < 0) {
         perror("Scandir");
@@ -127,14 +127,15 @@ list<pair<double, double>> getStationList(vector<vector<Ray>> data) {
     bool found;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
-    for (auto i = data.begin(); i != data.end(); ++i) {
-        for (auto j = (*i).begin(); j != (*i).end(); ++j) {
-            point station = (*j).station;
+    for (const auto& i : data) {
+        for (const auto& j : i) {
+            point station = j.station;
             chepmanLayer.coordinateTransformation->forward(station);
             found = false;
-            for (auto it = stations.begin(); it != stations.end(); ++it) {
-                if ((*it).first == station.R[0] && (*it).second == station.R[1]) {
+            for (const auto& k : stations) {
+                if (k.first == station.R[0] && k.second == station.R[1]) {
                     found = true;
+                    break;
                 }
             }
             if (!found) {
@@ -146,7 +147,7 @@ list<pair<double, double>> getStationList(vector<vector<Ray>> data) {
 }
 
 
-void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<float> integrals, double error, bool onlyPositive) {
+void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<double> integrals, double error, bool onlyPositive) {
     double initialResidual = computeResidual(grid, matrix, integrals);
     double firstRes, secondRes, currentRes;
     double limit = 0;
@@ -155,20 +156,20 @@ void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<float
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    firstRes = computeResidual(grid, matrix, integrals)/initialResidual;
+    firstRes = computeResidual(grid, matrix, integrals) / initialResidual;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    secondRes = computeResidual(grid, matrix, integrals)/initialResidual;
-    limit = (iterations*2*secondRes - iterations*firstRes)/iterations;
+    secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
+    limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
     cout << limit << endl;
     currentRes = secondRes;
     while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
-        currentRes = computeResidual(grid, matrix, integrals)/initialResidual;
-        counter++;
+        currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
+        ++counter;
         if (counter > 500) {
-            cout << "stopped at current/limit = " << currentRes/limit << endl;
+            cout << "stopped at current/limit = " << currentRes / limit << endl;
             break;
         }
         cout << counter << endl;
@@ -184,7 +185,7 @@ double radianToDegree(double radian) {
     return radian * 180 / pi;
 }
 
-void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatrix, vector<float> integrals, bool useSecondGrid, ElectronDensityDistribution *model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
+void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatrix, vector<double> integrals, bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();
     double reconstructionSum = 0, modelSum = 0;
@@ -196,9 +197,10 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
                 double theta = longitude.left + (longitude.right - longitude.left) / density * j;
                 double time = t * 3600;
                 
-                point station(phi, theta, Re), satellite(phi, theta, Re+1000);
-                model->coordinateTransformation->backward(station);
-                model->coordinateTransformation->backward(satellite);
+                point station(phi, theta, Re);
+                point satellite(phi, theta, Re + 1000);
+                model.coordinateTransformation->backward(station);
+                model.coordinateTransformation->backward(satellite);
                 
                 Ray L(station, satellite, time);
                 
@@ -214,10 +216,10 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
                     sumValue = crudeValue + accurateValue;
                 }
                 if (useSecondGrid) {
-                    reconstructionSum += (sumValue - modelValue)*(sumValue - modelValue);
+                    reconstructionSum += (sumValue - modelValue) * (sumValue - modelValue);
                 }
                 else {
-                    reconstructionSum += (crudeValue - modelValue)*(crudeValue - modelValue);
+                    reconstructionSum += (crudeValue - modelValue) * (crudeValue - modelValue);
                 }
             }
         }
@@ -230,12 +232,12 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
     
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
-        parametrs << computeResidual(accurate, sleMatrix, integrals)/initialResidual << '\t';
+        parametrs << computeResidual(accurate, sleMatrix, integrals) / initialResidual << '\t';
     }
     else {
-        parametrs << computeResidual(crude, sleMatrix, integrals)/initialResidual << '\t';
+        parametrs << computeResidual(crude, sleMatrix, integrals) / initialResidual << '\t';
     }
-    parametrs << sqrt(reconstructionSum/modelSum) << '\t' << (longitude.right-longitude.left)/intervals << '\t' << (time.right-time.left)/intervalsTime/60<< endl;
+    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << (longitude.right - longitude.left) / intervals << '\t' << (time.right - time.left) / intervalsTime / 60<< endl;
     parametrs.close();
 
 }

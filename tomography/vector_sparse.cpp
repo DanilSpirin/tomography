@@ -2,7 +2,7 @@
 #include "vector_sparse.h"
 
 
-void VectorSparse::add(float a, int b) {
+void VectorSparse::add(double a, int b) {
     phi.push_back(a);
     number.push_back(b);
 }

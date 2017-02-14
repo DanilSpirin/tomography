@@ -9,13 +9,13 @@ extern string pathToProcessedData;
 
 Solution::Solution() : grids(NULL){};
 
-void Solution::setLimits(float _latitudeLeft, float _latitudeRight, float _longitudeLeft, float _longitudeRight, float _timeLeft, float _timeRight) {
-    this->latitudeLeft = _latitudeLeft;
-    this->latitudeRight = _latitudeRight;
-    this->longitudeLeft = _longitudeLeft;
-    this->longitudeRight = _longitudeRight;
-    this->timeLeft = _timeLeft;
-    this->timeRight = _timeRight;
+void Solution::setLimits(float latitudeLeft, float latitudeRight, float longitudeLeft, float longitudeRight, float timeLeft, float timeRight) {
+    this->latitudeLeft = latitudeLeft;
+    this->latitudeRight = latitudeRight;
+    this->longitudeLeft = longitudeLeft;
+    this->longitudeRight = longitudeRight;
+    this->timeLeft = timeLeft;
+    this->timeRight = timeRight;
 }
 
 void Solution::setModel(ElectronDensityDistribution model) {
@@ -24,7 +24,7 @@ void Solution::setModel(ElectronDensityDistribution model) {
 
 void Solution::addGrid(int spaceIntervals, int timeIntervals) {
     Grid foo;
-    Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals*2);
+    Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals * 2);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
     Dimension time(timeLeft * 3600, timeRight * 3600, timeIntervals);
     foo.set(latitude, longitude, time);
@@ -38,7 +38,7 @@ void Solution::addData(vector<vector<Ray>> _data) {
 void Solution::find() {
     int numberOfGrids = (int)grids.size();
     if (numberOfGrids > 0) {
-        vector<float> currentIntegrals;
+        vector<double> currentIntegrals;
         vector<VectorSparse> currentSleMatrix;
         
         dataToSle(data, currentSleMatrix, currentIntegrals, grids.at(0));

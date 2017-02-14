@@ -6,15 +6,15 @@
 
 class Integration {
 public:
-    virtual double operator()(const BaseRay ray, const ElectronDensityDistribution *model) = 0;
+    virtual double operator()(const BaseRay ray, const ElectronDensityDistribution &model) = 0;
 };
 
 class Trapezium : public Integration {
 public:
-    double operator() (const BaseRay ray, const ElectronDensityDistribution *model);
+    double operator() (const BaseRay ray, const ElectronDensityDistribution &model);
 };
 
 class Rectangle : public Integration {
 public:
-    double operator() (const BaseRay ray, const ElectronDensityDistribution *model);
+    double operator() (const BaseRay ray, const ElectronDensityDistribution &model);
 };
