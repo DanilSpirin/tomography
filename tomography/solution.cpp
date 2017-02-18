@@ -7,7 +7,7 @@
 
 extern string pathToProcessedData;
 
-Solution::Solution() : grids(NULL){};
+Solution::Solution() : grids(0){};
 
 void Solution::setLimits(float latitudeLeft, float latitudeRight, float longitudeLeft, float longitudeRight, float timeLeft, float timeRight) {
     this->latitudeLeft = latitudeLeft;
@@ -40,16 +40,16 @@ void Solution::find() {
     if (numberOfGrids > 0) {
         vector<double> currentIntegrals;
         vector<VectorSparse> currentSleMatrix;
-        
+
         dataToSle(data, currentSleMatrix, currentIntegrals, grids.at(0));
         solveSle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1);
-        
+
         for (int i = 1; i < numberOfGrids; ++i) {
             currentIntegrals = computeVectorResidual(grids.at(i-1), currentSleMatrix, currentIntegrals);
             dataToSle(data, currentSleMatrix, grids.at(i));
             solveSle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
         }
-        
+
     }
     else {
         cout << "No grids, can't solve" << endl;
@@ -60,10 +60,10 @@ void Solution::print() {
     float min = INT_MAX, max = INT_MIN;
     Dimension latitude(latitudeLeft, latitudeRight, 0);
     Dimension longitude(longitudeLeft, longitudeRight, 0);
-    
+
     latitude.toRadian();
     longitude.toRadian();
-    
+
     int density = 150;
 
     ofstream out;
@@ -76,7 +76,7 @@ void Solution::print() {
                 double phi = latitude.left + (latitude.right - latitude.left) / density * x;
                 double theta = longitude.left + (longitude.right - longitude.left) / density * y;
                 double time = i * 3600;
-                
+
                 double sum = 0;
                 for (auto it = grids.begin(); it != grids.end(); ++it) {
                     sum += (*it)(phi, theta, time);
@@ -87,7 +87,7 @@ void Solution::print() {
                 if (sum > max) {
                     max = sum;
                 }
-                
+
                 out << sum;
                 (y != density) ? (out << " ") : (out << endl);
 
@@ -95,10 +95,10 @@ void Solution::print() {
         }
         out.close();
     }
-    
+
     latitude.toDegrees();
     longitude.toDegrees();
-    
+
     sprintf(path, "%s%s", pathToProcessedData.c_str(), "limits.txt");
     ofstream limits(path);
     limits << latitude.left << ' ' << latitude.right << endl << longitude.left << ' ' << longitude.right << endl << floor(min) << ' ' << ceil(max);

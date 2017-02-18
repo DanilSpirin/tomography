@@ -39,8 +39,8 @@ void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<double> 
         for (int j = 0; j < a[i].getSize(); ++j) {
             ax += a[i].getPhi(j) * x[a[i].getNumber(j)];
         }
-        for (int j = 0; j < a[i].getSize() ; ++j) {
-            dx[a[i].getNumber(j)] += (m[i] - ax)*a[i].getPhi(j);
+        for (int j = 0; j < a[i].getSize(); ++j) {
+            dx[a[i].getNumber(j)] += (m[i] - ax) * a[i].getPhi(j);
         }
     }
     // Вычисление коэффициента t для минимизации невязки
@@ -56,13 +56,13 @@ void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<double> 
         adx.push_back(adxj);
         axy.push_back(axyj - m[j]);
     }
-    double sum1=0, sum2=0;
+    double sum1 = 0, sum2 = 0;
     for (int j = 0; j < adx.size(); ++j) {
-        sum1 += axy[j]*adx[j];
-        sum2 += adx[j]*adx[j];
+        sum1 += axy[j] * adx[j];
+        sum2 += adx[j] * adx[j];
     }
     t = -sum1 / sum2;
-    
+
     // Вычисляем новый x
     for (int k = 0; k < x.size(); ++k) {
         x[k] += t * dx[k];

@@ -47,7 +47,7 @@ double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vecto
     for (int i = 0; i < difference.size(); ++i) {
         sum += difference[i] * difference[i];
     }
-    
+
     return sqrt(sum);
 }
 
@@ -67,20 +67,20 @@ vector<double> computeVectorResidual(const Grid &x, const vector<VectorSparse> &
 
 // отсеиваем скрытые файлы и файлы не являющиеся данными
 int sel(const struct dirent *d) {
-    if (!strcmp(".", d->d_name) || !strcmp("..", d->d_name) || !strcmp(".DS_Store", d->d_name)) return 0;
+    if (!strcmp(".", d->d_name) || !strcmp("..", d->d_name) || !strcmp(".DS_Store", d->d_name)) {
+        return 0;
+    }
     char* p = strstr(d->d_name, ".dat");
     return p ? 1 : 0;
 }
-vector<vector<Ray> > getData(const char *pathToData, int startTime, int finishTime) {
-//    ChepmanLayer chepmanLayer;
-//    chepmanLayer.coordinateTransformation = new DecartToGeographic;
+vector<vector<Ray>> getData(const char *pathToData, int startTime, int finishTime) {
     startTime *= 3600;
     finishTime *= 3600;
     dirent **nameList;
     int numberOfBundles = scandir(pathToData, &nameList, sel, 0);
     char temp[100];
     vector<vector<Ray>> data;
-    
+
     if (numberOfBundles < 0) {
         perror("Scandir");
     }
@@ -92,14 +92,14 @@ vector<vector<Ray> > getData(const char *pathToData, int startTime, int finishTi
             vector<Ray> tempBundle;
             sprintf(temp, "%s%s", pathToData, nameList[numberOfBundles]->d_name);
             ifstream gps(temp);
-            
+
             if (!gps) {
                 cout << "Can't open file " << temp << endl;
             }
             else {
                 int numberOfRays;
                 gps >> numberOfRays;
-                
+
                 while (numberOfRays--) {
                     Ray tempRay;
                     gps >> tempRay;
@@ -116,9 +116,9 @@ vector<vector<Ray> > getData(const char *pathToData, int startTime, int finishTi
             free(nameList[numberOfBundles]);
         }
     }
-    
+
     free(nameList);
-    
+
     return data;
 }
 
@@ -196,20 +196,20 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
                 double phi = latitude.left + (latitude.right - latitude.left) / density * i;
                 double theta = longitude.left + (longitude.right - longitude.left) / density * j;
                 double time = t * 3600;
-                
+
                 point station(phi, theta, Re);
                 point satellite(phi, theta, Re + 1000);
                 model.coordinateTransformation->backward(station);
                 model.coordinateTransformation->backward(satellite);
-                
+
                 Ray L(station, satellite, time);
-                
+
                 double crudeValue, accurateValue, sumValue, modelValue;
                 Rectangle integral;
-                
+
                 crudeValue = crude(phi, theta, time);
                 modelValue = integral(L, model);
-                
+
                 modelSum += modelValue * modelValue;
                 if (useSecondGrid) {
                     accurateValue = accurate(phi, theta, time);
@@ -224,12 +224,12 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
             }
         }
     }
-    
+
     latitude.toDegrees();
     longitude.toDegrees();
 
     ofstream parametrs((pathToProcessedData+"parametrs.txt").c_str(), ios::app);
-    
+
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
         parametrs << computeResidual(accurate, sleMatrix, integrals) / initialResidual << '\t';

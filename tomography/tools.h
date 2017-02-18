@@ -12,8 +12,8 @@ using namespace std;
 
 
 // Формирование матрицы задачи из данных
-void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, vector<double> &integrals, const Grid &test);
-void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, const Grid &test);
+void dataToSle(const vector<vector<Ray>> &data, vector<VectorSparse> &phi, vector<double> &integrals, const Grid &test);
+void dataToSle(const vector<vector<Ray>> &data, vector<VectorSparse> &phi, const Grid &test);
 
 // Рассчет невязки системы
 double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vector<double> &m);
@@ -23,7 +23,7 @@ vector<double> computeVectorResidual(const Grid &x, const vector<VectorSparse> &
 int sel(const struct dirent *d);
 
 // Сканирование указанной директории
-vector<vector<Ray> > getData(const char *p, int timeStart = 0, int timeFinish = 24);
+vector<vector<Ray>> getData(const char *p, int timeStart = 0, int timeFinish = 24);
 
 // Координаты станций
 list<pair<double, double>> getStationList(vector<vector<Ray>> data);
