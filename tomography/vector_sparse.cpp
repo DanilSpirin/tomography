@@ -50,7 +50,7 @@ VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
 VectorSparse operator * (const double a, const VectorSparse b) {
     VectorSparse tmp(b);
     for (int i = 0; i < tmp.getSize(); ++i) {
-        tmp.phi[i] = b.phi[i]*a;
+        tmp.phi[i] = b.phi[i] * a;
     }
     return tmp;
 }
@@ -58,7 +58,7 @@ VectorSparse operator * (const double a, const VectorSparse b) {
 VectorSparse operator * (const VectorSparse b, const double a) {
     VectorSparse tmp(b);
     for (int i = 0; i < tmp.getSize(); ++i) {
-        tmp.phi[i] = b.phi[i]*a;
+        tmp.phi[i] = b.phi[i] * a;
     }
     return tmp;
 }

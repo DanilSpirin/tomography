@@ -8,8 +8,8 @@ static const double h = 300; // высота тонкого слоя
 class point {
 public:
     double R[3];
-    point(double x = 0, double y = 0, double z = 0);
-    point(point const &a);
+    point(const double x = 0, const double y = 0, const double z = 0);
+    point(const point &a);
 };
 
 point operator - (const point&a, const point& b);

@@ -11,11 +11,11 @@ bool calcParametrs = false;
 
 int timeStart, timeFinish;
 
-string pathToData = "/Users/imaginary/Documents/Science/2003_302_1/";
-string pathToProcessedData = pathToData + "tec_processed_model/";
+std::string pathToData = "/Users/imaginary/Documents/Science/2003_302_1/";
+std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
 int main(int argc, const char * argv[]) {
-    ofstream crudeOut, accurateOut, sumOut, modelOut;
+    std::ofstream crudeOut, accurateOut, sumOut, modelOut;
 
     Rectangle integral;
     ChepmanLayer chepmanLayer;
@@ -31,18 +31,18 @@ int main(int argc, const char * argv[]) {
     timeStart = 0;
     timeFinish = 24;
 
-    list<int> crudeIntervalsDim = createListOfIntervals(8, 8);
-    list<int> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
-    list<int> accIntervalsDim = createListOfIntervals(36, 36);
-    list<int> accIntervalsTime = createListOfIntervals(240, 240);
+    std::list<int> crudeIntervalsDim = createListOfIntervals(8, 8);
+    std::list<int> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
+    std::list<int> accIntervalsDim = createListOfIntervals(36, 36);
+    std::list<int> accIntervalsTime = createListOfIntervals(240, 240);
 
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
 
-    vector<vector<Ray>> data = getData(pathToData.c_str(), timeStart, timeFinish);
+    std::vector<std::vector<Ray>> data = getData(pathToData.c_str(), timeStart, timeFinish);
 
-    list<pair<double, double>> stations = getStationList(data);
+    std::list<std::pair<double, double>> stations = getStationList(data);
 
-    ofstream station((pathToProcessedData + "stations_check.txt").c_str());
+    std::ofstream station((pathToProcessedData + "stations_check.txt").c_str());
     for (const auto &st : stations) {
         station << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
     }
@@ -59,7 +59,7 @@ int main(int argc, const char * argv[]) {
     Grid crude, accurate;
 
     if (calcParametrs) {
-        ofstream parametrs((pathToProcessedData + "parametrs.txt").c_str());
+        std::ofstream parametrs((pathToProcessedData + "parametrs.txt").c_str());
         parametrs.close();
     }
 
@@ -69,8 +69,8 @@ int main(int argc, const char * argv[]) {
             longitude = Dimension(30.0, 70.0, intervals);
             time = Dimension(double(timeStart * 3600), double(timeFinish * 3600), intervalsT);
 
-            vector<VectorSparse> crudeSleMatrix;
-            vector<double> crudeIntegrals;
+            std::vector<VectorSparse> crudeSleMatrix;
+            std::vector<double> crudeIntegrals;
 
             crude.set(latitude, longitude, time);
             dataToSle(data, crudeSleMatrix, crudeIntegrals, crude);
@@ -79,17 +79,17 @@ int main(int argc, const char * argv[]) {
             solveSle(crude, crudeSleMatrix, crudeIntegrals, 0.15);
 
             if (useSecondGrid) {
-                vector<double> accurateIntegrals;
+                std::vector<double> accurateIntegrals;
                 accurateIntegrals = computeVectorResidual(crude, crudeSleMatrix, crudeIntegrals);
-                vector<VectorSparse>().swap(crudeSleMatrix);
-                vector<double>().swap(crudeIntegrals);
+                std::vector<VectorSparse>().swap(crudeSleMatrix);
+                std::vector<double>().swap(crudeIntegrals);
                 for (int intervalsAcc : accIntervalsDim) {
                     for (int intervalsTime : accIntervalsTime) {
                         latitude = Dimension(-10.0, 40.0, intervalsAcc);
                         longitude = Dimension(30.0, 70.0, intervalsAcc);
                         time = Dimension(double(timeStart * 3600), double(timeFinish * 3600), intervalsTime);
 
-                        vector<VectorSparse> accurateSleMatrix;
+                        std::vector<VectorSparse> accurateSleMatrix;
 
                         accurate.set(latitude, longitude, time);
                         dataToSle(data, accurateSleMatrix, accurate);
@@ -99,7 +99,7 @@ int main(int argc, const char * argv[]) {
                         solveSle(accurate, accurateSleMatrix, accurateIntegrals, 0.1, false);
 
                         if (calcParametrs) {
-                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true,chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
+                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true, chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
                         }
                     }
                 }
@@ -209,7 +209,7 @@ int main(int argc, const char * argv[]) {
         latitude.toDegrees();
         longitude.toDegrees();
 
-        ofstream gridLimits((pathToProcessedData + "limits.txt").c_str());
+        std::ofstream gridLimits((pathToProcessedData + "limits.txt").c_str());
 
         gridLimits << latitude << '\n' << longitude << '\n'
                    << floor(crudeMin) << ' ' << ceil(crudeMax) << '\n'

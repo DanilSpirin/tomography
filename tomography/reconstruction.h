@@ -3,7 +3,6 @@
 #include <vector>
 #include "vector_sparse.h"
 #include "grid.h"
-using namespace std;
 
-void iterationArt(Grid &grid, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive=true);
-void iterationSirt(Grid &grid, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive=true);
+void iterationArt(Grid &grid, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive=true);
+void iterationSirt(Grid &grid, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive=true);

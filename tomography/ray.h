@@ -11,7 +11,7 @@ public:
 class Ray : public BaseRay{
 public:
     double thetta, phi, angle;
-    Ray(const point station, const point satellite, const float time);
+    Ray(const point &station, const point &satellite, const double time);
     Ray();
     point cross;
     void computeParameters();

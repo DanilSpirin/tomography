@@ -1,11 +1,10 @@
 #pragma once
 
 #include <vector>
-using namespace std;
 
 class VectorSparse {
-    vector<double> phi;
-    vector<int> number;
+    std::vector<double> phi;
+    std::vector<int> number;
 public:
     size_t getSize() const {return phi.size() == number.size() ? phi.size() : -1;};
     void add(double a, int b);

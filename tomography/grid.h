@@ -4,9 +4,7 @@
 #include "vector_sparse.h"
 #include "dimension.h"
 
-using namespace std;
-
-class Grid : public vector<double> {
+class Grid : public std::vector<double> {
 public:
     Grid(){};
     void set(const Dimension &latitude, const Dimension &longitude, const Dimension &time);

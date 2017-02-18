@@ -1,20 +1,16 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
-#include <sys/types.h>
 #include <dirent.h>
 
 #include "tools.h"
 #include "math.h"
-#include "ray.h"
-#include "distribution.h"
 #include "integration.h"
 
 extern int timeStart, timeFinish;
-extern string pathToProcessedData;
+extern std::string pathToProcessedData;
 
-void dataToSle(const vector<vector<Ray>> &data, vector<VectorSparse> &phi, vector<double> &integrals, const Grid &test) {
+void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
     phi.clear();
     integrals.clear();
     for (int j = 0; j < data.size(); ++j) {
@@ -26,7 +22,7 @@ void dataToSle(const vector<vector<Ray>> &data, vector<VectorSparse> &phi, vecto
     }
 }
 
-void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, const Grid &test) {
+void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
     phi.clear();
     for (int j = 0; j < data.size(); ++j) {
         for (int i = 0; i < data[j].size() - 1; ++i) {
@@ -35,8 +31,8 @@ void dataToSle(const vector<vector<Ray> > &data, vector<VectorSparse> &phi, cons
     }
 }
 
-double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vector<double> &m) {
-    vector<double> difference(m.size(), 0);
+double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+    std::vector<double> difference(m.size(), 0);
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A[i].getSize(); ++j) {
             difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
@@ -51,8 +47,8 @@ double computeResidual(const Grid &x, const vector<VectorSparse> &A, const vecto
     return sqrt(sum);
 }
 
-vector<double> computeVectorResidual(const Grid &x, const vector<VectorSparse> &A, const vector<double> &m) {
-    vector<double> difference(m.size(), 0);
+std::vector<double> computeVectorResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+    std::vector<double> difference(m.size(), 0);
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A[i].getSize(); ++j) {
             difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
@@ -73,28 +69,28 @@ int sel(const struct dirent *d) {
     char* p = strstr(d->d_name, ".dat");
     return p ? 1 : 0;
 }
-vector<vector<Ray>> getData(const char *pathToData, int startTime, int finishTime) {
+std::vector<std::vector<Ray>> getData(const char *pathToData, int startTime, int finishTime) {
     startTime *= 3600;
     finishTime *= 3600;
     dirent **nameList;
     int numberOfBundles = scandir(pathToData, &nameList, sel, 0);
     char temp[100];
-    vector<vector<Ray>> data;
+    std::vector<std::vector<Ray>> data;
 
     if (numberOfBundles < 0) {
         perror("Scandir");
     }
     else if (numberOfBundles == 0) {
-        cout << "No data files found!" << endl;
+        std::cout << "No data files found!" << std::endl;
     }
     else {
         while (numberOfBundles--) {
-            vector<Ray> tempBundle;
+            std::vector<Ray> tempBundle;
             sprintf(temp, "%s%s", pathToData, nameList[numberOfBundles]->d_name);
-            ifstream gps(temp);
+            std::ifstream gps(temp);
 
             if (!gps) {
-                cout << "Can't open file " << temp << endl;
+                std::cout << "Can't open file " << temp << std::endl;
             }
             else {
                 int numberOfRays;
@@ -103,10 +99,10 @@ vector<vector<Ray>> getData(const char *pathToData, int startTime, int finishTim
                 while (numberOfRays--) {
                     Ray tempRay;
                     gps >> tempRay;
-                        if (tempRay.time >= startTime && tempRay.time <= finishTime) {
-                            tempRay.computeParameters();
-                            tempBundle.push_back(tempRay);
-                        }
+                    if (tempRay.time >= startTime && tempRay.time <= finishTime) {
+                        tempRay.computeParameters();
+                        tempBundle.push_back(tempRay);
+                    }
                 }
                 gps.close();
             }
@@ -122,8 +118,8 @@ vector<vector<Ray>> getData(const char *pathToData, int startTime, int finishTim
     return data;
 }
 
-list<pair<double, double>> getStationList(vector<vector<Ray>> data) {
-    list<pair<double, double>> stations;
+std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data) {
+    std::list<std::pair<double, double>> stations;
     bool found;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
@@ -139,7 +135,7 @@ list<pair<double, double>> getStationList(vector<vector<Ray>> data) {
                 }
             }
             if (!found) {
-                stations.push_back(make_pair(station.R[0], station.R[1]));
+                stations.push_back(std::make_pair(station.R[0], station.R[1]));
             }
         }
     }
@@ -147,7 +143,7 @@ list<pair<double, double>> getStationList(vector<vector<Ray>> data) {
 }
 
 
-void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<double> integrals, double error, bool onlyPositive) {
+void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> integrals, double error, bool onlyPositive) {
     double initialResidual = computeResidual(grid, matrix, integrals);
     double firstRes, secondRes, currentRes;
     double limit = 0;
@@ -162,17 +158,17 @@ void solveSle(Grid &grid, const vector<VectorSparse> &matrix, const vector<doubl
     }
     secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
     limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
-    cout << limit << endl;
+    std::cout << limit << std::endl;
     currentRes = secondRes;
     while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
         currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
         ++counter;
         if (counter > 500) {
-            cout << "stopped at current/limit = " << currentRes / limit << endl;
+            std::cout << "stopped at current/limit = " << currentRes / limit << std::endl;
             break;
         }
-        cout << counter << endl;
+        std::cout << counter << std::endl;
     }
 }
 
@@ -185,7 +181,7 @@ double radianToDegree(double radian) {
     return radian * 180 / pi;
 }
 
-void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatrix, vector<double> integrals, bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
+void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sleMatrix, std::vector<double> integrals, bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();
     double reconstructionSum = 0, modelSum = 0;
@@ -228,7 +224,7 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
     latitude.toDegrees();
     longitude.toDegrees();
 
-    ofstream parametrs((pathToProcessedData+"parametrs.txt").c_str(), ios::app);
+    std::ofstream parametrs((pathToProcessedData+"parametrs.txt").c_str(), std::ios::app);
 
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
@@ -237,13 +233,13 @@ void computeParametrs(Grid &crude, Grid &accurate, vector<VectorSparse> sleMatri
     else {
         parametrs << computeResidual(crude, sleMatrix, integrals) / initialResidual << '\t';
     }
-    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << (longitude.right - longitude.left) / intervals << '\t' << (time.right - time.left) / intervalsTime / 60<< endl;
+    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << (longitude.right - longitude.left) / intervals << '\t' << (time.right - time.left) / intervalsTime / 60 << std::endl;
     parametrs.close();
 
 }
 
-list<int> createListOfIntervals(int first, int last) {
-    list<int> foo;
+std::list<int> createListOfIntervals(int first, int last) {
+    std::list<int> foo;
     do {
         foo.push_back(first);
         first *= 2;

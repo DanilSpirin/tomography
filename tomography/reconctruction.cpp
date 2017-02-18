@@ -4,9 +4,7 @@
 #include "reconstruction.h"
 #include "grid.h"
 
-using namespace std;
-
-void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive) {
+void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
     for (int i = 0; i < m.size(); ++i) {
         double t = 0, aa = 0, ax = 0;
         for (int k = 0; k < a[i].getSize(); ++k) {
@@ -30,9 +28,9 @@ void iterationArt(Grid &x, const vector<VectorSparse> &a, const vector<double> &
     }
 }
 
-void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<double> &m, bool onlyPositive) {
+void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
     // Вычисление приращения dx
-    vector<float> dx(x.size(), 0);
+    std::vector<double> dx(x.size(), 0);
     double t = 0;
     for (int i = 0; i < m.size(); ++i) {
         double ax = 0;
@@ -44,8 +42,8 @@ void iterationSirt(Grid &x, const vector<VectorSparse> &a, const vector<double> 
         }
     }
     // Вычисление коэффициента t для минимизации невязки
-    vector<float> adx;
-    vector<float> axy;
+    std::vector<double> adx;
+    std::vector<double> axy;
     for (int j = 0; j < m.size(); ++j) {
         double adxj = 0;
         double axyj = 0;

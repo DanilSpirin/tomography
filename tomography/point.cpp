@@ -2,10 +2,10 @@
 
 #include "point.h"
 
-point::point(double x, double y, double z) {
+point::point(const double x, const double y, const double z) {
     R[0] = x; R[1] = y; R[2] = z;
 }
-point::point(point const& a) {
+point::point(const point& a) {
     for (int i = 0; i < 3; ++i) {
         R[i] = a.R[i];
     }

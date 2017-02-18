@@ -4,8 +4,6 @@
 
 #include "transformation.h"
 
-using namespace std;
-
 class Spot {
 public:
     Spot();
@@ -50,6 +48,6 @@ private:
     double value(const point R, const double t) const;
     double nmin, nm, hm, H, d, dt;
     
-    vector<Spot> spots;
-    vector<Wave> waves;
+    std::vector<Spot> spots;
+    std::vector<Wave> waves;
 };
