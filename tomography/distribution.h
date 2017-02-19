@@ -7,10 +7,10 @@
 class Spot {
 public:
     Spot();
-    Spot(point location, double peak, double period, double intensity, double size);
+    Spot(const point &location, const double peak, const double period, const double intensity, const double size);
     Spot(const Spot &a);
     ~Spot();
-    double operator () (const point R, const double time) const;
+    double operator () (const point& R, const double time) const;
 private:
     point location;
     double peak, period, intensity, size;
@@ -19,10 +19,10 @@ private:
 class Wave {
 public:
     Wave();
-    Wave(point location, double start, double period, double speed);
+    Wave(const point &location, const double start, const double period, const double speed);
     Wave(const Wave &a);
     ~Wave();
-    double operator () (const point R, const double time) const;
+    double operator () (const point& R, const double time) const;
 private:
     point location;
     double period, start, speed;
@@ -42,8 +42,8 @@ class ChepmanLayer : public ElectronDensityDistribution {
 public:
     ChepmanLayer();
     ~ChepmanLayer();
-    void addSpot(point location, double peak, double period, double intensity, double size);
-    void addWave(point location, double peak, double period, double speed);
+    void add_spot(const point &location, const double peak, const double period, const double intensity, const double size);
+    void add_wave(const point &location, const double peak, const double period, const double speed);
 private:
     double value(const point R, const double t) const;
     double nmin, nm, hm, H, d, dt;

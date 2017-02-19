@@ -4,10 +4,10 @@
 
 
 double Trapezium::operator()(const BaseRay ray, const ElectronDensityDistribution &model) {
-    double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
-    double m = 100;
-    double h = r / m;
-    point dR = (ray.satellite - ray.station) / m;
+    const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
+    const double m = 100;
+    const double h = r / m;
+    const point dR = (ray.satellite - ray.station) / m;
     point R = ray.station;
     double value = 0.0;
 
@@ -24,10 +24,10 @@ double Trapezium::operator()(const BaseRay ray, const ElectronDensityDistributio
 }
 
 double Rectangle::operator()(const BaseRay ray, const ElectronDensityDistribution &model) {
-    double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
-    double m = 100;
-    double h = r / m;
-    point dR = (ray.satellite - ray.station) / m;
+    const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
+    const double m = 100;
+    const double h = r / m;
+    const point dR = (ray.satellite - ray.station) / m;
     point R = ray.station + dR * 0.5;
     double value = 0.0;
 

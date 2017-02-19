@@ -6,7 +6,7 @@
 #include "integration.h"
 #include "tools.h"
 
-bool useSecondGrid = false;
+bool useSecondGrid = true;
 bool calcParametrs = false;
 
 int timeStart, timeFinish;
@@ -20,13 +20,13 @@ int main(int argc, const char * argv[]) {
     Rectangle integral;
     ChepmanLayer chepmanLayer;
 
-    chepmanLayer.addSpot(point(30, 55), 12, pi / 24, 150, 0.5);
-    chepmanLayer.addSpot(point(2.5, 45), 12, pi / 6, 300, 0.2);
-    chepmanLayer.addSpot(point(12, 40), 12, pi / 4, 300, 0.2);
+    chepmanLayer.add_spot(point(30, 55), 12, pi / 24, 150, 0.5);
+    chepmanLayer.add_spot(point(2.5, 45), 12, pi / 6, 300, 0.2);
+    chepmanLayer.add_spot(point(12, 40), 12, pi / 4, 300, 0.2);
 
-    chepmanLayer.addWave(point(10, 40, Re), 32400, 1500, 0.3); // 25 minutes
-    chepmanLayer.addWave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
-    chepmanLayer.addWave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
+    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1500, 0.3); // 25 minutes
+    chepmanLayer.add_wave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
+    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
 
     timeStart = 0;
     timeFinish = 24;

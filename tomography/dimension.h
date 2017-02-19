@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 struct Dimension {
     double left, right;
     Dimension();

@@ -57,7 +57,7 @@ void Solution::find() {
 }
 
 void Solution::print() {
-    float min = INT_MAX, max = INT_MIN;
+    double min = INT_MAX, max = INT_MIN;
     Dimension latitude(latitudeLeft, latitudeRight, 0);
     Dimension longitude(longitudeLeft, longitudeRight, 0);
 
@@ -68,7 +68,7 @@ void Solution::print() {
 
     std::ofstream out;
     char path[100];
-    for (int i = timeLeft; i < timeRight+1; ++i) {
+    for (int i = (int)timeLeft; i < timeRight + 1; ++i) {
         sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", i, ".txt");
         out.open(path);
         for (int x = 0; x <= density; ++x) {
@@ -78,8 +78,11 @@ void Solution::print() {
                 double time = i * 3600;
 
                 double sum = 0;
-                for (auto it = grids.begin(); it != grids.end(); ++it) {
-                    sum += (*it)(phi, theta, time);
+//                for (auto it = grids.begin(); it != grids.end(); ++it) {
+//                    sum += (*it)(phi, theta, time);
+//                }
+                for (auto &&item : grids) {
+                    sum += item(phi, theta, time);
                 }
                 if (sum < min) {
                     min = sum;
