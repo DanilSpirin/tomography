@@ -32,7 +32,7 @@ VectorSparse Grid::basis(const double x, const double y, const double z) const {
                 const double value = spline(this->latitude.get(x, lat))
                                     * spline(this->longitude.get(y, lon))
                                     * spline(this->time.get(z, time));
-                const size_t number = (lat * (this->longitude.size() + 1) + lon) * (this->time.size() + 1) + time;
+                const unsigned number = (lat * (this->longitude.size() + 1) + lon) * (this->time.size() + 1) + time;
                 basis_vector.add(value, (int)number);
             }
         }

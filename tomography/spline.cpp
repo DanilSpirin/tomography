@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "spline.h"
 
 Spline::Spline() : splines (NULL) {

@@ -4,7 +4,7 @@
 #include <string>
 
 #include "solution.h"
-
+#include <climits>
 extern std::string pathToProcessedData;
 
 Solution::Solution() : grids(0){};
@@ -18,7 +18,7 @@ void Solution::setLimits(float latitudeLeft, float latitudeRight, float longitud
     this->timeRight = timeRight;
 }
 
-void Solution::setModel(ElectronDensityDistribution model) {
+void Solution::setModel(ElectronDensityDistribution &model) {
     this->model = &model;
 }
 

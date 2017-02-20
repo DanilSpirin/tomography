@@ -32,4 +32,4 @@ void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sle
 double degreeToRadian(double degree);
 double radianToDegree(double radian);
 
-std::list<int> createListOfIntervals(int first, int last);
+std::list<unsigned> createListOfIntervals(unsigned first, unsigned last);

@@ -6,8 +6,9 @@
 #include "tools.h"
 #include "math.h"
 #include "integration.h"
+#include <cstring>
 
-extern int timeStart, timeFinish;
+extern unsigned timeStart, timeFinish;
 extern std::string pathToProcessedData;
 
 void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
@@ -238,8 +239,8 @@ void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sle
 
 }
 
-std::list<int> createListOfIntervals(int first, int last) {
-    std::list<int> foo;
+std::list<unsigned> createListOfIntervals(unsigned first, unsigned last) {
+    std::list<unsigned> foo;
     do {
         foo.push_back(first);
         first *= 2;

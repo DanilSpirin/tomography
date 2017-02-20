@@ -5,7 +5,7 @@
 #include "ray.h"
 
 
-Dimension::Dimension(const double left, const double right, const size_t intervals, const bool isInDegrees) {
+Dimension::Dimension(const double left, const double right, const unsigned intervals, const bool isInDegrees) {
     this->left = left;
     this->right = right;
     this->intervals = intervals;
@@ -43,23 +43,23 @@ void Dimension::toDegrees() {
     }
 }
 
-void Dimension::expand(const uint16_t extra) {
-    uint16_t m = (uint16_t)ceil(extra / step);
+void Dimension::expand(const unsigned extra) {
+    unsigned m = (unsigned)ceil(extra / step);
     double D = m * step;
     this->left -= D;
     this->right += D;
     this->intervals += 2 * m;
 }
 
-size_t Dimension::size() const {
+unsigned Dimension::size() const {
     return this->intervals;
 }
 
-std::vector<size_t> Dimension::sequence(const double x) const {
-    const auto i = (size_t)floor((x - this->left) / this->step);
-    const size_t i1 = i < 2 ? 0 : (i - 1);
-    const size_t i2 = (i + 2) > this->intervals ? this->intervals : (i + 2);
-    std::vector<size_t> result(i2 - i1 + 1);
+std::vector<unsigned> Dimension::sequence(const double x) const {
+    const unsigned i = (unsigned)floor((x - this->left) / this->step);
+    const unsigned i1 = i < 2 ? 0 : (i - 1);
+    const unsigned i2 = (i + 2) > this->intervals ? this->intervals : (i + 2);
+    std::vector<unsigned> result(i2 - i1 + 1);
     std::iota(result.begin(), result.end(), i1);
     return result;
 }

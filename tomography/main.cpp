@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <climits>
 
 #include "reconstruction.h"
 #include "integration.h"
@@ -9,7 +10,7 @@
 bool useSecondGrid = true;
 bool calcParametrs = false;
 
-int timeStart, timeFinish;
+unsigned timeStart, timeFinish;
 
 std::string pathToData = "/Users/imaginary/Documents/Science/2003_302_1/";
 std::string pathToProcessedData = pathToData + "tec_processed_model/";
@@ -31,10 +32,10 @@ int main(int argc, const char * argv[]) {
     timeStart = 0;
     timeFinish = 24;
 
-    std::list<int> crudeIntervalsDim = createListOfIntervals(8, 8);
-    std::list<int> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
-    std::list<int> accIntervalsDim = createListOfIntervals(36, 36);
-    std::list<int> accIntervalsTime = createListOfIntervals(240, 240);
+    std::list<unsigned> crudeIntervalsDim = createListOfIntervals(8, 8);
+    std::list<unsigned> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);
+    std::list<unsigned> accIntervalsDim = createListOfIntervals(36, 36);
+    std::list<unsigned> accIntervalsTime = createListOfIntervals(240, 240);
 
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
 
@@ -42,11 +43,11 @@ int main(int argc, const char * argv[]) {
 
     std::list<std::pair<double, double>> stations = getStationList(data);
 
-    std::ofstream station((pathToProcessedData + "stations_check.txt").c_str());
+    std::ofstream station_file((pathToProcessedData + "stations_check.txt").c_str());
     for (const auto &st : stations) {
-        station << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
+        station_file << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
     }
-    station.close();
+    station_file.close();
 
     for (auto &i : data) {
         for (auto &j : i) {
@@ -63,8 +64,8 @@ int main(int argc, const char * argv[]) {
         parametrs.close();
     }
 
-    for (int intervals : crudeIntervalsDim) {
-        for (int intervalsT : crudeIntervalsTime) {
+    for (unsigned intervals : crudeIntervalsDim) {
+        for (unsigned intervalsT : crudeIntervalsTime) {
             latitude = Dimension(-10.0, 40.0, intervals);
             longitude = Dimension(30.0, 70.0, intervals);
             time = Dimension(double(timeStart * 3600), double(timeFinish * 3600), intervalsT);
@@ -83,8 +84,8 @@ int main(int argc, const char * argv[]) {
                 accurateIntegrals = computeVectorResidual(crude, crudeSleMatrix, crudeIntegrals);
                 std::vector<VectorSparse>().swap(crudeSleMatrix);
                 std::vector<double>().swap(crudeIntegrals);
-                for (int intervalsAcc : accIntervalsDim) {
-                    for (int intervalsTime : accIntervalsTime) {
+                for (unsigned intervalsAcc : accIntervalsDim) {
+                    for (unsigned intervalsTime : accIntervalsTime) {
                         latitude = Dimension(-10.0, 40.0, intervalsAcc);
                         longitude = Dimension(30.0, 70.0, intervalsAcc);
                         time = Dimension(double(timeStart * 3600), double(timeFinish * 3600), intervalsTime);
@@ -123,7 +124,7 @@ int main(int argc, const char * argv[]) {
 
         char path[100];
         int density = 100;
-        for (int t = timeStart; t < timeFinish + 1; ++t) {
+        for (unsigned t = timeStart; t < timeFinish + 1; ++t) {
             sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "first.txt");
             crudeOut.open(path);
             sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "model.txt");
