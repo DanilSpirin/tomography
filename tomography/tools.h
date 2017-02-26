@@ -16,11 +16,8 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
 double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 std::vector<double> computeVectorResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 
-// Критерий отбора для файлов
-int sel(const struct dirent *d);
-
 // Сканирование указанной директории
-std::vector<std::vector<Ray>> getData(const char *p, int timeStart = 0, int timeFinish = 24);
+std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime = 0, unsigned finishTime = 24);
 
 // Координаты станций
 std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data);

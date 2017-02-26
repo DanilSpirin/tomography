@@ -39,7 +39,7 @@ int main(int argc, const char * argv[]) {
 
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
 
-    std::vector<std::vector<Ray>> data = getData(pathToData.c_str(), timeStart, timeFinish);
+    std::vector<std::vector<Ray>> data = get_data(pathToData, timeStart, timeFinish);
 
     std::list<std::pair<double, double>> stations = getStationList(data);
 

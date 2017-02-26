@@ -1,12 +1,10 @@
 #include <iostream>
 #include <fstream>
-
-#include <dirent.h>
+#include <boost/filesystem.hpp>
 
 #include "tools.h"
 #include "math.h"
 #include "integration.h"
-#include <cstring>
 
 extern unsigned timeStart, timeFinish;
 extern std::string pathToProcessedData;
@@ -62,60 +60,41 @@ std::vector<double> computeVectorResidual(const Grid &x, const std::vector<Vecto
     return difference;
 }
 
-// отсеиваем скрытые файлы и файлы не являющиеся данными
-int sel(const struct dirent *d) {
-    if (!strcmp(".", d->d_name) || !strcmp("..", d->d_name) || !strcmp(".DS_Store", d->d_name)) {
-        return 0;
-    }
-    char* p = strstr(d->d_name, ".dat");
-    return p ? 1 : 0;
-}
-std::vector<std::vector<Ray>> getData(const char *pathToData, int startTime, int finishTime) {
+std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime, unsigned finishTime) {
     startTime *= 3600;
     finishTime *= 3600;
-    dirent **nameList;
-    int numberOfBundles = scandir(pathToData, &nameList, sel, 0);
-    char temp[100];
+    boost::filesystem::path p(path);
     std::vector<std::vector<Ray>> data;
+    if (boost::filesystem::exists(p)) {
+        if (boost::filesystem::is_directory(p)) {
+            for (const auto& file : boost::filesystem::directory_iterator(p)) {
+                if (file.path().extension() == ".dat") {
+                    std::ifstream gps(file.path().string());
+                    if (!gps) {
+                        std::cout << "Can't open file " << file.path().string() << std::endl;
+                    }
+                    else {
+                        std::vector<Ray> bundle;
+                        int numberOfRays;
+                        gps >> numberOfRays;
 
-    if (numberOfBundles < 0) {
-        perror("Scandir");
-    }
-    else if (numberOfBundles == 0) {
-        std::cout << "No data files found!" << std::endl;
-    }
-    else {
-        while (numberOfBundles--) {
-            std::vector<Ray> tempBundle;
-            sprintf(temp, "%s%s", pathToData, nameList[numberOfBundles]->d_name);
-            std::ifstream gps(temp);
-
-            if (!gps) {
-                std::cout << "Can't open file " << temp << std::endl;
-            }
-            else {
-                int numberOfRays;
-                gps >> numberOfRays;
-
-                while (numberOfRays--) {
-                    Ray tempRay;
-                    gps >> tempRay;
-                    if (tempRay.time >= startTime && tempRay.time <= finishTime) {
-                        tempRay.computeParameters();
-                        tempBundle.push_back(tempRay);
+                        while (numberOfRays--) {
+                            Ray ray;
+                            gps >> ray;
+                            if (ray.time >= startTime && ray.time <= finishTime) {
+                                ray.computeParameters();
+                                bundle.push_back(ray);
+                            }
+                        }
+                        gps.close();
+                        if (bundle.size() > 1) {
+                            data.push_back(bundle);
+                        }
                     }
                 }
-                gps.close();
             }
-            if (tempBundle.size() > 1) {
-                data.push_back(tempBundle);
-            }
-            free(nameList[numberOfBundles]);
         }
     }
-
-    free(nameList);
-
     return data;
 }
 
