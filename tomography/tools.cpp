@@ -31,18 +31,15 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
 }
 
 double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
-    std::vector<double> difference(m.size(), 0);
-    for (int i = 0; i < A.size(); ++i) {
-        for (int j = 0; j < A[i].getSize(); ++j) {
-            difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
-        }
-        difference[i] -= m[i];
-    }
     double sum = 0;
-    for (int i = 0; i < difference.size(); ++i) {
-        sum += difference[i] * difference[i];
+    for (int i = 0; i < A.size(); ++i) {
+        double difference = 0;
+        for (int j = 0; j < A[i].getSize(); ++j) {
+            difference += A[i].getPhi(j) * x[A[i].getNumber(j)];
+        }
+        difference -= m[i];
+        sum += (difference * difference);
     }
-
     return sqrt(sum);
 }
 
@@ -50,12 +47,9 @@ std::vector<double> computeVectorResidual(const Grid &x, const std::vector<Vecto
     std::vector<double> difference(m.size(), 0);
     for (int i = 0; i < A.size(); ++i) {
         for (int j = 0; j < A[i].getSize(); ++j) {
-            difference[i] += A[i].getPhi(j) * x[A[i].getNumber(j)];
+            difference[i] -= A[i].getPhi(j) * x[A[i].getNumber(j)];
         }
-        difference[i] -= m[i];
-    }
-    for (int i = 0; i < difference.size(); ++i) {
-        difference[i] = -difference[i];
+        difference[i] += m[i];
     }
     return difference;
 }
