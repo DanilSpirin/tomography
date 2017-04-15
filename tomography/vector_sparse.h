@@ -15,4 +15,5 @@ public:
     friend VectorSparse operator - (const VectorSparse& a);
     friend VectorSparse operator * (const double a, const VectorSparse b);
     friend VectorSparse operator * (const VectorSparse b, const double a);
+    friend VectorSparse operator / (const VectorSparse a, const double b);
 };

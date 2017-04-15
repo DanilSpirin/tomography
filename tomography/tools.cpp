@@ -15,7 +15,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     for (int j = 0; j < data.size(); ++j) {
         for (int i = 0; i < data[j].size() - 1; ++i) {
 //          Разностная схема
-            phi.push_back((1 / cos(data[j][i + 1].angle)) * test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) - (1 / cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
+            phi.push_back(test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle) -  test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle));
             integrals.push_back(data[j][i + 1].integral - data[j][i].integral);
         }
     }
@@ -25,7 +25,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     phi.clear();
     for (int j = 0; j < data.size(); ++j) {
         for (int i = 0; i < data[j].size() - 1; ++i) {
-            phi.push_back((1 / cos(data[j][i + 1].angle)) * test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) - (1 / cos(data[j][i].angle)) * test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time));
+            phi.push_back(test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle) -  test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle));
         }
     }
 }

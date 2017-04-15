@@ -62,3 +62,11 @@ VectorSparse operator * (const VectorSparse b, const double a) {
     }
     return tmp;
 }
+
+VectorSparse operator / (const VectorSparse a, const double b) {
+    VectorSparse tmp(a);
+    for (int i = 0; i < tmp.getSize(); ++i) {
+        tmp.phi[i] = a.phi[i] / b;
+    }
+    return tmp;
+}
