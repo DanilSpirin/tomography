@@ -12,7 +12,7 @@ bool calcParametrs = false;
 
 unsigned timeStart, timeFinish;
 
-std::string pathToData = "/Users/imaginary/Documents/Science/2003_302_1/";
+std::string pathToData = "/home/ds/science/2003_302_1/";
 std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
 int main(int argc, const char * argv[]) {
@@ -43,7 +43,7 @@ int main(int argc, const char * argv[]) {
 
     std::list<std::pair<double, double>> stations = getStationList(data);
 
-    std::ofstream station_file((pathToProcessedData + "stations_check.txt").c_str());
+    std::ofstream station_file(pathToProcessedData + "stations_check.txt");
     for (const auto &st : stations) {
         station_file << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
     }
@@ -60,7 +60,7 @@ int main(int argc, const char * argv[]) {
     Grid crude, accurate;
 
     if (calcParametrs) {
-        std::ofstream parametrs((pathToProcessedData + "parametrs.txt").c_str());
+        std::ofstream parametrs(pathToProcessedData + "parametrs.txt");
         parametrs.close();
     }
 
@@ -210,7 +210,7 @@ int main(int argc, const char * argv[]) {
         latitude.toDegrees();
         longitude.toDegrees();
 
-        std::ofstream gridLimits((pathToProcessedData + "limits.txt").c_str());
+        std::ofstream gridLimits(pathToProcessedData + "limits.txt");
 
         gridLimits << latitude << '\n' << longitude << '\n'
                    << floor(crudeMin) << ' ' << ceil(crudeMax) << '\n'
