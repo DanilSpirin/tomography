@@ -14,19 +14,19 @@ if(Boost_FOUND)
 endif()
 
 set(SOURCE_FILES
-        tomography/dimension.cpp
-        tomography/distribution.cpp
-        tomography/grid.cpp
-        tomography/integration.cpp
-        tomography/main.cpp
-        tomography/point.cpp
-        tomography/ray.cpp
-        tomography/reconctruction.cpp
-        tomography/solution.cpp
-        tomography/spline.cpp
-        tomography/tools.cpp
-        tomography/transformation.cpp
-        tomography/vector_sparse.cpp
+        src/dimension.cpp
+        src/distribution.cpp
+        src/grid.cpp
+        src/integration.cpp
+        src/main.cpp
+        src/point.cpp
+        src/ray.cpp
+        src/reconstruction.cpp
+        src/solution.cpp
+        src/spline.cpp
+        src/tools.cpp
+        src/transformation.cpp
+        src/vector_sparse.cpp
         )
 add_executable(tomography ${SOURCE_FILES})
 
