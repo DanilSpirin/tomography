@@ -100,13 +100,14 @@ int main(int argc, const char * argv[]) {
                         solveSle(accurate, accurateSleMatrix, accurateIntegrals, 0.1, false);
 
                         if (calcParametrs) {
-                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true, chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
+                            computeParametrs(crude, accurate, accurateSleMatrix, accurateIntegrals, true,
+                                chepmanLayer, latitude, longitude, time, intervalsAcc, intervalsTime, initialResidual);
                         }
                     }
                 }
-            }
-            else if (calcParametrs) {
-                computeParametrs(crude, accurate, crudeSleMatrix, crudeIntegrals, false, chepmanLayer, latitude, longitude, time, intervals, intervalsT, initialResidual);
+            } else if (calcParametrs) {
+                computeParametrs(crude, accurate, crudeSleMatrix, crudeIntegrals, false,
+                    chepmanLayer, latitude, longitude, time, intervals, intervalsT, initialResidual);
             }
         }
 

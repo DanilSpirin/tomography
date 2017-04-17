@@ -51,8 +51,7 @@ double Wave::p(const double r, const double v, const double T) const {
     double r0 = v * T / 2;
     if (r < r0) {
         return 1 / 2 * (1 - cos(pi * r / r0));
-    }
-    else {
+    } else {
         return 1;
     }
 }
@@ -94,22 +93,18 @@ void ChepmanLayer::add_wave(const point &location, const double start, const dou
 double ChepmanLayer::value(const point R, const double time) const {
     const double longitute = R.R[0], latitude = R.R[1], h = R.R[2] - Re;
 
-//	double zenith;	//zenith = cos зенитного угла
-//	double angle;	//часовой угол Солнца (на гринвиче) т.е. к нему нужно добавить долготу !
-//	double declination; //склонение Солнца
 	const double UT = (time - dt) / 60.0 / 60.0;    //всемирное время
-//	double ksi;
-    
+
 	const double declination = asin(sin(23.45 / 180.0 * pi) * sin(2 * pi / 365.0 * (d - 82.0))); //осуществлен перевод в радианы
 	const double angle = (15 * (UT - 12.0)) / 180.0 * pi + longitute; //осуществлен перевод в радианы. angle - ЧАСОВОЙ ПОЯС
 	const double zenith = sin(latitude) * sin(declination) + cos(latitude) * cos(declination) * cos(angle);
 	const double ksi = (h - hm) / H ;
-    
+
     double Q = nm * zenith;
 	if (Q < nmin) {
         Q = nmin;
     }
-    
+
     double wavesAddition = 0, spotsAddition = 0;
     for (const auto& i : waves) {
         wavesAddition += i(R, time);

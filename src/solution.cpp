@@ -50,8 +50,7 @@ void Solution::find() {
             solveSle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
         }
 
-    }
-    else {
+    } else {
         std::cout << "No grids, can't solve" << std::endl;
     }
 }
@@ -78,9 +77,6 @@ void Solution::print() {
                 double time = i * 3600;
 
                 double sum = 0;
-//                for (auto it = grids.begin(); it != grids.end(); ++it) {
-//                    sum += (*it)(phi, theta, time);
-//                }
                 for (auto &&item : grids) {
                     sum += item(phi, theta, time);
                 }
@@ -93,7 +89,6 @@ void Solution::print() {
 
                 out << sum;
                 (y != density) ? (out << " ") : (out << std::endl);
-
             }
         }
         out.close();

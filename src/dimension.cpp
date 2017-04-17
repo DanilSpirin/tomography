@@ -55,12 +55,16 @@ unsigned Dimension::size() const {
     return this->intervals;
 }
 
+double Dimension::length() const {
+    return this->right - this->left;
+}
+
 std::vector<unsigned> Dimension::sequence(const double x) const {
     const unsigned i = (unsigned)floor((x - this->left) / this->step);
-    const unsigned i1 = i < 2 ? 0 : (i - 1);
-    const unsigned i2 = (i + 2) > this->intervals ? this->intervals : (i + 2);
-    std::vector<unsigned> result(i2 - i1 + 1);
-    std::iota(result.begin(), result.end(), i1);
+    const unsigned start_point = i < 2 ? 0 : (i - 1);
+    const unsigned end_point = (i + 2) > this->intervals ? this->intervals : (i + 2);
+    std::vector<unsigned> result(end_point - start_point + 1);
+    std::iota(result.begin(), result.end(), start_point);
     return result;
 }
 

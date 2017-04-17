@@ -14,8 +14,7 @@ double Trapezium::operator()(const BaseRay ray, const ElectronDensityDistributio
     for (int i = 0; i < m; ++i) {
         if (i == 0 || i == m - 1) {
             value += model(R, ray.time) * h / 2;
-        }
-        else {
+        } else {
             value += model(R, ray.time) * h;
         }
         R = R + dR;

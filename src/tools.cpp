@@ -14,8 +14,9 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     integrals.clear();
     for (int j = 0; j < data.size(); ++j) {
         for (int i = 0; i < data[j].size() - 1; ++i) {
-//          Разностная схема
-            phi.push_back(test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle) -  test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle));
+            const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
+            const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
+            phi.push_back(right - left);
             integrals.push_back(data[j][i + 1].integral - data[j][i].integral);
         }
     }
@@ -25,7 +26,9 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     phi.clear();
     for (int j = 0; j < data.size(); ++j) {
         for (int i = 0; i < data[j].size() - 1; ++i) {
-            phi.push_back(test.basis(data[j][i+1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle) -  test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle));
+            const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
+            const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
+            phi.push_back(right - left);
         }
     }
 }
@@ -66,8 +69,7 @@ std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime, uns
                     std::ifstream gps(file.path().string());
                     if (!gps) {
                         std::cout << "Can't open file " << file.path().string() << std::endl;
-                    }
-                    else {
+                    } else {
                         std::vector<Ray> bundle;
                         int numberOfRays;
                         gps >> numberOfRays;
@@ -155,7 +157,8 @@ double radianToDegree(double radian) {
     return radian * 180 / pi;
 }
 
-void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sleMatrix, std::vector<double> integrals, bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
+void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sleMatrix, std::vector<double> integrals, bool useSecondGrid,
+ ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();
     double reconstructionSum = 0, modelSum = 0;
@@ -187,8 +190,7 @@ void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sle
                 }
                 if (useSecondGrid) {
                     reconstructionSum += (sumValue - modelValue) * (sumValue - modelValue);
-                }
-                else {
+                } else {
                     reconstructionSum += (crudeValue - modelValue) * (crudeValue - modelValue);
                 }
             }
@@ -203,11 +205,10 @@ void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sle
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
         parametrs << computeResidual(accurate, sleMatrix, integrals) / initialResidual << '\t';
-    }
-    else {
+    } else {
         parametrs << computeResidual(crude, sleMatrix, integrals) / initialResidual << '\t';
     }
-    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << (longitude.right - longitude.left) / intervals << '\t' << (time.right - time.left) / intervalsTime / 60 << std::endl;
+    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << longitude.length() / intervals << '\t' << time.length() / intervalsTime / 60 << std::endl;
     parametrs.close();
 
 }
