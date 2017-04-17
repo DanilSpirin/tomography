@@ -16,7 +16,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
         for (int i = 0; i < data[j].size() - 1; ++i) {
             const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
             const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
-            phi.push_back(right - left);
+            phi.push_back(left - right);
             integrals.push_back(data[j][i + 1].integral - data[j][i].integral);
         }
     }
@@ -28,7 +28,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
         for (int i = 0; i < data[j].size() - 1; ++i) {
             const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
             const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
-            phi.push_back(right - left);
+            phi.push_back(left - right);
         }
     }
 }
