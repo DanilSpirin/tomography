@@ -110,6 +110,7 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
             }
         }
     }
+    delete chepmanLayer.coordinateTransformation;
     return stations;
 }
 
