@@ -18,6 +18,7 @@ set(SOURCE_FILES
         src/distribution.cpp
         src/grid.cpp
         src/integration.cpp
+        src/limits.cpp
         src/main.cpp
         src/point.cpp
         src/ray.cpp

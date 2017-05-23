@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
-#include <climits>
 
 #include "reconstruction.h"
 #include "integration.h"
 #include "tools.h"
+#include "limits.h"
 
 bool useSecondGrid = true;
 bool calcParametrs = false;
@@ -115,16 +115,13 @@ int main(int argc, const char * argv[]) {
 
     if (!calcParametrs) {
 
-        double crudeMin = INT_MAX, crudeMax = INT_MIN;
-        double accurateMin = INT_MAX, accurateMax = INT_MIN;
-        double sumMin = INT_MAX, sumMax = INT_MIN;
-        double modelMin = INT_MAX, modelMax = INT_MIN;
+        Limits crude_limits, accurate_limits, model_limits, sum_limits;
 
         latitude.toRadian();
         longitude.toRadian();
 
         char path[100];
-        int density = 100;
+        const int density = 100;
         for (unsigned t = timeStart; t < timeFinish + 1; ++t) {
             sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "first.txt");
             crudeOut.open(path);
@@ -149,24 +146,11 @@ int main(int argc, const char * argv[]) {
 
                     Ray L(station, satellite, time);
 
-                    double crudeValue, modelValue;
+                    const double crudeValue = crude(phi, theta, time);
+                    const double modelValue = integral(L, chepmanLayer);
 
-                    crudeValue = crude(phi, theta, time);
-                    modelValue = integral(L, chepmanLayer);
-
-                    if (crudeValue < crudeMin) {
-                        crudeMin = crudeValue;
-                    }
-                    if (crudeValue > crudeMax) {
-                        crudeMax = crudeValue;
-                    }
-
-                    if (modelValue < modelMin) {
-                        modelMin = modelValue;
-                    }
-                    if (modelValue > modelMax) {
-                        modelMax = modelValue;
-                    }
+                    crude_limits.update(crudeValue);
+                    model_limits.update(modelValue);
 
                     crudeOut << crudeValue;
                     (j != density) ? (crudeOut << " ") : (crudeOut << '\n');
@@ -175,23 +159,11 @@ int main(int argc, const char * argv[]) {
                     (j != density) ? (modelOut << " ") : (modelOut << '\n');
 
                     if (useSecondGrid) {
-                        double accurateValue, sumValue;
-                        accurateValue = accurate(phi, theta, time);
-                        sumValue = crudeValue + accurateValue;
+                        const double accurateValue = accurate(phi, theta, time);
+                        const double sumValue = crudeValue + accurateValue;
 
-                        if (accurateValue < accurateMin) {
-                            accurateMin = accurateValue;
-                        }
-                        if (accurateValue > accurateMax) {
-                            accurateMax = accurateValue;
-                        }
-
-                        if (sumValue < sumMin) {
-                            sumMin = sumValue;
-                        }
-                        if (sumValue > sumMax) {
-                            sumMax = sumValue;
-                        }
+                        accurate_limits.update(accurateValue);
+                        sum_limits.update(sumValue);
 
                         accurateOut << accurateValue;
                         (j != density) ? (accurateOut << " ") : (accurateOut << '\n');
@@ -214,11 +186,9 @@ int main(int argc, const char * argv[]) {
         std::ofstream gridLimits(pathToProcessedData + "limits.txt");
 
         gridLimits << latitude << '\n' << longitude << '\n'
-                   << floor(crudeMin) << ' ' << ceil(crudeMax) << '\n'
-                   << floor(modelMin) << ' ' << ceil(modelMax) << '\n';
+            << crude_limits << '\n' << model_limits << '\n';
         if (useSecondGrid) {
-            gridLimits  << floor(accurateMin) << ' ' << ceil(accurateMax) << '\n'
-                        << floor(sumMin) << ' ' << ceil(sumMax) << '\n';
+            gridLimits << accurate_limits << '\n' << sum_limits << '\n';
         }
         gridLimits.close();
     }

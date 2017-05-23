@@ -62,30 +62,28 @@ std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime, uns
     finishTime *= 3600;
     boost::filesystem::path p(path);
     std::vector<std::vector<Ray>> data;
-    if (boost::filesystem::exists(p)) {
-        if (boost::filesystem::is_directory(p)) {
-            for (const auto& file : boost::filesystem::directory_iterator(p)) {
-                if (file.path().extension() == ".dat") {
-                    std::ifstream gps(file.path().string());
-                    if (!gps) {
-                        std::cout << "Can't open file " << file.path().string() << std::endl;
-                    } else {
-                        std::vector<Ray> bundle;
-                        int numberOfRays;
-                        gps >> numberOfRays;
+    if (boost::filesystem::exists(p) && boost::filesystem::is_directory(p)) {
+        for (const auto& file : boost::filesystem::directory_iterator(p)) {
+            if (file.path().extension() == ".dat") {
+                std::ifstream gps(file.path().string());
+                if (!gps) {
+                    std::cout << "Can't open file " << file.path().string() << std::endl;
+                } else {
+                    std::vector<Ray> bundle;
+                    int numberOfRays;
+                    gps >> numberOfRays;
 
-                        while (numberOfRays--) {
-                            Ray ray;
-                            gps >> ray;
-                            if (ray.time >= startTime && ray.time <= finishTime) {
-                                ray.computeParameters();
-                                bundle.push_back(ray);
-                            }
+                    while (numberOfRays--) {
+                        Ray ray;
+                        gps >> ray;
+                        if (ray.time >= startTime && ray.time <= finishTime) {
+                            ray.computeParameters();
+                            bundle.push_back(ray);
                         }
-                        gps.close();
-                        if (bundle.size() > 1) {
-                            data.push_back(bundle);
-                        }
+                    }
+                    gps.close();
+                    if (bundle.size() > 1) {
+                        data.push_back(bundle);
                     }
                 }
             }
