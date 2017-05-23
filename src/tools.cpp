@@ -57,7 +57,7 @@ std::vector<double> computeVectorResidual(const Grid &x, const std::vector<Vecto
     return difference;
 }
 
-std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime, unsigned finishTime) {
+std::vector<std::vector<Ray>> get_data(const std::string &path, unsigned startTime, unsigned finishTime) {
     startTime *= 3600;
     finishTime *= 3600;
     boost::filesystem::path p(path);
@@ -117,23 +117,22 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
 }
 
 
-void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> integrals, double error, bool onlyPositive) {
+void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
     double initialResidual = computeResidual(grid, matrix, integrals);
-    double firstRes, secondRes, currentRes;
     double limit = 0;
     double iterations = 50;
     double counter = 0;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    firstRes = computeResidual(grid, matrix, integrals) / initialResidual;
+    const double firstRes = computeResidual(grid, matrix, integrals) / initialResidual;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
+    const double secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
     limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
     std::cout << limit << std::endl;
-    currentRes = secondRes;
+    double currentRes = secondRes;
     while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
         currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
@@ -147,15 +146,15 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
 }
 
 
-double degreeToRadian(double degree){
+double degreeToRadian(const double degree){
     return degree / 180 * pi;
 }
 
-double radianToDegree(double radian) {
+double radianToDegree(const double radian) {
     return radian * 180 / pi;
 }
 
-void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sleMatrix, std::vector<double> integrals, bool useSecondGrid,
+void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid,
  ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();

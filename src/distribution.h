@@ -35,7 +35,7 @@ public:
     double operator() (point R, const double t) const;
     CoordinateTransformation *coordinateTransformation;
 private:
-    virtual double value(const point R, const double t) const = 0;
+    virtual double value(const point &R, const double t) const = 0;
 };
 
 class ChepmanLayer : public ElectronDensityDistribution {
@@ -45,7 +45,7 @@ public:
     void add_spot(const point &location, const double peak, const double period, const double intensity, const double size);
     void add_wave(const point &location, const double peak, const double period, const double speed);
 private:
-    double value(const point R, const double t) const;
+    double value(const point &R, const double t) const;
     double nmin, nm, hm, H, d, dt;
     
     std::vector<Spot> spots;

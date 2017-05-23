@@ -3,7 +3,7 @@
 #include "integration.h"
 
 
-double Trapezium::operator()(const BaseRay ray, const ElectronDensityDistribution &model) {
+double Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
     const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
     const double m = 100;
     const double h = r / m;
@@ -22,7 +22,7 @@ double Trapezium::operator()(const BaseRay ray, const ElectronDensityDistributio
     return value;
 }
 
-double Rectangle::operator()(const BaseRay ray, const ElectronDensityDistribution &model) {
+double Rectangle::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
     const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
     const double m = 100;
     const double h = r / m;

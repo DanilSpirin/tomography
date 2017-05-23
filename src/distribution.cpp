@@ -7,17 +7,13 @@
 Spot::Spot() {}
 Spot::~Spot() {}
 
-Spot::Spot(const point &location, const double peak, const double period, const double intensity, const double size) {
-    this->location = location;
+Spot::Spot(const point &location, const double peak, const double period, const double intensity, const double size)
+    : location(location), peak(peak), period(period), intensity(intensity), size(size) {
     this->location.R[0] /= (180.0 / pi);
     this->location.R[1] /= (180.0 / pi);
-    this->peak = peak;
-    this->period = period;
-    this->intensity = intensity;
-    this->size = size;
 }
 
-Spot::Spot(const Spot &a)  {
+Spot::Spot(const Spot &a) {
     this->location = a.location;
     this->peak = a.peak;
     this->period = a.period;
@@ -32,13 +28,10 @@ double Spot::operator()(const point& R, const double time) const {
 Wave::Wave() {}
 Wave::~Wave() {}
 
-Wave::Wave(const point &location, const double start, const double period, const double speed) {
-    this->location = location;
+Wave::Wave(const point &location, const double start, const double period, const double speed)
+    : location(location), start(start), period(period), speed(speed) {
     this->location.R[0] /= (180.0 / pi);
     this->location.R[1] /= (180.0 / pi);
-    this->start = start;
-    this->period = period;
-    this->speed = speed;
 }
 
 Wave::Wave(const Wave &a) {
@@ -90,7 +83,7 @@ void ChepmanLayer::add_wave(const point &location, const double start, const dou
     waves.push_back(Wave(location, start, period, speed));
 }
 
-double ChepmanLayer::value(const point R, const double time) const {
+double ChepmanLayer::value(const point &R, const double time) const {
     const double longitute = R.R[0], latitude = R.R[1], h = R.R[2] - Re;
 
 	const double UT = (time - dt) / 60.0 / 60.0;    //всемирное время

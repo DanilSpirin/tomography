@@ -2,14 +2,14 @@
 #include "vector_sparse.h"
 
 
-void VectorSparse::add(double a, int b) {
+void VectorSparse::add(const double a, const int b) {
     phi.push_back(a);
     number.push_back(b);
 }
-int VectorSparse::getNumber(int i) const {
+int VectorSparse::getNumber(const int i) const {
     return number.at(i);
 }
-double VectorSparse::getPhi(int i) const {
+double VectorSparse::getPhi(const int i) const {
     return phi.at(i);
 }
 
@@ -45,7 +45,7 @@ VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
     return c;
 }
 
-VectorSparse operator * (const double a, const VectorSparse b) {
+VectorSparse operator * (const double a, const VectorSparse &b) {
     VectorSparse tmp(b);
     for (int i = 0; i < tmp.getSize(); ++i) {
         tmp.phi[i] = b.phi[i] * a;
@@ -53,7 +53,7 @@ VectorSparse operator * (const double a, const VectorSparse b) {
     return tmp;
 }
 
-VectorSparse operator * (const VectorSparse b, const double a) {
+VectorSparse operator * (const VectorSparse &b, const double a) {
     VectorSparse tmp(b);
     for (int i = 0; i < tmp.getSize(); ++i) {
         tmp.phi[i] = b.phi[i] * a;
@@ -61,7 +61,7 @@ VectorSparse operator * (const VectorSparse b, const double a) {
     return tmp;
 }
 
-VectorSparse operator / (const VectorSparse a, const double b) {
+VectorSparse operator / (const VectorSparse &a, const double b) {
     VectorSparse tmp(a);
     for (int i = 0; i < tmp.getSize(); ++i) {
         tmp.phi[i] = a.phi[i] / b;

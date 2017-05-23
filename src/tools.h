@@ -17,16 +17,16 @@ double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const 
 std::vector<double> computeVectorResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 
 // Сканирование указанной директории
-std::vector<std::vector<Ray>> get_data(std::string path, unsigned startTime = 0, unsigned finishTime = 24);
+std::vector<std::vector<Ray>> get_data(const std::string &path, unsigned startTime = 0, unsigned finishTime = 24);
 
 // Координаты станций
 std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data);
 
 
-void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> integrals, double error, bool onlyPositive = true);
-void computeParametrs(Grid &crude, Grid &accurate, std::vector<VectorSparse> sleMatrix, std::vector<double> integrals, bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual);
+void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive = true);
+void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual);
 
-double degreeToRadian(double degree);
-double radianToDegree(double radian);
+double degreeToRadian(const double degree);
+double radianToDegree(const double radian);
 
-std::list<unsigned> createListOfIntervals(unsigned first, unsigned last);
+std::list<unsigned> createListOfIntervals(const unsigned first, const unsigned last);
