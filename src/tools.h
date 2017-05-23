@@ -17,7 +17,7 @@ double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const 
 std::vector<double> computeVectorResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 
 // Сканирование указанной директории
-std::vector<std::vector<Ray>> get_data(const std::string &path, unsigned startTime = 0, unsigned finishTime = 24);
+std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned startTime = 0, const unsigned finishTime = 24);
 
 // Координаты станций
 std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data);

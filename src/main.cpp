@@ -10,8 +10,6 @@
 bool useSecondGrid = true;
 bool calcParametrs = false;
 
-unsigned timeStart, timeFinish;
-
 std::string pathToData = "/home/ds/science/2003_302_1/";
 std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
@@ -29,8 +27,8 @@ int main(int argc, const char * argv[]) {
     chepmanLayer.add_wave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
     chepmanLayer.add_wave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
 
-    timeStart = 0;
-    timeFinish = 24;
+    const unsigned timeStart = 0;
+    const unsigned timeFinish = 24;
 
     std::list<unsigned> crudeIntervalsDim = createListOfIntervals(8, 8);
     std::list<unsigned> crudeIntervalsTime = createListOfIntervals(timeFinish - timeStart, timeFinish - timeStart);

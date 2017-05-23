@@ -6,7 +6,6 @@
 #include "math.h"
 #include "integration.h"
 
-extern unsigned timeStart, timeFinish;
 extern std::string pathToProcessedData;
 
 void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
@@ -57,9 +56,7 @@ std::vector<double> computeVectorResidual(const Grid &x, const std::vector<Vecto
     return difference;
 }
 
-std::vector<std::vector<Ray>> get_data(const std::string &path, unsigned startTime, unsigned finishTime) {
-    startTime *= 3600;
-    finishTime *= 3600;
+std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned startTime, const unsigned finishTime) {
     boost::filesystem::path p(path);
     std::vector<std::vector<Ray>> data;
     if (boost::filesystem::exists(p) && boost::filesystem::is_directory(p)) {
@@ -76,7 +73,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, unsigned startTi
                     while (numberOfRays--) {
                         Ray ray;
                         gps >> ray;
-                        if (ray.time >= startTime && ray.time <= finishTime) {
+                        if (ray.time >= startTime * 3600 && ray.time <= finishTime * 3600) {
                             ray.computeParameters();
                             bundle.push_back(ray);
                         }
@@ -118,10 +115,8 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
 
 
 void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
-    double initialResidual = computeResidual(grid, matrix, integrals);
-    double limit = 0;
+    const double initialResidual = computeResidual(grid, matrix, integrals);
     double iterations = 50;
-    double counter = 0;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
@@ -130,9 +125,10 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
     const double secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
-    limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
+    const double limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
     std::cout << limit << std::endl;
     double currentRes = secondRes;
+    unsigned counter = 0;
     while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
         currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
@@ -146,7 +142,7 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
 }
 
 
-double degreeToRadian(const double degree){
+double degreeToRadian(const double degree) {
     return degree / 180 * pi;
 }
 
@@ -158,34 +154,33 @@ void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSpars
  ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();
-    double reconstructionSum = 0, modelSum = 0;
+    double reconstructionSum = 0;
+    double modelSum = 0;
     int density = 100; // Количество точек по оси, по которым строится область
+    const unsigned timeStart = time.left / 3600;
+    const unsigned timeFinish = time.right / 3600;
     for (int t = timeStart; t < timeFinish; ++t) {
         for (int i = 0; i <= density; ++i) {
             for (int j = 0; j <= density; ++j) {
-                double phi = latitude.left + (latitude.right - latitude.left) / density * i;
-                double theta = longitude.left + (longitude.right - longitude.left) / density * j;
-                double time = t * 3600;
+                const double phi = latitude.left + (latitude.right - latitude.left) / density * i;
+                const double theta = longitude.left + (longitude.right - longitude.left) / density * j;
+                const double ray_time = t * 3600;
 
                 point station(phi, theta, Re);
                 point satellite(phi, theta, Re + 1000);
                 model.coordinateTransformation->backward(station);
                 model.coordinateTransformation->backward(satellite);
 
-                Ray L(station, satellite, time);
+                Ray L(station, satellite, ray_time);
 
-                double crudeValue, accurateValue, sumValue, modelValue;
                 Rectangle integral;
 
-                crudeValue = crude(phi, theta, time);
-                modelValue = integral(L, model);
+                const double crudeValue = crude(phi, theta, ray_time);
+                const double modelValue = integral(L, model);
 
                 modelSum += modelValue * modelValue;
                 if (useSecondGrid) {
-                    accurateValue = accurate(phi, theta, time);
-                    sumValue = crudeValue + accurateValue;
-                }
-                if (useSecondGrid) {
+                    const double sumValue = crudeValue + accurate(phi, theta, ray_time);
                     reconstructionSum += (sumValue - modelValue) * (sumValue - modelValue);
                 } else {
                     reconstructionSum += (crudeValue - modelValue) * (crudeValue - modelValue);
@@ -197,7 +192,7 @@ void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSpars
     latitude.toDegrees();
     longitude.toDegrees();
 
-    std::ofstream parametrs((pathToProcessedData+"parametrs.txt").c_str(), std::ios::app);
+    std::ofstream parametrs(pathToProcessedData + "parametrs.txt", std::ios::app);
 
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
