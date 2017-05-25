@@ -121,14 +121,14 @@ int main(int argc, const char * argv[]) {
         char path[100];
         const int density = 100;
         for (unsigned t = timeStart; t < timeFinish + 1; ++t) {
-            sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "first.txt");
+            sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "first.txt");
             crudeOut.open(path);
-            sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "model.txt");
+            sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "model.txt");
             modelOut.open(path);
             if (useSecondGrid) {
-                sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "second.txt");
+                sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "second.txt");
                 accurateOut.open(path);
-                sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", t, "sum.txt");
+                sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "sum.txt");
                 sumOut.open(path);
             }
             for (int i = 0; i <= density; ++i) {
