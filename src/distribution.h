@@ -11,6 +11,7 @@ public:
     Spot(const Spot &a);
     ~Spot();
     double operator () (const point& R, const double time) const;
+    Spot& operator=(const Spot &a);
 private:
     point location;
     double peak, period, intensity, size;
@@ -23,6 +24,7 @@ public:
     Wave(const Wave &a);
     ~Wave();
     double operator () (const point& R, const double time) const;
+    Wave& operator=(const Wave &a);
 private:
     point location;
     double period, start, speed;

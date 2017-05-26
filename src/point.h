@@ -13,6 +13,7 @@ public:
     double length() const;
     double length_squared() const;
     double radius_squared() const;
+    point& operator = (const point &a);
 };
 
 point operator - (const point&a, const point& b);

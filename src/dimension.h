@@ -16,6 +16,7 @@ public:
     std::vector<unsigned> sequence(const double i) const; // TODO: come up withe a better name
     double get(const double x, const double i) const; // TODO: come up with a better name
     friend std::ostream& operator << (std::ostream& out, const Dimension& dimension);
+    Dimension& operator = (const Dimension &foo);
 private:
     bool inDegrees;
     double step;

@@ -26,6 +26,13 @@ double point::radius_squared() const {
     return R[0] * R[0] + R[1] * R[1];
 }
 
+point& point::operator = (const point &a) {
+    for (int i = 0; i < 3; ++i) {
+        R[i] = a.R[i];
+    }
+    return *this;
+}
+
 point operator + (const point& a, const point& b) {
     point c;
     for (int i = 0; i < 3; ++i) {

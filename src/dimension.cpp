@@ -21,6 +21,15 @@ Dimension::Dimension(Dimension const &foo) {
     this->inDegrees = foo.inDegrees;
 }
 
+Dimension& Dimension::operator=(const Dimension &foo) {
+    this->left = foo.left;
+    this->right = foo.right;
+    this->intervals = foo.intervals;
+    this->step = foo.step;
+    this->inDegrees = foo.inDegrees;
+    return *this;
+}
+
 Dimension::Dimension() {
 
 }

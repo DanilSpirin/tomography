@@ -13,12 +13,20 @@ Spot::Spot(const point &location, const double peak, const double period, const 
     this->location.R[1] /= (180.0 / pi);
 }
 
-Spot::Spot(const Spot &a) {
+Spot::Spot(const Spot &a) : location(a.location) {
+    this->peak = a.peak;
+    this->period = a.period;
+    this->intensity = a.intensity;
+    this->size = a.size;
+}
+
+Spot& Spot::operator=(const Spot &a) {
     this->location = a.location;
     this->peak = a.peak;
     this->period = a.period;
     this->intensity = a.intensity;
     this->size = a.size;
+    return *this;
 }
 
 double Spot::operator()(const point& R, const double time) const {
@@ -34,12 +42,20 @@ Wave::Wave(const point &location, const double start, const double period, const
     this->location.R[1] /= (180.0 / pi);
 }
 
-Wave::Wave(const Wave &a) {
-    this->location = a.location;
+Wave::Wave(const Wave &a) : location(a.location) {
     this->start = a.start;
     this->period = a.period;
     this->speed = a.speed;
 }
+
+Wave& Wave::operator=(const Wave &a) {
+    this->location = a.location;
+    this->start = a.start;
+    this->period = a.period;
+    this->speed = a.speed;
+    return *this;
+}
+
 double Wave::p(const double r, const double v, const double T) const {
     double r0 = v * T / 2;
     if (r < r0) {
