@@ -33,7 +33,7 @@ VectorSparse Grid::basis(const double x, const double y, const double z) const {
                                     * spline(this->longitude.get(y, lon))
                                     * spline(this->time.get(z, time));
                 const unsigned number = (lat * (this->longitude.size() + 1) + lon) * (this->time.size() + 1) + time;
-                basis_vector.add(value, (int)number);
+                basis_vector.push_back(number, value);
             }
         }
     }
@@ -43,8 +43,9 @@ VectorSparse Grid::basis(const double x, const double y, const double z) const {
 double Grid::operator()(const double x, const double y, const double z) {
     double sum = 0;
     VectorSparse temp = basis(x, y, z);
-    for (int j = 0; j < temp.getSize(); ++j) {
-        sum += temp.getPhi(j) * operator[](temp.getNumber(j));
+    for (unsigned i = 0; i < temp.size(); ++i) {
+        const auto element = temp[i];
+        sum += element.value * operator[](element.index);
     }
     return sum;
 }

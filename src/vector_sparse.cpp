@@ -1,70 +1,100 @@
 #include <iostream>
 #include "vector_sparse.h"
 
+size_t VectorSparse::size() const {
+    if (_value.size() == _index.size()) {
+        return _value.size();
+    } else {
+        throw "Problem in vector sparse. Index and value sizes differ.";
+    }
+}
 
-void VectorSparse::add(const double a, const int b) {
-    phi.push_back(a);
-    number.push_back(b);
+void VectorSparse::push_back(const unsigned index, const double value) {
+    _index.push_back(index);
+    _value.push_back(value);
 }
-int VectorSparse::getNumber(const int i) const {
-    return number.at(i);
+
+void VectorSparse::push_back(const Element &element) {
+    _index.push_back(element.index);
+    _value.push_back(element.value);
 }
-double VectorSparse::getPhi(const int i) const {
-    return phi.at(i);
+
+Element VectorSparse::operator[](const unsigned i) const {
+    return Element(_index[i], _value[i]);
+}
+
+Element VectorSparse::at(const unsigned i) const {
+    return Element(_index.at(i), _value.at(i));
 }
 
 VectorSparse operator - (const VectorSparse &a) {
-    VectorSparse b;
-    for (int i = 0; i < a.getSize(); ++i) {
-        b.add(-a.getPhi(i), a.getNumber(i));
+    VectorSparse result(a);
+    for (unsigned i = 0; i < result.size(); ++i) {
+        result._value[i] = -result._value[i];
     }
-    return b;
+    return result;
 }
+
 VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
-    if (b.getSize() == 0 || b.getSize() == -1) {
+    const auto left_size = a.size();
+    const auto right_size = b.size();
+    if (!right_size) {
         return a;
     }
-    if (a.getSize() == 0 || a.getSize() == -1) {
+    if (!left_size) {
         return -b;
     }
-    VectorSparse c;
-    int i1 = 0, i2 = 0;
-    while(i1 < a.getSize() || i2 < b.getSize()) {
-		if(i1 < a.getSize() && (i2 == b.getSize() || a.number[i1] < b.number[i2])) {
-			c.add(a.phi[i1], a.number[i1]);
-			i1++;
-		} else if (i2 < b.getSize() && (i1 == a.getSize() || b.number[i2] < a.number[i1])) {
-			c.add(-b.phi[i2], b.number[i2]);
-			i2++;
+    VectorSparse result;
+    unsigned i_left = 0;
+    unsigned i_right = 0;
+    while (i_left < left_size && i_right < right_size) {
+        const auto left = a[i_left];
+        const auto right = b[i_right];
+		if (left.index < right.index) {
+            result.push_back(left);
+			++i_left;
+		} else if (right.index < left.index) {
+            result.push_back(-right);
+			++i_right;
 		} else {
-			c.add(a.phi[i1]-b.phi[i2], a.number[i1]);
-			i1++;
-			i2++;
+            result.push_back(left.index, left.value - right.value);
+            ++i_left;
+            ++i_right;
 		}
     }
-    return c;
+    while (i_left < left_size) {
+        const auto left = a[i_left];
+        result.push_back(left);
+        ++i_left;
+    } 
+    while (i_right < right_size) {
+        const auto right = b[i_right];
+        result.push_back(-right);
+        ++i_right;
+    }
+    return result;
 }
 
 VectorSparse operator * (const double a, const VectorSparse &b) {
-    VectorSparse tmp(b);
-    for (int i = 0; i < tmp.getSize(); ++i) {
-        tmp.phi[i] = b.phi[i] * a;
+    VectorSparse result(b);
+    for (unsigned i = 0; i < result.size(); ++i) {
+        result._value[i] *= a;
     }
-    return tmp;
+    return result;
 }
 
-VectorSparse operator * (const VectorSparse &b, const double a) {
-    VectorSparse tmp(b);
-    for (int i = 0; i < tmp.getSize(); ++i) {
-        tmp.phi[i] = b.phi[i] * a;
+VectorSparse operator * (const VectorSparse &a, const double b) {
+    VectorSparse result(a);
+    for (unsigned i = 0; i < result.size(); ++i) {
+        result._value[i] *= b;
     }
-    return tmp;
+    return result;
 }
 
 VectorSparse operator / (const VectorSparse &a, const double b) {
-    VectorSparse tmp(a);
-    for (int i = 0; i < tmp.getSize(); ++i) {
-        tmp.phi[i] = a.phi[i] / b;
+    VectorSparse result(a);
+    for (unsigned i = 0; i < result.size(); ++i) {
+        result._value[i] /= b;
     }
-    return tmp;
+    return result;
 }

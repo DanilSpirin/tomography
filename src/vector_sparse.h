@@ -2,15 +2,22 @@
 
 #include <vector>
 
+struct Element {
+    unsigned index;
+    double value;
+    Element(const unsigned index, const double value) : index(index), value(value) {}
+    Element operator-() const {return Element(index, -value);}
+};
+
 class VectorSparse {
-    std::vector<double> phi;
-    std::vector<int> number;
+    std::vector<double> _value;
+    std::vector<unsigned> _index;
 public:
-    size_t getSize() const {return phi.size() == number.size() ? phi.size() : -1;};
-    void add(const double a, const int b);
-    double getPhi(const int i) const;
-    int getNumber(const int i) const;
-//    VectorSparse& operator *= (const double a);
+    size_t size() const;
+    void push_back(const unsigned index, const double value);
+    void push_back(const Element &element);
+    Element at(const unsigned i) const;
+    Element operator[](const unsigned i) const;
     friend VectorSparse operator - (const VectorSparse& a, const VectorSparse& b);
     friend VectorSparse operator - (const VectorSparse& a);
     friend VectorSparse operator * (const double a, const VectorSparse &b);
