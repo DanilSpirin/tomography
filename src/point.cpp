@@ -8,11 +8,6 @@ point::point(const double x, const double y, const double z) {
     R[1] = y;
     R[2] = z;
 }
-point::point(const point& a) {
-    for (int i = 0; i < 3; ++i) {
-        R[i] = a.R[i];
-    }
-}
 
 double point::length() const {
     return sqrt(R[0] * R[0] + R[1] * R[1] + R[2] * R[2]);
@@ -24,13 +19,6 @@ double point::length_squared() const {
 
 double point::radius_squared() const {
     return R[0] * R[0] + R[1] * R[1];
-}
-
-point& point::operator = (const point &a) {
-    for (int i = 0; i < 3; ++i) {
-        R[i] = a.R[i];
-    }
-    return *this;
 }
 
 point operator + (const point& a, const point& b) {

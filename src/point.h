@@ -9,11 +9,9 @@ class point {
 public:
     double R[3];
     point(const double x = 0, const double y = 0, const double z = Re);
-    point(const point &a);
     double length() const;
     double length_squared() const;
     double radius_squared() const;
-    point& operator = (const point &a);
 };
 
 point operator - (const point&a, const point& b);

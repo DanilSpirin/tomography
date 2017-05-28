@@ -6,12 +6,8 @@
 
 class Spot {
 public:
-    Spot();
     Spot(const point &location, const double peak, const double period, const double intensity, const double size);
-    Spot(const Spot &a);
-    ~Spot();
     double operator () (const point& R, const double time) const;
-    Spot& operator=(const Spot &a);
 private:
     point location;
     double peak, period, intensity, size;
@@ -19,12 +15,8 @@ private:
 
 class Wave {
 public:
-    Wave();
     Wave(const point &location, const double start, const double period, const double speed);
-    Wave(const Wave &a);
-    ~Wave();
     double operator () (const point& R, const double time) const;
-    Wave& operator=(const Wave &a);
 private:
     point location;
     double period, start, speed;
