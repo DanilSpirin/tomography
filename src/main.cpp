@@ -14,9 +14,6 @@ std::string pathToData = "/home/ds/science/2003_302_1/";
 std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
 int main(int argc, const char * argv[]) {
-    std::ofstream crudeOut, accurateOut, sumOut, modelOut;
-
-    Rectangle integral;
     ChepmanLayer chepmanLayer;
 
     chepmanLayer.add_spot(point(30, 55), 12, pi / 24, 150, 0.5);
@@ -47,6 +44,7 @@ int main(int argc, const char * argv[]) {
     }
     station_file.close();
 
+    Rectangle integral;
     for (auto &i : data) {
         for (auto &j : i) {
             j.integral = integral(j, chepmanLayer);
@@ -113,6 +111,8 @@ int main(int argc, const char * argv[]) {
 
     if (!calcParametrs) {
 
+        std::ofstream crudeOut, accurateOut, sumOut, modelOut;
+
         Limits crude_limits, accurate_limits, model_limits, sum_limits;
 
         latitude.toRadian();
@@ -133,8 +133,8 @@ int main(int argc, const char * argv[]) {
             }
             for (int i = 0; i <= density; ++i) {
                 for (int j = 0; j <= density; ++j) {
-                    double phi = latitude.left + (latitude.right - latitude.left) / density * i;
-                    double theta = longitude.left + (longitude.right - longitude.left) / density * j;
+                    const double phi = latitude.left + (latitude.right - latitude.left) / density * i;
+                    const double theta = longitude.left + (longitude.right - longitude.left) / density * j;
                     double time = t * 3600;
 
                     point station(phi, theta, Re);
