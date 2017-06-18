@@ -6,15 +6,15 @@
 #include "math.h"
 #include "integration.h"
 
-namespace fs = std::experimental::filesystem::v1;
+namespace fs = std::experimental::filesystem;
 
 extern std::string pathToProcessedData;
 
 void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
     phi.clear();
     integrals.clear();
-    for (int j = 0; j < data.size(); ++j) {
-        for (int i = 0; i < data[j].size() - 1; ++i) {
+    for (unsigned j = 0; j < data.size(); ++j) {
+        for (unsigned i = 0; i < data[j].size() - 1; ++i) {
             const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
             const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
             phi.push_back(left - right);
@@ -25,8 +25,8 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
 
 void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
     phi.clear();
-    for (int j = 0; j < data.size(); ++j) {
-        for (int i = 0; i < data[j].size() - 1; ++i) {
+    for (unsigned j = 0; j < data.size(); ++j) {
+        for (unsigned i = 0; i < data[j].size() - 1; ++i) {
             const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
             const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
             phi.push_back(left - right);
@@ -160,12 +160,12 @@ void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSpars
     longitude.toRadian();
     double reconstructionSum = 0;
     double modelSum = 0;
-    int density = 100; // Количество точек по оси, по которым строится область
+    unsigned density = 100; // Количество точек по оси, по которым строится область
     const unsigned timeStart = time.left / 3600;
     const unsigned timeFinish = time.right / 3600;
-    for (int t = timeStart; t < timeFinish; ++t) {
-        for (int i = 0; i <= density; ++i) {
-            for (int j = 0; j <= density; ++j) {
+    for (unsigned t = timeStart; t < timeFinish; ++t) {
+        for (unsigned i = 0; i <= density; ++i) {
+            for (unsigned j = 0; j <= density; ++j) {
                 const double phi = latitude.left + (latitude.right - latitude.left) / density * i;
                 const double theta = longitude.left + (longitude.right - longitude.left) / density * j;
                 const double ray_time = t * 3600;

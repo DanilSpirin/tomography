@@ -8,7 +8,7 @@ void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector
     for (unsigned i = 0; i < m.size(); ++i) {
         double aa = 0;
         double ax = 0;
-        for (int k = 0; k < a[i].size(); ++k) {
+        for (unsigned k = 0; k < a[i].size(); ++k) {
             const auto element = a[i][k];
             aa += element.value * element.value;
             ax += element.value * x[element.index];

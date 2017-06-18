@@ -7,7 +7,7 @@
 #include <climits>
 extern std::string pathToProcessedData;
 
-Solution::Solution() : grids(0){};
+Solution::Solution(){}
 
 void Solution::setLimits(float latitudeLeft, float latitudeRight, float longitudeLeft, float longitudeRight, float timeLeft, float timeRight) {
     this->latitudeLeft = latitudeLeft;

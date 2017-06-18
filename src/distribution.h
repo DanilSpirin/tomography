@@ -19,7 +19,7 @@ public:
     double operator () (const point& R, const double time) const;
 private:
     point location;
-    double period, start, speed;
+    double start, period, speed;
     double p(const double r, const double v, const double T) const;
     double f(const double t, const double T, const double n) const;
 };
