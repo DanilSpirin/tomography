@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
 #include "tools.h"
 #include "math.h"
 #include "integration.h"
+
+namespace fs = std::experimental::filesystem::v1;
 
 extern std::string pathToProcessedData;
 
@@ -59,10 +61,9 @@ std::vector<double> computeVectorResidual(const Grid &x, const std::vector<Vecto
 }
 
 std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned startTime, const unsigned finishTime) {
-    boost::filesystem::path p(path);
     std::vector<std::vector<Ray>> data;
-    if (boost::filesystem::exists(p) && boost::filesystem::is_directory(p)) {
-        for (const auto& file : boost::filesystem::directory_iterator(p)) {
+    if (fs::exists(path) && fs::is_directory(path)) {
+        for (const auto& file : fs::directory_iterator(path)) {
             if (file.path().extension() == ".dat") {
                 std::ifstream gps(file.path().string());
                 if (!gps) {
