@@ -4,7 +4,8 @@
 #include <string>
 
 #include "solution.h"
-#include <climits>
+#include "limits.h"
+
 extern std::string pathToProcessedData;
 
 Solution::Solution(){}
@@ -56,7 +57,7 @@ void Solution::find() {
 }
 
 void Solution::print() {
-    double min = INT_MAX, max = INT_MIN;
+    Limits limit;
     Dimension latitude(latitudeLeft, latitudeRight, 0);
     Dimension longitude(longitudeLeft, longitudeRight, 0);
 
@@ -65,27 +66,22 @@ void Solution::print() {
 
     int density = 150;
 
-    std::ofstream out;
     char path[100];
     for (int i = (int)timeLeft; i < timeRight + 1; ++i) {
         sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", i, ".txt");
-        out.open(path);
+        std::ofstream out(path);
         for (int x = 0; x <= density; ++x) {
             for (int y = 0; y <= density; ++y) {
-                double phi = latitude.left + (latitude.right - latitude.left) / density * x;
-                double theta = longitude.left + (longitude.right - longitude.left) / density * y;
-                double time = i * 3600;
+                const double phi = latitude.left + (latitude.right - latitude.left) / density * x;
+                const double theta = longitude.left + (longitude.right - longitude.left) / density * y;
+                const double time = i * 3600;
 
                 double sum = 0;
                 for (auto &&item : grids) {
                     sum += item(phi, theta, time);
                 }
-                if (sum < min) {
-                    min = sum;
-                }
-                if (sum > max) {
-                    max = sum;
-                }
+
+                limit.update(sum);
 
                 out << sum;
                 (y != density) ? (out << " ") : (out << std::endl);
@@ -97,8 +93,7 @@ void Solution::print() {
     latitude.toDegrees();
     longitude.toDegrees();
 
-    sprintf(path, "%s%s", pathToProcessedData.c_str(), "limits.txt");
-    std::ofstream limits(path);
-    limits << latitude << std::endl << longitude << std::endl << floor(min) << ' ' << ceil(max);
+    std::ofstream limits(pathToProcessedData + "limits.txt");
+    limits << latitude << '\n' << longitude << '\n' << limit;
     limits.close();
 }
