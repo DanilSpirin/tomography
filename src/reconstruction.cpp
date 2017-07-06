@@ -9,17 +9,17 @@ void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector
         double aa = 0;
         double ax = 0;
         for (unsigned k = 0; k < a[i].size(); ++k) {
-            const auto element = a[i][k];
-            aa += element.value * element.value;
-            ax += element.value * x[element.index];
+            const auto [index, value] = a[i][k];
+            aa += value * value;
+            ax += value * x[index];
         }
         if (aa == 0) {
             continue;
         }
         const double t = (m[i] - ax) / aa;
         for (unsigned j = 0; j < a[i].size(); ++j) {
-            const auto element = a[i][j];
-            x[element.index] += element.value * t;
+            const auto [index, value] = a[i][j];
+            x[index] += value * t;
         }
         if (onlyPositive) {
             for (unsigned j = 0; j < x.size(); ++j) {
@@ -37,12 +37,12 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
     for (unsigned i = 0; i < m.size(); ++i) {
         double ax = 0;
         for (unsigned j = 0; j < a[i].size(); ++j) {
-            const auto element = a[i][j];
-            ax += element.value * x[element.index];
+            const auto [index, value] = a[i][j];
+            ax += value * x[index];
         }
         for (unsigned j = 0; j < a[i].size(); ++j) {
-            const auto element = a[i][j];
-            dx[element.index] += (m[i] - ax) * element.value;
+            const auto [index, value] = a[i][j];
+            dx[index] += (m[i] - ax) * value;
         }
     }
     // Вычисление коэффициента t для минимизации невязки
@@ -52,9 +52,9 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
         double adxj = 0;
         double axyj = 0;
         for (unsigned k = 0; k < a[j].size(); ++k) {
-            const auto element = a[j][k];
-            adxj += element.value * dx[element.index];
-            axyj += element.value * x[element.index];
+            const auto [index, value] = a[j][k];
+            adxj += value * dx[index];
+            axyj += value * x[index];
         }
         adx.push_back(adxj);
         axy.push_back(axyj - m[j]);

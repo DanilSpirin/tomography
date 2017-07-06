@@ -39,8 +39,8 @@ int main(int argc, const char * argv[]) {
     std::list<std::pair<double, double>> stations = getStationList(data);
 
     std::ofstream station_file(pathToProcessedData + "stations_check.txt");
-    for (const auto &st : stations) {
-        station_file << radianToDegree(st.first) << ' ' << radianToDegree(st.second) << '\n';
+    for (const auto &[lat, lon] : stations) {
+        station_file << radianToDegree(lat) << ' ' << radianToDegree(lon) << '\n';
     }
     station_file.close();
 
