@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm>
+#include <numeric>
 #include <vector>
 
 #include "reconstruction.h"
@@ -22,11 +24,9 @@ void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector
             x[index] += value * t;
         }
         if (onlyPositive) {
-            for (unsigned j = 0; j < x.size(); ++j) {
-                if (x[j] < 0) {
-                    x[j] = 0;
-                }
-            }
+            std::transform(x.begin(), x.end(), x.begin(),
+                [] (double value) { return std::max(value, 0.0); }
+            );
         }
     }
 }
@@ -59,22 +59,19 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
         adx.push_back(adxj);
         axy.push_back(axyj - m[j]);
     }
-    double sum1 = 0, sum2 = 0;
-    for (unsigned j = 0; j < adx.size(); ++j) {
-        sum1 += axy[j] * adx[j];
-        sum2 += adx[j] * adx[j];
-    }
-    const double t = -sum1 / sum2;
+    // Numerator is a sum of axy and adx product values
+    // While denominator is a sum of adx values squared
+    const double numerator = std::inner_product(axy.begin(), axy.end(), adx.begin(), 0.0);
+    const double denominator = std::inner_product(adx.begin(), adx.end(), adx.begin(), 0.0);
+    const double t = - numerator / denominator;
 
     // Вычисляем новый x
     for (unsigned k = 0; k < x.size(); ++k) {
         x[k] += t * dx[k];
     }
     if (onlyPositive) {
-        for (unsigned k = 0; k < x.size(); ++k) {
-            if (x[k] < 0) {
-                x[k] = 0;
-            }
-        }
+        std::transform(x.begin(), x.end(), x.begin(),
+            [] (double value) { return std::max(value, 0.0); }
+        );
     }
 }
