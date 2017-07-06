@@ -73,10 +73,7 @@ double ChepmanLayer::value(const point &R, const double time) const {
 	const double zenith = sin(latitude) * sin(declination) + cos(latitude) * cos(declination) * cos(angle);
 	const double ksi = (h - hm) / H ;
 
-    double Q = nm * zenith;
-	if (Q < nmin) {
-        Q = nmin;
-    }
+    const double Q = std::max(nm * zenith, nmin);
 
     double wavesAddition = 0, spotsAddition = 0;
     for (const auto& i : waves) {
