@@ -7,13 +7,14 @@
 #include "tools.h"
 #include "limits.h"
 
-bool useSecondGrid = true;
-bool calcParametrs = false;
-
 std::string pathToData = "/home/ds/science/2003_302_1/";
 std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
 int main(int argc, const char * argv[]) {
+
+    const bool useSecondGrid = true;
+    const bool calcParametrs = false;
+    
     ChepmanLayer chepmanLayer;
 
     chepmanLayer.add_spot(point(30, 55), 12, pi / 24, 150, 0.5);
