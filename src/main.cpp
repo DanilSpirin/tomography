@@ -1,6 +1,6 @@
-#include <iostream>
 #include <fstream>
 #include <cmath>
+#include <fmt/format.h>
 
 #include "reconstruction.h"
 #include "integration.h"
@@ -118,17 +118,16 @@ int main(int argc, const char * argv[]) {
         latitude.toRadian();
         longitude.toRadian();
 
-        char path[100];
-        const int density = 100;
         for (unsigned t = timeStart; t < timeFinish + 1; ++t) {
-            sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "first.txt");
+            const int density = 100;
+            auto path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", t, "first.txt");
             crudeOut.open(path);
-            sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "model.txt");
+            path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", t, "model.txt");
             modelOut.open(path);
             if (useSecondGrid) {
-                sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "second.txt");
+                path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", t, "second.txt");
                 accurateOut.open(path);
-                sprintf(path, "%s%s%02u%s", pathToProcessedData.c_str(), "time_", t, "sum.txt");
+                path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", t, "sum.txt");
                 sumOut.open(path);
             }
             for (int i = 0; i <= density; ++i) {
@@ -141,7 +140,6 @@ int main(int argc, const char * argv[]) {
                     point satellite(phi, theta, Re + 1000);
                     chepmanLayer.coordinateTransformation->backward(station);
                     chepmanLayer.coordinateTransformation->backward(satellite);
-
                     Ray L(station, satellite, time);
 
                     const double crudeValue = crude(phi, theta, time);

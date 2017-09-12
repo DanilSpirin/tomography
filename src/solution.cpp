@@ -1,7 +1,7 @@
-#include <iostream>
 #include <fstream>
 #include <cmath>
 #include <string>
+#include <fmt/format.h>
 
 #include "solution.h"
 #include "limits.h"
@@ -52,7 +52,7 @@ void Solution::find() {
         }
 
     } else {
-        std::cout << "No grids, can't solve" << std::endl;
+        fmt::print("No grids, can't solve\n");
     }
 }
 
@@ -66,9 +66,8 @@ void Solution::print() {
 
     int density = 150;
 
-    char path[100];
     for (int i = static_cast<int>(timeLeft); i < timeRight + 1; ++i) {
-        sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", i, ".txt");
+        auto path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", i, ".txt");
         std::ofstream out(path);
         for (int x = 0; x <= density; ++x) {
             for (int y = 0; y <= density; ++y) {

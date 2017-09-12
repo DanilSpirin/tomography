@@ -1,6 +1,6 @@
-#include <iostream>
 #include <fstream>
 #include <experimental/filesystem>
+#include <fmt/format.h>
 
 #include "tools.h"
 #include "math.h"
@@ -67,7 +67,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
             if (file.path().extension() == ".dat") {
                 std::ifstream gps(file.path().string());
                 if (!gps) {
-                    std::cout << "Can't open file " << file.path().string() << std::endl;
+                    fmt::print("Can't open file {}\n", file.path().string());
                 } else {
                     std::vector<Ray> bundle;
                     int numberOfRays;
@@ -94,14 +94,13 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
 
 std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data) {
     std::list<std::pair<double, double>> stations;
-    bool found;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
     for (const auto& i : data) {
         for (const auto& j : i) {
             point station = j.station;
             chepmanLayer.coordinateTransformation->forward(station);
-            found = false;
+            bool found = false;
             for (const auto& k : stations) {
                 if (k.first == station.R[0] && k.second == station.R[1]) {
                     found = true;
@@ -130,7 +129,7 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
     }
     const double secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
     const double limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
-    std::cout << limit << std::endl;
+    fmt::print("{}\n", limit);
     double currentRes = secondRes;
     unsigned counter = 0;
     while (currentRes / limit > 1 + error) {
@@ -138,10 +137,10 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
         currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
         ++counter;
         if (counter > 500) {
-            std::cout << "stopped at current/limit = " << currentRes / limit << std::endl;
+            fmt::print("Stopped at current/limit = {}\n", currentRes / limit);
             break;
         }
-        std::cout << counter << std::endl;
+        fmt::print("{}\n", counter);
     }
 }
 

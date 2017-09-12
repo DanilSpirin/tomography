@@ -23,4 +23,4 @@ set(SOURCE_FILES
         )
 add_executable(tomography ${SOURCE_FILES})
 
-target_link_libraries(tomography "-lstdc++fs")
+target_link_libraries(tomography "-lstdc++fs -lfmt")
