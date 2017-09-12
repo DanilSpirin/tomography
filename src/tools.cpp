@@ -120,7 +120,7 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
 
 void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
     const double initialResidual = computeResidual(grid, matrix, integrals);
-    double iterations = 50;
+    const double iterations = 50;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
@@ -155,14 +155,14 @@ double radianToDegree(const double radian) {
 }
 
 void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid,
- ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, int intervals, int intervalsTime, double initialResidual) {
+ ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual) {
     latitude.toRadian();
     longitude.toRadian();
     double reconstructionSum = 0;
     double modelSum = 0;
     unsigned density = 100; // Количество точек по оси, по которым строится область
-    const unsigned timeStart = time.left / 3600;
-    const unsigned timeFinish = time.right / 3600;
+    const unsigned timeStart = static_cast<unsigned>(time.left / 3600);
+    const unsigned timeFinish = static_cast<unsigned>(time.right / 3600);
     for (unsigned t = timeStart; t < timeFinish; ++t) {
         for (unsigned i = 0; i <= density; ++i) {
             for (unsigned j = 0; j <= density; ++j) {

@@ -2,7 +2,6 @@
 
 #include "integration.h"
 
-
 double Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
     const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
     const double m = 100;

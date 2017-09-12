@@ -10,7 +10,7 @@ extern std::string pathToProcessedData;
 
 Solution::Solution(){}
 
-void Solution::setLimits(float latitudeLeft, float latitudeRight, float longitudeLeft, float longitudeRight, float timeLeft, float timeRight) {
+void Solution::setLimits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight) {
     this->latitudeLeft = latitudeLeft;
     this->latitudeRight = latitudeRight;
     this->longitudeLeft = longitudeLeft;
@@ -23,7 +23,7 @@ void Solution::setModel(ElectronDensityDistribution &model) {
     this->model = &model;
 }
 
-void Solution::addGrid(int spaceIntervals, int timeIntervals) {
+void Solution::addGrid(unsigned spaceIntervals, unsigned timeIntervals) {
     Grid foo;
     Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals * 2);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
@@ -37,7 +37,7 @@ void Solution::addData(std::vector<std::vector<Ray>> _data) {
 }
 
 void Solution::find() {
-    int numberOfGrids = (int)grids.size();
+    auto numberOfGrids = grids.size();
     if (numberOfGrids > 0) {
         std::vector<double> currentIntegrals;
         std::vector<VectorSparse> currentSleMatrix;
@@ -45,7 +45,7 @@ void Solution::find() {
         dataToSle(data, currentSleMatrix, currentIntegrals, grids.at(0));
         solveSle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1);
 
-        for (int i = 1; i < numberOfGrids; ++i) {
+        for (unsigned i = 1; i < numberOfGrids; ++i) {
             currentIntegrals = computeVectorResidual(grids.at(i - 1), currentSleMatrix, currentIntegrals);
             dataToSle(data, currentSleMatrix, grids.at(i));
             solveSle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
@@ -67,7 +67,7 @@ void Solution::print() {
     int density = 150;
 
     char path[100];
-    for (int i = (int)timeLeft; i < timeRight + 1; ++i) {
+    for (int i = static_cast<int>(timeLeft); i < timeRight + 1; ++i) {
         sprintf(path, "%s%s%02d%s", pathToProcessedData.c_str(), "time_", i, ".txt");
         std::ofstream out(path);
         for (int x = 0; x <= density; ++x) {

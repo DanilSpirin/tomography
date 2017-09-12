@@ -26,6 +26,7 @@ private:
 
 class ElectronDensityDistribution {
 public:
+    virtual ~ElectronDensityDistribution() = default;
     double operator() (point R, const double t) const;
     CoordinateTransformation *coordinateTransformation;
 private:

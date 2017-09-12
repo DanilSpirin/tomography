@@ -35,9 +35,8 @@ int main(int argc, const char * argv[]) {
 
     chepmanLayer.coordinateTransformation = new DecartToGeographic;
 
-    std::vector<std::vector<Ray>> data = get_data(pathToData, timeStart, timeFinish);
-
-    std::list<std::pair<double, double>> stations = getStationList(data);
+    auto data = get_data(pathToData, timeStart, timeFinish);
+    const auto stations = getStationList(data);
 
     std::ofstream station_file(pathToProcessedData + "stations_check.txt");
     for (const auto &[lat, lon] : stations) {

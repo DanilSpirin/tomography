@@ -36,7 +36,7 @@ void Dimension::toDegrees() {
 }
 
 void Dimension::expand(const unsigned extra) {
-    unsigned m = (unsigned)ceil(extra / step);
+    unsigned m = static_cast<unsigned>(ceil(extra / step));
     double D = m * step;
     this->left -= D;
     this->right += D;
@@ -52,7 +52,8 @@ double Dimension::length() const {
 }
 
 std::vector<unsigned> Dimension::sequence(const double x) const {
-    const unsigned i = (unsigned)floor((x - this->left) / this->step);
+//    const unsigned i = (unsigned)floor((x - this->left) / this->step);
+    const unsigned i = static_cast<unsigned>(((x - this->left) / this->step));
     const unsigned start_point = i < 2 ? 0 : (i - 1);
     const unsigned end_point = (i + 2) > this->intervals ? this->intervals : (i + 2);
     std::vector<unsigned> result(end_point - start_point + 1);
