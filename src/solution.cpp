@@ -10,7 +10,7 @@ extern std::string pathToProcessedData;
 
 Solution::Solution(){}
 
-void Solution::setLimits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight) {
+void Solution::set_limits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight) {
     this->latitudeLeft = latitudeLeft;
     this->latitudeRight = latitudeRight;
     this->longitudeLeft = longitudeLeft;
@@ -19,11 +19,11 @@ void Solution::setLimits(double latitudeLeft, double latitudeRight, double longi
     this->timeRight = timeRight;
 }
 
-void Solution::setModel(ElectronDensityDistribution &model) {
+void Solution::set_model(ElectronDensityDistribution &model) {
     this->model = &model;
 }
 
-void Solution::addGrid(unsigned spaceIntervals, unsigned timeIntervals) {
+void Solution::add_grid(unsigned spaceIntervals, unsigned timeIntervals) {
     Grid foo;
     Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals * 2);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
@@ -32,7 +32,7 @@ void Solution::addGrid(unsigned spaceIntervals, unsigned timeIntervals) {
     grids.push_back(foo);
 }
 
-void Solution::addData(std::vector<std::vector<Ray>> _data) {
+void Solution::add_data(std::vector<std::vector<Ray>> _data) {
     this->data = _data;
 }
 
@@ -64,13 +64,13 @@ void Solution::print() {
     latitude.toRadian();
     longitude.toRadian();
 
-    int density = 150;
+    const unsigned density = 150;
 
-    for (int i = static_cast<int>(timeLeft); i < timeRight + 1; ++i) {
+    for (unsigned i = static_cast<unsigned>(timeLeft); i < timeRight + 1; ++i) {
         auto path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", i, ".txt");
         std::ofstream out(path);
-        for (int x = 0; x <= density; ++x) {
-            for (int y = 0; y <= density; ++y) {
+        for (unsigned x = 0; x <= density; ++x) {
+            for (unsigned y = 0; y <= density; ++y) {
                 const double phi = latitude.left + (latitude.right - latitude.left) / density * x;
                 const double theta = longitude.left + (longitude.right - longitude.left) / density * y;
                 const double time = i * 3600;

@@ -10,10 +10,10 @@ class Solution {
     double latitudeRight, longitudeRight, timeRight;
 public:
     Solution();
-    void setLimits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight);
-    void setModel(ElectronDensityDistribution &model);
-    void addGrid(unsigned spaceIntervals, unsigned timeIntervals);
-    void addData(std::vector<std::vector<Ray>> data);
+    void set_limits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight);
+    void set_model(ElectronDensityDistribution &model);
+    void add_grid(unsigned spaceIntervals, unsigned timeIntervals);
+    void add_data(std::vector<std::vector<Ray>> data);
     void find();
     void print();
 };
