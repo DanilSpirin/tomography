@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "transformation.h"
 
@@ -28,7 +29,7 @@ class ElectronDensityDistribution {
 public:
     virtual ~ElectronDensityDistribution() = default;
     double operator() (point R, const double t) const;
-    CoordinateTransformation *coordinateTransformation;
+    std::unique_ptr<CoordinateTransformation> coordinateTransformation;
 private:
     virtual double value(const point &R, const double t) const = 0;
 };

@@ -95,7 +95,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
 std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data) {
     std::list<std::pair<double, double>> stations;
     ChepmanLayer chepmanLayer;
-    chepmanLayer.coordinateTransformation = new DecartToGeographic;
+    chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
     for (const auto& i : data) {
         for (const auto& j : i) {
             point station = j.station;
@@ -112,7 +112,6 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
             }
         }
     }
-    delete chepmanLayer.coordinateTransformation;
     return stations;
 }
 

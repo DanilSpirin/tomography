@@ -33,8 +33,7 @@ int main(int argc, const char * argv[]) {
     std::list<unsigned> accIntervalsDim = createListOfIntervals(36, 36);
     std::list<unsigned> accIntervalsTime = createListOfIntervals(240, 240);
 
-    chepmanLayer.coordinateTransformation = new DecartToGeographic;
-
+    chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
     auto data = get_data(pathToData, timeStart, timeFinish);
     const auto stations = getStationList(data);
 
@@ -189,6 +188,5 @@ int main(int argc, const char * argv[]) {
         gridLimits.close();
     }
 
-    delete chepmanLayer.coordinateTransformation;
     return 0;
 }
