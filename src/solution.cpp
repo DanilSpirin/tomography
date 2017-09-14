@@ -1,14 +1,13 @@
 #include <fstream>
 #include <cmath>
 #include <string>
+#include <numeric>
 #include <fmt/format.h>
 
 #include "solution.h"
 #include "limits.h"
 
 extern std::string pathToProcessedData;
-
-Solution::Solution(){}
 
 void Solution::set_limits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight) {
     this->latitudeLeft = latitudeLeft;
@@ -25,14 +24,14 @@ void Solution::set_model(ElectronDensityDistribution &model) {
 
 void Solution::add_grid(unsigned spaceIntervals, unsigned timeIntervals) {
     Grid foo;
-    Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals * 2);
+    Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
     Dimension time(timeLeft * 3600, timeRight * 3600, timeIntervals);
     foo.set(latitude, longitude, time);
     grids.push_back(foo);
 }
 
-void Solution::add_data(std::vector<std::vector<Ray>> _data) {
+void Solution::add_data(std::vector<std::vector<Ray>> &&_data) {
     this->data = _data;
 }
 
@@ -64,7 +63,7 @@ void Solution::print() {
     latitude.toRadian();
     longitude.toRadian();
 
-    const unsigned density = 150;
+    const unsigned density = 100;
 
     for (unsigned i = static_cast<unsigned>(timeLeft); i < timeRight + 1; ++i) {
         auto path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", i, ".txt");
@@ -76,7 +75,7 @@ void Solution::print() {
                 const double time = i * 3600;
 
                 double sum = 0;
-                for (auto &&item : grids) {
+                for (const auto &item : grids) {
                     sum += item(phi, theta, time);
                 }
 

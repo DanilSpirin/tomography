@@ -39,7 +39,7 @@ VectorSparse Grid::basis(const double x, const double y, const double z) const {
     return basis_vector;
 }
 
-double Grid::operator()(const double x, const double y, const double z) {
+double Grid::operator()(const double x, const double y, const double z) const {
     double sum = 0;
     VectorSparse temp = basis(x, y, z);
     for (unsigned i = 0; i < temp.size(); ++i) {

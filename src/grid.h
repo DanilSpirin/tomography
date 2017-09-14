@@ -9,7 +9,7 @@ public:
     Grid(){}
     void set(const Dimension &latitude, const Dimension &longitude, const Dimension &time);
     VectorSparse basis(const double x, const double y, const double z) const;
-    double operator ()(const double x, const double y, const double z);
+    double operator ()(const double x, const double y, const double z) const;
 private:
     Dimension latitude, longitude, time;
 };
