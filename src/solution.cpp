@@ -9,7 +9,9 @@
 
 extern std::string pathToProcessedData;
 
-void Solution::set_limits(double latitudeLeft, double latitudeRight, double longitudeLeft, double longitudeRight, double timeLeft, double timeRight) {
+void Solution::set_limits(double latitudeLeft, double latitudeRight,
+                          double longitudeLeft, double longitudeRight,
+                          double timeLeft, double timeRight) {
     this->latitudeLeft = latitudeLeft;
     this->latitudeRight = latitudeRight;
     this->longitudeLeft = longitudeLeft;

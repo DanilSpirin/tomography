@@ -31,7 +31,7 @@ void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector
 }
 
 void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
-    // Вычисление приращения dx
+    // Calculating x increment
     std::vector<double> dx(x.size(), 0);
     for (unsigned i = 0; i < m.size(); ++i) {
         double ax = 0;
@@ -44,7 +44,7 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
             dx[index] += (m[i] - ax) * value;
         }
     }
-    // Вычисление коэффициента t для минимизации невязки
+    // Calculating t coefficient for residual minimization
     std::vector<double> adx;
     std::vector<double> axy;
     for (unsigned j = 0; j < m.size(); ++j) {
@@ -64,7 +64,7 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
     const double denominator = std::inner_product(adx.begin(), adx.end(), adx.begin(), 0.0);
     const double t = - numerator / denominator;
 
-    // Вычисляем новый x
+    // Calculating new x
     for (unsigned k = 0; k < x.size(); ++k) {
         x[k] += t * dx[k];
     }

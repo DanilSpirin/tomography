@@ -13,10 +13,6 @@ Dimension::Dimension(const double left, const double right, const unsigned inter
     this->step = (right - left) / intervals;
 }
 
-Dimension::Dimension() {
-
-}
-
 void Dimension::to_radian() {
     if (inDegrees) {
         left = left / 180 * pi;

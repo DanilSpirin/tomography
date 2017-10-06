@@ -6,7 +6,7 @@
 class Dimension {
 public:
     double left, right;
-    Dimension();
+    Dimension() = default;
     Dimension(const double left, const double right, const unsigned itervals, const bool inDegrees = true);
     void to_radian();
     void to_degrees();

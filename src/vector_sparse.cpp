@@ -50,17 +50,17 @@ VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
     while (i_left < left_size && i_right < right_size) {
         const auto left = a[i_left];
         const auto right = b[i_right];
-		if (left.index < right.index) {
+        if (left.index < right.index) {
             result.push_back(left);
-			++i_left;
-		} else if (right.index < left.index) {
+            ++i_left;
+        } else if (right.index < left.index) {
             result.push_back(-right);
-			++i_right;
-		} else {
+            ++i_right;
+        } else {
             result.push_back(left.index, left.value - right.value);
             ++i_left;
             ++i_right;
-		}
+        }
     }
     while (i_left < left_size) {
         const auto left = a[i_left];

@@ -65,10 +65,10 @@ void ChepmanLayer::add_wave(const point &location, const double start, const dou
 double ChepmanLayer::value(const point &R, const double time) const {
     const double longitute = R.R[0], latitude = R.R[1], h = R.R[2] - Re;
 
-    const double UT = (time - dt) / 60.0 / 60.0;    //всемирное время
+    const double UT = (time - dt) / 60.0 / 60.0;    // Universal Time
 
-    const double declination = asin(sin(23.45 / 180.0 * pi) * sin(2 * pi / 365.0 * (d - 82.0))); //осуществлен перевод в радианы
-    const double angle = (15 * (UT - 12.0)) / 180.0 * pi + longitute; //осуществлен перевод в радианы. angle - ЧАСОВОЙ ПОЯС
+    const double declination = asin(sin(23.45 / 180.0 * pi) * sin(2 * pi / 365.0 * (d - 82.0))); // convert to radians
+    const double angle = (15 * (UT - 12.0)) / 180.0 * pi + longitute; // angle - time zone
     const double zenith = sin(latitude) * sin(declination) + cos(latitude) * cos(declination) * cos(angle);
     const double ksi = (h - hm) / H ;
 
