@@ -14,10 +14,10 @@ public:
     Ray(const point &station, const point &satellite, const double time);
     Ray();
     point cross;
-    void computeParameters();
+    void compute_parameters();
 private:
-    void computeCross();
-    void computeAngles();
+    void compute_cross();
+    void compute_angles();
 };
 
 std::istream& operator >> (std::istream&, Ray&);

@@ -8,8 +8,8 @@ public:
     double left, right;
     Dimension();
     Dimension(const double left, const double right, const unsigned itervals, const bool inDegrees = true);
-    void toRadian();
-    void toDegrees();
+    void to_radian();
+    void to_degrees();
     void expand(const unsigned extra = 16);
     unsigned size() const;
     double length() const;

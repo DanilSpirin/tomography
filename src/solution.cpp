@@ -41,13 +41,13 @@ void Solution::find() {
         std::vector<double> currentIntegrals;
         std::vector<VectorSparse> currentSleMatrix;
 
-        dataToSle(data, currentSleMatrix, currentIntegrals, grids.at(0));
-        solveSle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1);
+        data_to_sle(data, currentSleMatrix, currentIntegrals, grids.at(0));
+        solve_sle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1);
 
         for (unsigned i = 1; i < numberOfGrids; ++i) {
-            currentIntegrals = computeVectorResidual(grids.at(i - 1), currentSleMatrix, currentIntegrals);
-            dataToSle(data, currentSleMatrix, grids.at(i));
-            solveSle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
+            currentIntegrals = compute_vector_residual(grids.at(i - 1), currentSleMatrix, currentIntegrals);
+            data_to_sle(data, currentSleMatrix, grids.at(i));
+            solve_sle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
         }
 
     } else {
@@ -60,8 +60,8 @@ void Solution::print() {
     Dimension latitude(latitudeLeft, latitudeRight, 0);
     Dimension longitude(longitudeLeft, longitudeRight, 0);
 
-    latitude.toRadian();
-    longitude.toRadian();
+    latitude.to_radian();
+    longitude.to_radian();
 
     const unsigned density = 100;
 
@@ -88,8 +88,8 @@ void Solution::print() {
         out.close();
     }
 
-    latitude.toDegrees();
-    longitude.toDegrees();
+    latitude.to_degrees();
+    longitude.to_degrees();
 
     std::ofstream limits(pathToProcessedData + "limits.txt");
     limits << latitude << '\n' << longitude << '\n' << limit;

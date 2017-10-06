@@ -12,8 +12,8 @@ void Grid::set(const Dimension &latitude, const Dimension &longitude, const Dime
     this->time = time;
     this->latitude.expand();
     this->longitude.expand();
-    this->latitude.toRadian();
-    this->longitude.toRadian();
+    this->latitude.to_radian();
+    this->longitude.to_radian();
     resize((this->latitude.size() + 1) * (this->longitude.size() + 1) * (this->time.size() + 1), 0);
 }
 

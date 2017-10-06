@@ -10,7 +10,7 @@ namespace fs = std::experimental::filesystem;
 
 extern std::string pathToProcessedData;
 
-void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
+void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
     phi.clear();
     integrals.clear();
     for (unsigned j = 0; j < data.size(); ++j) {
@@ -23,7 +23,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     }
 }
 
-void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
+void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
     phi.clear();
     for (unsigned j = 0; j < data.size(); ++j) {
         for (unsigned i = 0; i < data[j].size() - 1; ++i) {
@@ -34,7 +34,7 @@ void dataToSle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSpar
     }
 }
 
-double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+double compute_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
     double sum = 0;
     for (unsigned i = 0; i < A.size(); ++i) {
         double difference = 0;
@@ -48,7 +48,7 @@ double computeResidual(const Grid &x, const std::vector<VectorSparse> &A, const 
     return sqrt(sum);
 }
 
-std::vector<double> computeVectorResidual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+std::vector<double> compute_vector_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
     std::vector<double> difference(m.size(), 0);
     for (unsigned i = 0; i < A.size(); ++i) {
         for (unsigned j = 0; j < A[i].size(); ++j) {
@@ -77,7 +77,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
                         Ray ray;
                         gps >> ray;
                         if (ray.time >= startTime * 3600 && ray.time <= finishTime * 3600) {
-                            ray.computeParameters();
+                            ray.compute_parameters();
                             bundle.push_back(ray);
                         }
                     }
@@ -92,7 +92,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
     return data;
 }
 
-std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>> data) {
+std::list<std::pair<double, double>> get_station_lilst(std::vector<std::vector<Ray>> data) {
     std::list<std::pair<double, double>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
@@ -116,24 +116,24 @@ std::list<std::pair<double, double>> getStationList(std::vector<std::vector<Ray>
 }
 
 
-void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
-    const double initialResidual = computeResidual(grid, matrix, integrals);
+void solve_sle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
+    const double initialResidual = compute_residual(grid, matrix, integrals);
     const double iterations = 50;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    const double firstRes = computeResidual(grid, matrix, integrals) / initialResidual;
+    const double firstRes = compute_residual(grid, matrix, integrals) / initialResidual;
     for (int i = 0; i < iterations; ++i) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
     }
-    const double secondRes = computeResidual(grid, matrix, integrals) / initialResidual;
+    const double secondRes = compute_residual(grid, matrix, integrals) / initialResidual;
     const double limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
     fmt::print("{}\n", limit);
     double currentRes = secondRes;
     unsigned counter = 0;
     while (currentRes / limit > 1 + error) {
         iterationSirt(grid, matrix, integrals, onlyPositive);
-        currentRes = computeResidual(grid, matrix, integrals) / initialResidual;
+        currentRes = compute_residual(grid, matrix, integrals) / initialResidual;
         ++counter;
         if (counter > 500) {
             fmt::print("Stopped at current/limit = {}\n", currentRes / limit);
@@ -144,18 +144,18 @@ void solveSle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::ve
 }
 
 
-double degreeToRadian(const double degree) {
+double degree_to_radian(const double degree) {
     return degree / 180 * pi;
 }
 
-double radianToDegree(const double radian) {
+double radian_to_degree(const double radian) {
     return radian * 180 / pi;
 }
 
-void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid,
+void compute_parametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid,
  ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual) {
-    latitude.toRadian();
-    longitude.toRadian();
+    latitude.to_radian();
+    longitude.to_radian();
     double reconstructionSum = 0;
     double modelSum = 0;
     unsigned density = 100; // Количество точек по оси, по которым строится область
@@ -191,23 +191,23 @@ void computeParametrs(Grid &crude, Grid &accurate, const std::vector<VectorSpars
         }
     }
 
-    latitude.toDegrees();
-    longitude.toDegrees();
+    latitude.to_degrees();
+    longitude.to_degrees();
 
     std::ofstream parametrs(pathToProcessedData + "parametrs.txt", std::ios::app);
 
     parametrs << intervals << '\t' << intervalsTime << '\t';
     if (useSecondGrid) {
-        parametrs << computeResidual(accurate, sleMatrix, integrals) / initialResidual << '\t';
+        parametrs << compute_residual(accurate, sleMatrix, integrals) / initialResidual << '\t';
     } else {
-        parametrs << computeResidual(crude, sleMatrix, integrals) / initialResidual << '\t';
+        parametrs << compute_residual(crude, sleMatrix, integrals) / initialResidual << '\t';
     }
     parametrs << sqrt(reconstructionSum / modelSum) << '\t' << longitude.length() / intervals << '\t' << time.length() / intervalsTime / 60 << std::endl;
     parametrs.close();
 
 }
 
-std::list<unsigned> createListOfIntervals(unsigned first, unsigned last) {
+std::list<unsigned> create_intervals(unsigned first, unsigned last) {
     std::list<unsigned> foo;
     do {
         foo.push_back(first);

@@ -20,13 +20,13 @@ Ray::Ray(const point &station, const point &satellite, const double time) {
     this->satellite = satellite;
     this->time = time;
 }
-void Ray::computeCross() {
+void Ray::compute_cross() {
     const point dr = satellite - station;
     const double rdr = station * dr;
     const double t = (-rdr + sqrt(rdr * rdr + (dr * dr) * ((Re + h) * (Re + h) - (station * station)))) / (dr * dr);
 	cross = station + t * (satellite - station);
 }
-void Ray::computeAngles() {
+void Ray::compute_angles() {
     double ac = (cross * (satellite - station)) / sqrt((cross * cross) * ((satellite - station) * (satellite - station)));
     if (ac > 1) {
         ac = 1;
@@ -35,7 +35,7 @@ void Ray::computeAngles() {
     thetta = asin(cross.R[2] / (Re + h));
     phi = atan2(cross.R[1], cross.R[0]);
 }
-void Ray::computeParameters() {
-    computeCross();
-    computeAngles();
+void Ray::compute_parameters() {
+    compute_cross();
+    compute_angles();
 }

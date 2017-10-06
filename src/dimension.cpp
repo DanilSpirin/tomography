@@ -17,7 +17,7 @@ Dimension::Dimension() {
 
 }
 
-void Dimension::toRadian() {
+void Dimension::to_radian() {
     if (inDegrees) {
         left = left / 180 * pi;
         right = right / 180 * pi;
@@ -26,7 +26,7 @@ void Dimension::toRadian() {
     }
 }
 
-void Dimension::toDegrees() {
+void Dimension::to_degrees() {
     if (!inDegrees) {
         left = left / pi * 180;
         right = right / pi * 180;
