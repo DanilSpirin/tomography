@@ -8,20 +8,19 @@
 #include <vector>
 #include <list>
 
-// Формирование матрицы задачи из данных
+// Forming task SLE
 void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test);
 void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test);
 
-// Рассчет невязки системы
+// Calculating residual
 double compute_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 std::vector<double> compute_vector_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m);
 
-// Сканирование указанной директории
+// Reading data from specified path
 std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned startTime = 0, const unsigned finishTime = 24);
 
-// Координаты станций
-std::list<std::pair<double, double>> get_station_lilst(std::vector<std::vector<Ray>> data);
-
+// Station coordinates
+std::list<std::pair<double, double>> get_station_list(std::vector<std::vector<Ray>> data);
 
 void solve_sle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive = true);
 void compute_parametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual);

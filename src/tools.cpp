@@ -92,7 +92,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
     return data;
 }
 
-std::list<std::pair<double, double>> get_station_lilst(std::vector<std::vector<Ray>> data) {
+std::list<std::pair<double, double>> get_station_list(std::vector<std::vector<Ray>> data) {
     std::list<std::pair<double, double>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
