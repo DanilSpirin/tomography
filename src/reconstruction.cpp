@@ -64,10 +64,9 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
     const double denominator = std::inner_product(adx.begin(), adx.end(), adx.begin(), 0.0);
     const double t = - numerator / denominator;
 
-    // Calculating new x
-    for (unsigned k = 0; k < x.size(); ++k) {
-        x[k] += t * dx[k];
-    }
+    std::transform(dx.begin(), dx.end(), dx.begin(), [t](auto i) { return t * i;});
+    std::transform(x.begin(), x.end(), dx.begin(), x.begin(), std::plus<double>());
+
     if (onlyPositive) {
         std::transform(x.begin(), x.end(), x.begin(),
             [] (double value) { return std::max(value, 0.0); }
