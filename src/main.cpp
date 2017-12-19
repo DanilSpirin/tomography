@@ -1,6 +1,5 @@
 #include <fstream>
-#include <cmath>
-#include <chrono>
+#include <fmt/ostream.h>
 
 #include "integration.h"
 #include "tools.h"
@@ -30,7 +29,7 @@ int main() {
 
     std::ofstream station_file(pathToProcessedData + "stations_check.txt");
     for (const auto &[lat, lon] : stations) {
-        station_file << radian_to_degree(lat) << ' ' << radian_to_degree(lon) << '\n';
+        fmt::print(station_file, "{:.2f} {:.2f}\n", radian_to_degree(lat), radian_to_degree(lon));
     }
     station_file.close();
 

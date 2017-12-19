@@ -3,6 +3,7 @@
 #include <string>
 #include <numeric>
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 
 #include "solution.h"
 #include "limits.h"
@@ -82,9 +83,7 @@ void Solution::print() {
                 }
 
                 limit.update(sum);
-
-                out << sum;
-                (y != density) ? (out << " ") : (out << std::endl);
+                fmt::print(out, "{:.2f}{}", sum, (y != density) ? ' ' : '\n');
             }
         }
         out.close();
@@ -94,6 +93,6 @@ void Solution::print() {
     longitude.to_degrees();
 
     std::ofstream limits(pathToProcessedData + "limits.txt");
-    limits << latitude << '\n' << longitude << '\n' << limit;
+    fmt::print(limits, "{}\n{}\n{}", latitude, longitude, limit);
     limits.close();
 }

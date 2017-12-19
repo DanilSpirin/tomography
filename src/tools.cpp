@@ -1,6 +1,7 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 
 #include "tools.h"
 #include "math.h"
@@ -199,16 +200,15 @@ void compute_parametrs(Grid &crude, Grid &accurate, const std::vector<VectorSpar
     longitude.to_degrees();
 
     std::ofstream parametrs(pathToProcessedData + "parametrs.txt", std::ios::app);
-
-    parametrs << intervals << '\t' << intervalsTime << '\t';
-    if (useSecondGrid) {
-        parametrs << compute_residual(accurate, sleMatrix, integrals) / initialResidual << '\t';
-    } else {
-        parametrs << compute_residual(crude, sleMatrix, integrals) / initialResidual << '\t';
-    }
-    parametrs << sqrt(reconstructionSum / modelSum) << '\t' << longitude.length() / intervals << '\t' << time.length() / intervalsTime / 60 << std::endl;
+    auto residual = compute_residual(useSecondGrid ? accurate : crude, sleMatrix, integrals);
+    fmt::print(parametrs, "{}\t{}\t{}\t{}\t{}\t{}\n",
+               intervals,
+               intervalsTime,
+               residual / initialResidual,
+               sqrt(reconstructionSum / modelSum),
+               longitude.length() / intervals,
+               time.length() / intervalsTime / 60);
     parametrs.close();
-
 }
 
 std::list<unsigned> create_intervals(unsigned first, unsigned last) {
