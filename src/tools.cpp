@@ -11,7 +11,10 @@ namespace fs = std::experimental::filesystem;
 
 extern std::string pathToProcessedData;
 
-void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
+using SparseMatrix = std::vector<VectorSparse>;
+using SleMatrix = std::vector<std::vector<Ray>>;
+
+void data_to_sle(const SleMatrix &data, SparseMatrix &phi, std::vector<double> &integrals, const Grid& test) {
     phi.clear();
     integrals.clear();
     for (const auto& it : data) {
@@ -26,7 +29,7 @@ void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSp
     }
 }
 
-void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
+void data_to_sle(const SleMatrix &data, SparseMatrix &phi, const Grid& test) {
     phi.clear();
     for (const auto& it : data) {
         auto curr = std::cbegin(it);
@@ -39,7 +42,7 @@ void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSp
     }
 }
 
-double compute_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+double compute_residual(const Grid &x, const SparseMatrix &A, const std::vector<double> &m) {
     double sum = 0;
     for (unsigned i = 0; i < A.size(); ++i) {
         double difference = 0;
@@ -53,7 +56,7 @@ double compute_residual(const Grid &x, const std::vector<VectorSparse> &A, const
     return sqrt(sum);
 }
 
-std::vector<double> compute_vector_residual(const Grid &x, const std::vector<VectorSparse> &A, const std::vector<double> &m) {
+std::vector<double> compute_vector_residual(const Grid &x, const SparseMatrix &A, const std::vector<double> &m) {
     std::vector<double> difference(m.size(), 0);
     for (unsigned i = 0; i < A.size(); ++i) {
         for (unsigned j = 0; j < A[i].size(); ++j) {
@@ -65,8 +68,8 @@ std::vector<double> compute_vector_residual(const Grid &x, const std::vector<Vec
     return difference;
 }
 
-std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned startTime, const unsigned finishTime) {
-    std::vector<std::vector<Ray>> data;
+SleMatrix get_data(const std::string &path, const unsigned startTime, const unsigned finishTime) {
+    SleMatrix data;
     if (fs::exists(path) && fs::is_directory(path)) {
         for (const auto& file : fs::directory_iterator(path)) {
             if (file.path().extension() == ".dat") {
@@ -77,7 +80,6 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
                     std::vector<Ray> bundle;
                     int numberOfRays;
                     gps >> numberOfRays;
-
                     while (numberOfRays--) {
                         Ray ray;
                         gps >> ray;
@@ -97,7 +99,7 @@ std::vector<std::vector<Ray>> get_data(const std::string &path, const unsigned s
     return data;
 }
 
-std::list<std::pair<double, double>> get_station_list(std::vector<std::vector<Ray>> data) {
+std::list<std::pair<double, double>> get_station_list(const SleMatrix &data) {
     std::list<std::pair<double, double>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
@@ -120,8 +122,8 @@ std::list<std::pair<double, double>> get_station_list(std::vector<std::vector<Ra
     return stations;
 }
 
-
-void solve_sle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive) {
+void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals,
+        const double error, const bool onlyPositive) {
     const double initialResidual = compute_residual(grid, matrix, integrals);
     const double iterations = 50;
     for (int i = 0; i < iterations; ++i) {
@@ -148,7 +150,6 @@ void solve_sle(Grid &grid, const std::vector<VectorSparse> &matrix, const std::v
     }
 }
 
-
 double degree_to_radian(const double degree) {
     return degree / 180 * pi;
 }
@@ -157,13 +158,15 @@ double radian_to_degree(const double radian) {
     return radian * 180 / pi;
 }
 
-void compute_parametrs(Grid &crude, Grid &accurate, const std::vector<VectorSparse> &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid,
- ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual) {
+void compute_parametrs(Grid &crude, Grid &accurate, const SparseMatrix &sleMatrix,
+        const std::vector<double> &integrals, const bool useSecondGrid,
+        ElectronDensityDistribution &model, Dimension latitude, Dimension longitude,
+        Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual) {
     latitude.to_radian();
     longitude.to_radian();
     double reconstructionSum = 0;
     double modelSum = 0;
-    unsigned density = 100; // Количество точек по оси, по которым строится область
+    const unsigned density = 100; // Количество точек по оси, по которым строится область
     const unsigned timeStart = static_cast<unsigned>(time.left / 3600);
     const unsigned timeFinish = static_cast<unsigned>(time.right / 3600);
     for (unsigned t = timeStart; t < timeFinish; ++t) {
