@@ -13,22 +13,26 @@ extern std::string pathToProcessedData;
 void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, std::vector<double> &integrals, const Grid &test) {
     phi.clear();
     integrals.clear();
-    for (unsigned j = 0; j < data.size(); ++j) {
-        for (unsigned i = 0; i < data[j].size() - 1; ++i) {
-            const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
-            const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
+    for (const auto& it : data) {
+        auto curr = std::cbegin(it);
+        auto next = std::next(curr);
+        for ( ; next != std::cend(it); ++curr, ++next) {
+            const auto left  = test.basis(next->phi, next->thetta, next->time) / cos(next->angle);
+            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / cos(curr->angle);
             phi.push_back(left - right);
-            integrals.push_back(data[j][i + 1].integral - data[j][i].integral);
+            integrals.push_back(next->integral - curr->integral);
         }
     }
 }
 
 void data_to_sle(const std::vector<std::vector<Ray>> &data, std::vector<VectorSparse> &phi, const Grid &test) {
     phi.clear();
-    for (unsigned j = 0; j < data.size(); ++j) {
-        for (unsigned i = 0; i < data[j].size() - 1; ++i) {
-            const auto left = test.basis(data[j][i + 1].phi, data[j][i + 1].thetta, data[j][i + 1].time) / cos(data[j][i + 1].angle);
-            const auto right = test.basis(data[j][i].phi, data[j][i].thetta, data[j][i].time) / cos(data[j][i].angle);
+    for (const auto& it : data) {
+        auto curr = std::cbegin(it);
+        auto next = std::next(curr);
+        for ( ; next != std::cend(it); ++curr, ++next) {
+            const auto left  = test.basis(next->phi, next->thetta, next->time) / cos(next->angle);
+            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / cos(curr->angle);
             phi.push_back(left - right);
         }
     }
