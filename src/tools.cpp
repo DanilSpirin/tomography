@@ -77,12 +77,14 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
                 if (!gps) {
                     fmt::print("Can't open file {}\n", file.path().string());
                 } else {
-                    std::vector<Ray> bundle;
                     int numberOfRays;
                     gps >> numberOfRays;
-                    while (numberOfRays--) {
-                        Ray ray;
-                        gps >> ray;
+
+                    std::vector<Ray> bundle;
+                    bundle.reserve(numberOfRays);
+
+                    Ray ray;
+                    while (gps >> ray) {
                         if (ray.time >= startTime * 3600 && ray.time <= finishTime * 3600) {
                             ray.compute_parameters();
                             bundle.push_back(ray);
