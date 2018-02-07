@@ -26,9 +26,8 @@ SleMatrix get_data(const std::string &path, const unsigned startTime = 0, const 
 std::set<std::pair<double, double>> get_stations(const SleMatrix& data);
 
 void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive = true);
-void compute_parametrs(Grid &crude, Grid &accurate, const SparseMatrix &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual);
 
 double degree_to_radian(const double degree);
 double radian_to_degree(const double radian);
 
-std::list<unsigned> create_intervals(const unsigned first, const unsigned last);
+std::vector<unsigned> create_intervals(const unsigned first, const unsigned last);

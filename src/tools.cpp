@@ -154,64 +154,8 @@ double radian_to_degree(const double radian) {
     return radian * 180 / pi;
 }
 
-void compute_parametrs(Grid &crude, Grid &accurate, const SparseMatrix &sleMatrix,
-        const std::vector<double> &integrals, const bool useSecondGrid,
-        ElectronDensityDistribution &model, Dimension latitude, Dimension longitude,
-        Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual) {
-    latitude.to_radian();
-    longitude.to_radian();
-    double reconstructionSum = 0;
-    double modelSum = 0;
-    const unsigned density = 100; // Количество точек по оси, по которым строится область
-    const unsigned timeStart = static_cast<unsigned>(time.left / 3600);
-    const unsigned timeFinish = static_cast<unsigned>(time.right / 3600);
-    for (unsigned t = timeStart; t < timeFinish; ++t) {
-        for (unsigned i = 0; i <= density; ++i) {
-            for (unsigned j = 0; j <= density; ++j) {
-                const double phi = latitude.left + (latitude.right - latitude.left) / density * i;
-                const double theta = longitude.left + (longitude.right - longitude.left) / density * j;
-                const double ray_time = t * 3600;
-
-                point station(phi, theta, Re);
-                point satellite(phi, theta, Re + 1000);
-                model.coordinateTransformation->backward(station);
-                model.coordinateTransformation->backward(satellite);
-
-                Ray L(station, satellite, ray_time);
-
-                Rectangle integral;
-
-                const double crudeValue = crude(phi, theta, ray_time);
-                const double modelValue = integral(L, model);
-
-                modelSum += modelValue * modelValue;
-                if (useSecondGrid) {
-                    const double sumValue = crudeValue + accurate(phi, theta, ray_time);
-                    reconstructionSum += (sumValue - modelValue) * (sumValue - modelValue);
-                } else {
-                    reconstructionSum += (crudeValue - modelValue) * (crudeValue - modelValue);
-                }
-            }
-        }
-    }
-
-    latitude.to_degrees();
-    longitude.to_degrees();
-
-    std::ofstream parametrs(pathToProcessedData + "parametrs.txt", std::ios::app);
-    auto residual = compute_residual(useSecondGrid ? accurate : crude, sleMatrix, integrals);
-    fmt::print(parametrs, "{}\t{}\t{}\t{}\t{}\t{}\n",
-               intervals,
-               intervalsTime,
-               residual / initialResidual,
-               sqrt(reconstructionSum / modelSum),
-               longitude.length() / intervals,
-               time.length() / intervalsTime / 60);
-    parametrs.close();
-}
-
-std::list<unsigned> create_intervals(unsigned first, unsigned last) {
-    std::list<unsigned> foo;
+std::vector<unsigned> create_intervals(unsigned first, unsigned last) {
+    std::vector<unsigned> foo;
     do {
         foo.push_back(first);
         first *= 2;
