@@ -55,11 +55,11 @@ ChepmanLayer::~ChepmanLayer() {}
 
 void ChepmanLayer::add_spot(const point &location, const double peak, const double period, const double intensity,
                             const double size) {
-    spots.push_back(Spot(location, peak, period, intensity, size));
+    spots.emplace_back(Spot(location, peak, period, intensity, size));
 }
 
 void ChepmanLayer::add_wave(const point &location, const double start, const double period, const double speed) {
-    waves.push_back(Wave(location, start, period, speed));
+    waves.emplace_back(Wave(location, start, period, speed));
 }
 
 double ChepmanLayer::value(const point &R, const double time) const {
