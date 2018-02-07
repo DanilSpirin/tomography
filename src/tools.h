@@ -6,7 +6,7 @@
 #include "reconstruction.h"
 #include "distribution.h"
 #include <vector>
-#include <list>
+#include <set>
 
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;
@@ -23,7 +23,7 @@ std::vector<double> compute_vector_residual(const Grid &x, const SparseMatrix &A
 SleMatrix get_data(const std::string &path, const unsigned startTime = 0, const unsigned finishTime = 24);
 
 // Station coordinates
-std::list<std::pair<double, double>> get_station_list(const SleMatrix& data);
+std::set<std::pair<double, double>> get_stations(const SleMatrix& data);
 
 void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive = true);
 void compute_parametrs(Grid &crude, Grid &accurate, const SparseMatrix &sleMatrix, const std::vector<double> &integrals, const bool useSecondGrid, ElectronDensityDistribution &model, Dimension latitude, Dimension longitude, Dimension time, unsigned intervals, unsigned intervalsTime, double initialResidual);

@@ -101,23 +101,17 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
     return data;
 }
 
-std::list<std::pair<double, double>> get_station_list(const SleMatrix &data) {
-    std::list<std::pair<double, double>> stations;
+std::set<std::pair<double, double> > get_stations(const SleMatrix &data) {
+    std::set<std::pair<double, double>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
     for (const auto& i : data) {
         for (const auto& j : i) {
             point station = j.station;
             chepmanLayer.coordinateTransformation->forward(station);
-            bool found = false;
-            for (const auto& k : stations) {
-                if (k.first == station.R[0] && k.second == station.R[1]) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                stations.push_back(std::make_pair(station.R[0], station.R[1]));
+            auto station_pair = std::make_pair(station.R[0], station.R[1]);
+            if (stations.find(station_pair) == stations.end()) {
+                stations.insert(station_pair);
             }
         }
     }

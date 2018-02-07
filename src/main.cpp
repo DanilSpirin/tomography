@@ -25,7 +25,7 @@ int main() {
 
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
     auto data = get_data(pathToData, time_start, time_finish);
-    const auto stations = get_station_list(data);
+    const auto stations = get_stations(data);
 
     std::ofstream station_file(pathToProcessedData + "stations_check.txt");
     for (const auto &[lat, lon] : stations) {
