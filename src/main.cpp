@@ -5,10 +5,10 @@
 #include "tools.h"
 #include "solution.h"
 
-std::string pathToData = "/home/ds/science/2003_302_1/";
-std::string pathToProcessedData = pathToData + "tec_processed_model/";
-
 int main() {
+
+    const std::string pathToData = "/home/ds/science/2003_302_1/";
+    const std::string pathToProcessedData = pathToData + "tec_processed_model/";
 
     ChepmanLayer chepmanLayer;
 
@@ -46,7 +46,7 @@ int main() {
     solution.add_grid(8, 24);
     solution.add_grid(36, 240);
     solution.find();
-    solution.print();
+    solution.print(pathToProcessedData);
 
     return 0;
 }

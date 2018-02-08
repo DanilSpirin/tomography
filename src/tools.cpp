@@ -8,8 +8,6 @@
 
 namespace fs = std::experimental::filesystem;
 
-extern std::string pathToProcessedData;
-
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;
 

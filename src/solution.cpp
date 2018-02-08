@@ -6,7 +6,6 @@
 #include "limits.h"
 #include "solution.h"
 
-extern std::string pathToProcessedData;
 
 void Solution::set_limits(double latitudeLeft, double latitudeRight,
                           double longitudeLeft, double longitudeRight,
@@ -56,7 +55,7 @@ void Solution::find() {
     }
 }
 
-void Solution::print() {
+void Solution::print(const std::string& output_path) {
     Limits limit;
     Dimension latitude(latitudeLeft, latitudeRight, 0);
     Dimension longitude(longitudeLeft, longitudeRight, 0);
@@ -67,7 +66,7 @@ void Solution::print() {
     const unsigned density = 100;
 
     for (unsigned i = static_cast<unsigned>(timeLeft); i < timeRight + 1; ++i) {
-        auto path = fmt::format("{}{}{:02}{}", pathToProcessedData, "time_", i, ".txt");
+        auto path = fmt::format("{}{}{:02}{}", output_path, "time_", i, ".txt");
         std::ofstream out(path);
         for (unsigned x = 0; x <= density; ++x) {
             for (unsigned y = 0; y <= density; ++y) {
@@ -90,7 +89,7 @@ void Solution::print() {
     latitude.to_degrees();
     longitude.to_degrees();
 
-    std::ofstream limits(pathToProcessedData + "limits.txt");
+    std::ofstream limits(output_path + "limits.txt");
     fmt::print(limits, "{}\n{}\n{}", latitude, longitude, limit);
     limits.close();
 }
