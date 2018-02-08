@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <limits>
+
 #include "spline.h"
 
 Spline::Spline(const std::vector<double> x, const std::vector<double> y) {

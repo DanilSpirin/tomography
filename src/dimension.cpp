@@ -1,9 +1,8 @@
 #include <cmath>
-#include <vector>
 #include <numeric>
-#include "dimension.h"
-#include "ray.h"
 
+#include "dimension.h"
+#include "point.h"
 
 Dimension::Dimension(const double left, const double right, const unsigned intervals, const bool isInDegrees) {
     this->left = left;

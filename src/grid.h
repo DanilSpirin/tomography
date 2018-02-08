@@ -1,8 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "vector_sparse.h"
+
 #include "dimension.h"
+#include "vector_sparse.h"
 
 class Grid : public std::vector<double> {
 public:

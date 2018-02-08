@@ -1,12 +1,10 @@
 #include <fstream>
-#include <cmath>
-#include <string>
-#include <numeric>
+
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
-#include "solution.h"
 #include "limits.h"
+#include "solution.h"
 
 extern std::string pathToProcessedData;
 

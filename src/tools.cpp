@@ -1,11 +1,10 @@
 #include <fstream>
 #include <experimental/filesystem>
+
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
 #include "tools.h"
-#include "math.h"
-#include "integration.h"
 
 namespace fs = std::experimental::filesystem;
 

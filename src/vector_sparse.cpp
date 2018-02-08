@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "vector_sparse.h"
 
 size_t VectorSparse::size() const {

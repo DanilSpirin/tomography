@@ -1,12 +1,13 @@
 #pragma once
 
-#include "vector_sparse.h"
+#include <set>
+#include <vector>
+
+#include "distribution.h"
 #include "grid.h"
 #include "ray.h"
 #include "reconstruction.h"
-#include "distribution.h"
-#include <vector>
-#include <set>
+#include "vector_sparse.h"
 
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;

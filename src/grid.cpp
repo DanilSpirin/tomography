@@ -1,9 +1,5 @@
-#include <cmath>
-#include <numeric>
-
 #include "grid.h"
 #include "spline.h"
-#include "tools.h"
 
 const std::vector<double> spline_y = {0, 0.25, 1, 0.25, 0};
 const std::vector<double> spline_x = {-2, -1, 0, 1, 2};

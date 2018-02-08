@@ -1,9 +1,7 @@
 #include <algorithm>
 #include <numeric>
-#include <vector>
 
 #include "reconstruction.h"
-#include "grid.h"
 
 void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
     for (unsigned i = 0; i < m.size(); ++i) {
