@@ -35,19 +35,19 @@ void Solution::add_data(std::vector<std::vector<Ray>> &&_data) {
     this->data = _data;
 }
 
-void Solution::find() {
+void Solution::find(const Solver& solver) {
     auto numberOfGrids = grids.size();
     if (numberOfGrids > 0) {
         std::vector<double> currentIntegrals;
         std::vector<VectorSparse> currentSleMatrix;
 
         data_to_sle(data, currentSleMatrix, currentIntegrals, grids.at(0));
-        solve_sle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1);
+        solve_sle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1, solver);
 
         for (unsigned i = 1; i < numberOfGrids; ++i) {
             currentIntegrals = compute_vector_residual(grids.at(i - 1), currentSleMatrix, currentIntegrals);
             data_to_sle(data, currentSleMatrix, grids.at(i));
-            solve_sle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, false);
+            solve_sle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, solver, false);
         }
 
     } else {

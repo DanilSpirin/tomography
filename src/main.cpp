@@ -40,12 +40,13 @@ int main() {
         }
     }
 
+    Sirt solver;
     Solution solution;
     solution.set_limits(-10.0, 40.0, 30.0, 70.0, time_start, time_finish);
     solution.add_data(std::move(data));
     solution.add_grid(8, 24);
     solution.add_grid(36, 240);
-    solution.find();
+    solution.find(solver);
     solution.print(pathToProcessedData);
 
     return 0;

@@ -116,15 +116,15 @@ std::set<std::pair<double, double> > get_stations(const SleMatrix &data) {
 }
 
 void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals,
-        const double error, const bool onlyPositive) {
+        const double error, const Solver &solver, const bool onlyPositive) {
     const double initialResidual = compute_residual(grid, matrix, integrals);
     const double iterations = 50;
     for (int i = 0; i < iterations; ++i) {
-        iterationSirt(grid, matrix, integrals, onlyPositive);
+        solver(grid, matrix, integrals, onlyPositive);
     }
     const double firstRes = compute_residual(grid, matrix, integrals) / initialResidual;
     for (int i = 0; i < iterations; ++i) {
-        iterationSirt(grid, matrix, integrals, onlyPositive);
+        solver(grid, matrix, integrals, onlyPositive);
     }
     const double secondRes = compute_residual(grid, matrix, integrals) / initialResidual;
     const double limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
@@ -132,7 +132,7 @@ void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double>
     double currentRes = secondRes;
     unsigned counter = 0;
     while (currentRes / limit > 1 + error) {
-        iterationSirt(grid, matrix, integrals, onlyPositive);
+        solver(grid, matrix, integrals, onlyPositive);
         currentRes = compute_residual(grid, matrix, integrals) / initialResidual;
         ++counter;
         if (counter > 500) {

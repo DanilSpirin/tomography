@@ -17,6 +17,6 @@ public:
     void set_model(ElectronDensityDistribution &model);
     void add_grid(unsigned spaceIntervals, unsigned timeIntervals);
     void add_data(std::vector<std::vector<Ray>> &&data);
-    void find();
+    void find(const Solver &solver);
     void print(const std::string& output_path);
 };

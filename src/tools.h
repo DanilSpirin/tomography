@@ -26,7 +26,7 @@ SleMatrix get_data(const std::string &path, const unsigned startTime = 0, const 
 // Station coordinates
 std::set<std::pair<double, double>> get_stations(const SleMatrix& data);
 
-void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals, const double error, const bool onlyPositive = true);
+void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals, const double error, const Solver &solver, const bool onlyPositive = true);
 
 double degree_to_radian(const double degree);
 double radian_to_degree(const double radian);

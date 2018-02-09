@@ -3,7 +3,8 @@
 
 #include "reconstruction.h"
 
-void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
+
+void Art::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) const {
     for (unsigned i = 0; i < m.size(); ++i) {
         double aa = 0;
         double ax = 0;
@@ -26,9 +27,10 @@ void iterationArt(Grid &x, const std::vector<VectorSparse> &a, const std::vector
             );
         }
     }
+
 }
 
-void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) {
+void Sirt::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::vector<double> &m, bool onlyPositive) const {
     // Calculating x increment
     std::vector<double> dx(x.size(), 0);
     for (unsigned i = 0; i < m.size(); ++i) {
@@ -42,6 +44,7 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
             dx[index] += (m[i] - ax) * value;
         }
     }
+
     // Calculating t coefficient for residual minimization
     std::vector<double> adx;
     std::vector<double> axy;
@@ -56,6 +59,7 @@ void iterationSirt(Grid &x, const std::vector<VectorSparse> &a, const std::vecto
         adx.push_back(adxj);
         axy.push_back(axyj - m[j]);
     }
+
     // Numerator is a sum of axy and adx product values
     // While denominator is a sum of adx values squared
     const double numerator = std::inner_product(axy.begin(), axy.end(), adx.begin(), 0.0);
