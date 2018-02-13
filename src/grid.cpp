@@ -5,16 +5,13 @@ const std::vector<float> spline_y = {0, 0.25, 1, 0.25, 0};
 const std::vector<float> spline_x = {-2, -1, 0, 1, 2};
 const Spline spline(spline_x, spline_y);
 
-void Grid::set(const Dimension &latitude, const Dimension &longitude, const Dimension &time) {
-    clear();
-    this->latitude = latitude;
-    this->longitude = longitude;
-    this->time = time;
+Grid::Grid(const Dimension &latitude, const Dimension &longitude, const Dimension &time)
+    : latitude(latitude), longitude(longitude), time(time) {
     this->latitude.expand();
     this->longitude.expand();
     this->latitude.to_radian();
     this->longitude.to_radian();
-    resize((this->latitude.size() + 1) * (this->longitude.size() + 1) * (this->time.size() + 1), 0);
+    data.resize((this->latitude.size() + 1) * (this->longitude.size() + 1) * (this->time.size() + 1), 0);
 }
 
 VectorSparse Grid::basis(const float x, const float y, const float z) const {
@@ -37,9 +34,8 @@ VectorSparse Grid::basis(const float x, const float y, const float z) const {
 float Grid::operator()(const float x, const float y, const float z) const {
     float sum = 0;
     VectorSparse temp = basis(x, y, z);
-    for (unsigned i = 0; i < temp.size(); ++i) {
-        const auto element = temp[i];
-        sum += element.value * operator[](element.index);
+    for (const auto& it : temp) {
+        sum += it.value * data[it.index];
     }
     return sum;
 }

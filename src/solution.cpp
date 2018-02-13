@@ -23,12 +23,11 @@ void Solution::set_model(ElectronDensityDistribution &model) {
 }
 
 void Solution::add_grid(unsigned spaceIntervals, unsigned timeIntervals) {
-    Grid foo;
     Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
     Dimension time(timeLeft * 3600, timeRight * 3600, timeIntervals);
-    foo.set(latitude, longitude, time);
-    grids.push_back(foo);
+    Grid grid(latitude, longitude, time);
+    grids.push_back(grid);
 }
 
 void Solution::add_data(std::vector<std::vector<Ray>> &&_data) {
