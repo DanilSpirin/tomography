@@ -12,13 +12,15 @@ private:
     };
     std::vector<Element> data;
 public:
-    size_t size() const { return data.size(); }
+    std::size_t size() const { return data.size(); }
 
     Element& operator[](const std::size_t i) { return  data[i]; }
     const Element& operator[](const std::size_t i) const { return data[i]; }
 
     auto begin() {return data.begin();}
     auto end() { return data.end(); }
+    auto begin() const { return data.begin(); }
+    auto end() const { return data.end(); }
     auto cbegin() const { return data.cbegin(); }
     auto cend() const { return data.cend(); }
 

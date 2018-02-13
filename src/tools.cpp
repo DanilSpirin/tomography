@@ -15,9 +15,7 @@ void data_to_sle(const SleMatrix &data, SparseMatrix &phi, std::vector<float> &i
     phi.clear();
     integrals.clear();
     for (const auto& it : data) {
-        auto curr = std::cbegin(it);
-        auto next = std::next(curr);
-        for ( ; next != std::cend(it); ++curr, ++next) {
+        for (auto curr = std::cbegin(it), next = std::next(curr); next != std::cend(it); ++curr, ++next) {
             const auto left  = test.basis(next->phi, next->thetta, next->time) / std::cos(next->angle);
             const auto right = test.basis(curr->phi, curr->thetta, curr->time) / std::cos(curr->angle);
             phi.emplace_back(left - right);
@@ -29,9 +27,7 @@ void data_to_sle(const SleMatrix &data, SparseMatrix &phi, std::vector<float> &i
 void data_to_sle(const SleMatrix &data, SparseMatrix &phi, const Grid& test) {
     phi.clear();
     for (const auto& it : data) {
-        auto curr = std::cbegin(it);
-        auto next = std::next(curr);
-        for ( ; next != std::cend(it); ++curr, ++next) {
+        for (auto curr = std::cbegin(it), next = std::next(curr); next != std::cend(it); ++curr, ++next) {
             const auto left  = test.basis(next->phi, next->thetta, next->time) / std::cos(next->angle);
             const auto right = test.basis(curr->phi, curr->thetta, curr->time) / std::cos(curr->angle);
             phi.emplace_back(left - right);
@@ -43,9 +39,8 @@ float compute_residual(const Grid &x, const SparseMatrix &A, const std::vector<f
     float sum = 0;
     for (unsigned i = 0; i < A.size(); ++i) {
         float difference = 0;
-        for (unsigned j = 0; j < A[i].size(); ++j) {
-            const auto element = A[i][j];
-            difference += element.value * x[element.index];
+        for (const auto &[index, value] : A[i]) {
+            difference += value * x[index];
         }
         difference -= m[i];
         sum += (difference * difference);

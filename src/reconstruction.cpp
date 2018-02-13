@@ -8,8 +8,7 @@ void Art::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::vec
     for (unsigned i = 0; i < m.size(); ++i) {
         float aa = 0;
         float ax = 0;
-        for (unsigned k = 0; k < a[i].size(); ++k) {
-            const auto [index, value] = a[i][k];
+        for (const auto &[index, value] : a[i]) {
             aa += value * value;
             ax += value * x[index];
         }
@@ -17,13 +16,12 @@ void Art::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::vec
             continue;
         }
         const float t = (m[i] - ax) / aa;
-        for (unsigned j = 0; j < a[i].size(); ++j) {
-            const auto [index, value] = a[i][j];
+        for (const auto &[index, value] : a[i]) {
             x[index] += value * t;
         }
         if (onlyPositive) {
             std::transform(x.begin(), x.end(), x.begin(),
-                [] (float value) { return std::max(value, 0.f); }
+                [] (float value) { return std::max(value, 0.0f); }
             );
         }
     }
@@ -51,8 +49,7 @@ void Sirt::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::ve
     for (unsigned j = 0; j < m.size(); ++j) {
         float adxj = 0;
         float axyj = 0;
-        for (unsigned k = 0; k < a[j].size(); ++k) {
-            const auto [index, value] = a[j][k];
+        for (const auto &[index, value] : a[j]) {
             adxj += value * dx[index];
             axyj += value * x[index];
         }
@@ -62,8 +59,8 @@ void Sirt::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::ve
 
     // Numerator is a sum of axy and adx product values
     // While denominator is a sum of adx values squared
-    const float numerator = std::inner_product(axy.begin(), axy.end(), adx.begin(), 0.f);
-    const float denominator = std::inner_product(adx.begin(), adx.end(), adx.begin(), 0.f);
+    const float numerator = std::inner_product(axy.begin(), axy.end(), adx.begin(), 0.0f);
+    const float denominator = std::inner_product(adx.begin(), adx.end(), adx.begin(), 0.0f);
     const float t = - numerator / denominator;
 
     std::transform(dx.begin(), dx.end(), dx.begin(), [t](auto i) { return t * i;});
@@ -71,7 +68,7 @@ void Sirt::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::ve
 
     if (onlyPositive) {
         std::transform(x.begin(), x.end(), x.begin(),
-            [] (float value) { return std::max(value, 0.f); }
+            [] (float value) { return std::max(value, 0.0f); }
         );
     }
 }
