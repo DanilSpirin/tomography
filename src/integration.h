@@ -6,18 +6,18 @@
 
 class Integration {
 public:
-    virtual double operator()(const BaseRay &ray, const ElectronDensityDistribution &model) = 0;
+    virtual float operator()(const BaseRay &ray, const ElectronDensityDistribution &model) = 0;
     virtual ~Integration() = default;
 };
 
 class Trapezium : public Integration {
 public:
-    virtual double operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
+    virtual float operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
     ~Trapezium() {}
 };
 
 class Rectangle : public Integration {
 public:
-    virtual double operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
+    virtual float operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
     ~Rectangle() {}
 };

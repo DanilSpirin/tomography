@@ -4,7 +4,7 @@
 #include "dimension.h"
 #include "point.h"
 
-Dimension::Dimension(const double left, const double right, const unsigned intervals, const bool isInDegrees) {
+Dimension::Dimension(const float left, const float right, const unsigned intervals, const bool isInDegrees) {
     this->left = left;
     this->right = right;
     this->intervals = intervals;
@@ -31,8 +31,8 @@ void Dimension::to_degrees() {
 }
 
 void Dimension::expand(const unsigned extra) {
-    const unsigned m = static_cast<unsigned>(ceil(extra / step));
-    const double D = m * step;
+    const unsigned m = static_cast<unsigned>(std::ceil(extra / step));
+    const float D = m * step;
     this->left -= D;
     this->right += D;
     this->intervals += 2 * m;
@@ -42,11 +42,11 @@ unsigned Dimension::size() const {
     return this->intervals;
 }
 
-double Dimension::length() const {
+float Dimension::length() const {
     return this->right - this->left;
 }
 
-std::vector<unsigned> Dimension::sequence(const double x) const {
+std::vector<unsigned> Dimension::sequence(const float x) const {
     const unsigned i = static_cast<unsigned>(((x - this->left) / this->step));
     const unsigned start_point = i < 2 ? 0 : (i - 1);
     const unsigned end_point = (i + 2) > this->intervals ? this->intervals : (i + 2);
@@ -55,7 +55,7 @@ std::vector<unsigned> Dimension::sequence(const double x) const {
     return result;
 }
 
-double Dimension::get(const double x, const double i) const {
+float Dimension::get(const float x, const float i) const {
     return (x - (this->left + i * this->step)) / this->step;
 }
 

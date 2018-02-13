@@ -2,13 +2,13 @@
 
 #include "integration.h"
 
-double Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
-    const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
+float Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
+    const float r = std::sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
     const unsigned m = 100;
-    const double h = r / m;
+    const float h = r / m;
     const point dR = (ray.satellite - ray.station) / m;
     point R = ray.station;
-    double value = 0.0;
+    float value = 0.0;
 
     for (unsigned i = 0; i < m; ++i) {
         if (i == 0 || i == m - 1) {
@@ -21,13 +21,13 @@ double Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistributi
     return value;
 }
 
-double Rectangle::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
-    const double r = sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
+float Rectangle::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
+    const float r = std::sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));
     const unsigned m = 100;
-    const double h = r / m;
+    const float h = r / m;
     const point dR = (ray.satellite - ray.station) / m;
     point R = ray.station + dR * 0.5;
-    double value = 0.0;
+    float value = 0.0;
 
     for (unsigned i = 0; i < m; ++i) {
         value += model(R, ray.time) * h;

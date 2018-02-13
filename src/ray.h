@@ -4,14 +4,14 @@
 
 class BaseRay {
 public:
-    double integral, time;
+    float integral, time;
     point station, satellite;
 };
 
 class Ray : public BaseRay{
 public:
-    double thetta, phi, angle;
-    Ray(const point &station, const point &satellite, const double time);
+    float thetta, phi, angle;
+    Ray(const point &station, const point &satellite, const float time);
     Ray() = default;
     point cross;
     void compute_parameters();

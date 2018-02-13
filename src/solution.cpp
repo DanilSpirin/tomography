@@ -7,9 +7,9 @@
 #include "solution.h"
 
 
-void Solution::set_limits(double latitudeLeft, double latitudeRight,
-                          double longitudeLeft, double longitudeRight,
-                          double timeLeft, double timeRight) {
+void Solution::set_limits(float latitudeLeft, float latitudeRight,
+                          float longitudeLeft, float longitudeRight,
+                          float timeLeft, float timeRight) {
     this->latitudeLeft = latitudeLeft;
     this->latitudeRight = latitudeRight;
     this->longitudeLeft = longitudeLeft;
@@ -38,16 +38,16 @@ void Solution::add_data(std::vector<std::vector<Ray>> &&_data) {
 void Solution::find(const Solver& solver) {
     auto numberOfGrids = grids.size();
     if (numberOfGrids > 0) {
-        std::vector<double> currentIntegrals;
+        std::vector<float> currentIntegrals;
         std::vector<VectorSparse> currentSleMatrix;
 
         data_to_sle(data, currentSleMatrix, currentIntegrals, grids.at(0));
-        solve_sle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1, solver);
+        solve_sle(grids.at(0), currentSleMatrix, currentIntegrals, 0.1f, solver);
 
         for (unsigned i = 1; i < numberOfGrids; ++i) {
             currentIntegrals = compute_vector_residual(grids.at(i - 1), currentSleMatrix, currentIntegrals);
             data_to_sle(data, currentSleMatrix, grids.at(i));
-            solve_sle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15, solver, false);
+            solve_sle(grids.at(i), currentSleMatrix, currentIntegrals, 0.15f, solver, false);
         }
 
     } else {
@@ -70,11 +70,11 @@ void Solution::print(const std::string& output_path) {
         std::ofstream out(path);
         for (unsigned x = 0; x <= density; ++x) {
             for (unsigned y = 0; y <= density; ++y) {
-                const double phi = latitude.left + (latitude.right - latitude.left) / density * x;
-                const double theta = longitude.left + (longitude.right - longitude.left) / density * y;
-                const double time = i * 3600;
+                const float phi = latitude.left + (latitude.right - latitude.left) / density * x;
+                const float theta = longitude.left + (longitude.right - longitude.left) / density * y;
+                const float time = i * 3600;
 
-                double sum = 0;
+                float sum = 0;
                 for (const auto &item : grids) {
                     sum += item(phi, theta, time);
                 }

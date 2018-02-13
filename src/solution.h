@@ -6,14 +6,14 @@ class Solution {
     ElectronDensityDistribution *model;
     std::vector<Grid> grids;
     std::vector<std::vector<Ray>> data;
-    double latitudeLeft, longitudeLeft, timeLeft;
-    double latitudeRight, longitudeRight, timeRight;
+    float latitudeLeft, longitudeLeft, timeLeft;
+    float latitudeRight, longitudeRight, timeRight;
 public:
     Solution() = default;
     ~Solution() = default;
-    void set_limits(double latitudeLeft, double latitudeRight,
-                    double longitudeLeft, double longitudeRight,
-                    double timeLeft, double timeRight);
+    void set_limits(float latitudeLeft, float latitudeRight,
+                    float longitudeLeft, float longitudeRight,
+                    float timeLeft, float timeRight);
     void set_model(ElectronDensityDistribution &model);
     void add_grid(unsigned spaceIntervals, unsigned timeIntervals);
     void add_data(std::vector<std::vector<Ray>> &&data);

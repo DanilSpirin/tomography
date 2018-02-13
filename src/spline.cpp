@@ -3,7 +3,7 @@
 
 #include "spline.h"
 
-Spline::Spline(const std::vector<double> x, const std::vector<double> y) {
+Spline::Spline(const std::vector<float> x, const std::vector<float> y) {
     auto n = x.size();
     splines.resize(x.size());
     for (std::size_t i = 0; i < n; ++i) {
@@ -14,16 +14,16 @@ Spline::Spline(const std::vector<double> x, const std::vector<double> y) {
     // Natural boundary conditions
     splines.front().c = splines.back().c = 0;
 
-    std::vector<double> alpha(n - 1);
-    std::vector<double> beta(n - 1);
+    std::vector<float> alpha(n - 1);
+    std::vector<float> beta(n - 1);
 
     // Tridiagonal matrix algorithm
     for (std::size_t i = 1; i < n - 1; ++i) {
-        const double A = x[i] - x[i - 1];
-        const double B = x[i + 1] - x[i];
-        const double C = 2.0 * (A + B);
-        const double F = 6.0 * ((y[i + 1] - y[i]) / B - (y[i] - y[i - 1]) / A);
-        const double z = A * alpha[i - 1] + C;
+        const float A = x[i] - x[i - 1];
+        const float B = x[i + 1] - x[i];
+        const float C = 2.f * (A + B);
+        const float F = 6.f * ((y[i + 1] - y[i]) / B - (y[i] - y[i - 1]) / A);
+        const float z = A * alpha[i - 1] + C;
         alpha[i] = -B / z;
         beta[i] = (F - A * beta[i - 1]) / z;
     }
@@ -33,15 +33,15 @@ Spline::Spline(const std::vector<double> x, const std::vector<double> y) {
     }
 
     for (std::size_t i = n - 1; i > 0; --i) {
-        const double h = x[i] - x[i - 1];
+        const float h = x[i] - x[i - 1];
         splines[i].d = (splines[i].c - splines[i - 1].c) / h;
-        splines[i].b = h * (2.0 * splines[i].c + splines[i - 1].c) / 6.0 + (y[i] - y[i - 1]) / h;
+        splines[i].b = h * (2.f * splines[i].c + splines[i - 1].c) / 6.f + (y[i] - y[i - 1]) / h;
     }
 }
 
-double Spline::operator()(const double x) const {
+float Spline::operator()(const float x) const {
     if (!splines.size()) {
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<float>::quiet_NaN();
     }
 
     // Do not interpolate past boundary values
@@ -52,10 +52,10 @@ double Spline::operator()(const double x) const {
         return splines.back().a;
     }
 
-    auto it = std::lower_bound(splines.begin(), splines.end(), x, [](SplineTuple left, double right) {
+    auto it = std::lower_bound(splines.begin(), splines.end(), x, [](SplineTuple left, float right) {
         return left.x < right;
     });
 
     const auto dx = x - it->x;
-    return it->a + (it->b + (it->c / 2.0 + it->d * dx / 6.0) * dx) * dx;
+    return it->a + (it->b + (it->c / 2.f + it->d * dx / 6.f) * dx) * dx;
 }

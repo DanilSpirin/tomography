@@ -2,39 +2,6 @@
 
 #include "vector_sparse.h"
 
-size_t VectorSparse::size() const {
-    if (_value.size() == _index.size()) {
-        return _value.size();
-    } else {
-        throw "Problem in vector sparse. Index and value sizes differ.";
-    }
-}
-
-void VectorSparse::push_back(const unsigned index, const double value) {
-    _index.push_back(index);
-    _value.push_back(value);
-}
-
-void VectorSparse::push_back(const Element &element) {
-    _index.push_back(element.index);
-    _value.push_back(element.value);
-}
-
-Element VectorSparse::operator[](const unsigned i) const {
-    return Element(_index[i], _value[i]);
-}
-
-Element VectorSparse::at(const unsigned i) const {
-    return Element(_index.at(i), _value.at(i));
-}
-
-VectorSparse operator - (const VectorSparse &a) {
-    VectorSparse result(a);
-    for (unsigned i = 0; i < result.size(); ++i) {
-        result._value[i] = -result._value[i];
-    }
-    return result;
-}
 
 VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
     const auto left_size = a.size();
@@ -72,30 +39,6 @@ VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
         const auto right = b[i_right];
         result.push_back(-right);
         ++i_right;
-    }
-    return result;
-}
-
-VectorSparse operator * (const double a, const VectorSparse &b) {
-    VectorSparse result(b);
-    for (unsigned i = 0; i < result.size(); ++i) {
-        result._value[i] *= a;
-    }
-    return result;
-}
-
-VectorSparse operator * (const VectorSparse &a, const double b) {
-    VectorSparse result(a);
-    for (unsigned i = 0; i < result.size(); ++i) {
-        result._value[i] *= b;
-    }
-    return result;
-}
-
-VectorSparse operator / (const VectorSparse &a, const double b) {
-    VectorSparse result(a);
-    for (unsigned i = 0; i < result.size(); ++i) {
-        result._value[i] /= b;
     }
     return result;
 }

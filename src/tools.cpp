@@ -11,16 +11,16 @@ namespace fs = std::experimental::filesystem;
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;
 
-void data_to_sle(const SleMatrix &data, SparseMatrix &phi, std::vector<double> &integrals, const Grid& test) {
+void data_to_sle(const SleMatrix &data, SparseMatrix &phi, std::vector<float> &integrals, const Grid& test) {
     phi.clear();
     integrals.clear();
     for (const auto& it : data) {
         auto curr = std::cbegin(it);
         auto next = std::next(curr);
         for ( ; next != std::cend(it); ++curr, ++next) {
-            const auto left  = test.basis(next->phi, next->thetta, next->time) / cos(next->angle);
-            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / cos(curr->angle);
-            phi.push_back(left - right);
+            const auto left  = test.basis(next->phi, next->thetta, next->time) / std::cos(next->angle);
+            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / std::cos(curr->angle);
+            phi.emplace_back(left - right);
             integrals.push_back(next->integral - curr->integral);
         }
     }
@@ -32,17 +32,17 @@ void data_to_sle(const SleMatrix &data, SparseMatrix &phi, const Grid& test) {
         auto curr = std::cbegin(it);
         auto next = std::next(curr);
         for ( ; next != std::cend(it); ++curr, ++next) {
-            const auto left  = test.basis(next->phi, next->thetta, next->time) / cos(next->angle);
-            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / cos(curr->angle);
-            phi.push_back(left - right);
+            const auto left  = test.basis(next->phi, next->thetta, next->time) / std::cos(next->angle);
+            const auto right = test.basis(curr->phi, curr->thetta, curr->time) / std::cos(curr->angle);
+            phi.emplace_back(left - right);
         }
     }
 }
 
-double compute_residual(const Grid &x, const SparseMatrix &A, const std::vector<double> &m) {
-    double sum = 0;
+float compute_residual(const Grid &x, const SparseMatrix &A, const std::vector<float> &m) {
+    float sum = 0;
     for (unsigned i = 0; i < A.size(); ++i) {
-        double difference = 0;
+        float difference = 0;
         for (unsigned j = 0; j < A[i].size(); ++j) {
             const auto element = A[i][j];
             difference += element.value * x[element.index];
@@ -50,11 +50,11 @@ double compute_residual(const Grid &x, const SparseMatrix &A, const std::vector<
         difference -= m[i];
         sum += (difference * difference);
     }
-    return sqrt(sum);
+    return std::sqrt(sum);
 }
 
-std::vector<double> compute_vector_residual(const Grid &x, const SparseMatrix &A, const std::vector<double> &m) {
-    std::vector<double> difference(m.size(), 0);
+std::vector<float> compute_vector_residual(const Grid &x, const SparseMatrix &A, const std::vector<float> &m) {
+    std::vector<float> difference(m.size(), 0);
     for (unsigned i = 0; i < A.size(); ++i) {
         for (unsigned j = 0; j < A[i].size(); ++j) {
             const auto element = A[i][j];
@@ -98,8 +98,8 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
     return data;
 }
 
-std::set<std::pair<double, double> > get_stations(const SleMatrix &data) {
-    std::set<std::pair<double, double>> stations;
+std::set<std::pair<float, float> > get_stations(const SleMatrix &data) {
+    std::set<std::pair<float, float>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();
     for (const auto& i : data) {
@@ -115,21 +115,21 @@ std::set<std::pair<double, double> > get_stations(const SleMatrix &data) {
     return stations;
 }
 
-void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double> &integrals,
-        const double error, const Solver &solver, const bool onlyPositive) {
-    const double initialResidual = compute_residual(grid, matrix, integrals);
-    const double iterations = 50;
+void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<float> &integrals,
+        const float error, const Solver &solver, const bool onlyPositive) {
+    const float initialResidual = compute_residual(grid, matrix, integrals);
+    const float iterations = 50;
     for (int i = 0; i < iterations; ++i) {
         solver(grid, matrix, integrals, onlyPositive);
     }
-    const double firstRes = compute_residual(grid, matrix, integrals) / initialResidual;
+    const float firstRes = compute_residual(grid, matrix, integrals) / initialResidual;
     for (int i = 0; i < iterations; ++i) {
         solver(grid, matrix, integrals, onlyPositive);
     }
-    const double secondRes = compute_residual(grid, matrix, integrals) / initialResidual;
-    const double limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
+    const float secondRes = compute_residual(grid, matrix, integrals) / initialResidual;
+    const float limit = (iterations * 2 * secondRes - iterations * firstRes) / iterations;
     fmt::print("{}\n", limit);
-    double currentRes = secondRes;
+    float currentRes = secondRes;
     unsigned counter = 0;
     while (currentRes / limit > 1 + error) {
         solver(grid, matrix, integrals, onlyPositive);
@@ -143,11 +143,11 @@ void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<double>
     }
 }
 
-double degree_to_radian(const double degree) {
+float degree_to_radian(const float degree) {
     return degree / 180 * pi;
 }
 
-double radian_to_degree(const double radian) {
+float radian_to_degree(const float radian) {
     return radian * 180 / pi;
 }
 

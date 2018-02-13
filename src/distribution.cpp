@@ -3,78 +3,79 @@
 #include "distribution.h"
 #include "point.h"
 
-Spot::Spot(const point &location, const double peak, const double period, const double intensity, const double size)
+Spot::Spot(const point &location, const float peak, const float period, const float intensity, const float size)
     : location(location), peak(peak), period(period), intensity(intensity), size(size) {
-    this->location.R[0] /= (180.0 / pi);
-    this->location.R[1] /= (180.0 / pi);
+    this->location.R[0] /= (180.0f / pi);
+    this->location.R[1] /= (180.0f / pi);
 }
 
-double Spot::operator()(const point& R, const double time) const {
-    return size * sin(pi / 2 + (peak - time / 3600) * period) * exp(-(R - location).radius_squared() * intensity);
+float Spot::operator()(const point& R, const float time) const {
+    return size * std::sin(pi / 2 + (peak - time / 3600) * period) * std::exp(-(R - location).radius_squared() * intensity);
 }
 
-Wave::Wave(const point &location, const double start, const double period, const double speed)
+Wave::Wave(const point &location, const float start, const float period, const float speed)
     : location(location), start(start), period(period), speed(speed) {
-    this->location.R[0] /= (180.0 / pi);
-    this->location.R[1] /= (180.0 / pi);
+    this->location.R[0] /= (180.0f / pi);
+    this->location.R[1] /= (180.0f / pi);
 }
 
-double Wave::p(const double r, const double v, const double T) const {
-    double r0 = v * T / 2;
+float Wave::p(const float r, const float v, const float T) const {
+    float r0 = v * T / 2;
     if (r < r0) {
-        return 1 / 2 * (1 - cos(pi * r / r0));
+        return 1 / 2 * (1 - std::cos(pi * r / r0));
     } else {
         return 1;
     }
 }
 
-double Wave::f(const double t, const double T, const double n) const {
-    return sin(2 * pi * t / T) * exp(-t * t / 2 / n / n / T / T);
+float Wave::f(const float t, const float T, const float n) const {
+    return std::sin(2 * pi * t / T) * std::exp(-t * t / 2 / n / n / T / T);
 }
 
-double Wave::operator()(const point& R_a, const double time) const {
+float Wave::operator()(const point& R_a, const float time) const {
     point R = R_a;
     point Rc = location;
     DecartToGeographic transformation;
     transformation.backward(R);
     transformation.backward(Rc);
-    const double r = (R - Rc).length();
-    const double n = 2;
+    const float r = (R - Rc).length();
+    const float n = 2;
     return p(r, speed, period) * f(r / speed - (time - start), period, n);
 }
-double ElectronDensityDistribution::operator() (point R, const double t) const {
+
+float ElectronDensityDistribution::operator() (point R, const float t) const {
     if (coordinateTransformation) {
         coordinateTransformation->forward(R);
     }
     return value(R, t);
 }
 
-ChepmanLayer::ChepmanLayer() : nmin(0.4), nm(1.1), hm(300), H(100), d(102), dt(0) {}
+ChepmanLayer::ChepmanLayer() : nmin(0.4f), nm(1.1f), hm(300), H(100), d(102), dt(0) {}
 
 ChepmanLayer::~ChepmanLayer() {}
 
-void ChepmanLayer::add_spot(const point &location, const double peak, const double period, const double intensity,
-                            const double size) {
+void ChepmanLayer::add_spot(const point &location, const float peak, const float period, const float intensity,
+                            const float size) {
     spots.emplace_back(Spot(location, peak, period, intensity, size));
 }
 
-void ChepmanLayer::add_wave(const point &location, const double start, const double period, const double speed) {
+void ChepmanLayer::add_wave(const point &location, const float start, const float period, const float speed) {
     waves.emplace_back(Wave(location, start, period, speed));
 }
 
-double ChepmanLayer::value(const point &R, const double time) const {
-    const double longitute = R.R[0], latitude = R.R[1], h = R.R[2] - Re;
+float ChepmanLayer::value(const point &R, const float time) const {
+    const float longitute = R.R[0], latitude = R.R[1], h = R.R[2] - Re;
 
-    const double UT = (time - dt) / 60.0 / 60.0;    // Universal Time
+    const float UT = (time - dt) / 60.0f / 60.0f;    // Universal Time
 
-    const double declination = asin(sin(23.45 / 180.0 * pi) * sin(2 * pi / 365.0 * (d - 82.0))); // convert to radians
-    const double angle = (15 * (UT - 12.0)) / 180.0 * pi + longitute; // angle - time zone
-    const double zenith = sin(latitude) * sin(declination) + cos(latitude) * cos(declination) * cos(angle);
-    const double ksi = (h - hm) / H ;
+    const float declination = std::asin(std::sin(23.45f / 180.0f * pi) * std::sin(2 * pi / 365.0f * (d - 82.0f))); // convert to radians
+    const float angle = (15 * (UT - 12.0f)) / 180.0f * pi + longitute; // angle - time zone
+    const float zenith = std::sin(latitude) * std::sin(declination) + std::cos(latitude) * std::cos(declination) * std::cos(angle);
+    const float ksi = (h - hm) / H ;
 
-    const double Q = std::max(nm * zenith, nmin);
+    const float Q = std::max(nm * zenith, nmin);
 
-    double wavesAddition = 0, spotsAddition = 0;
+    float wavesAddition = 0, spotsAddition = 0;
     for (const auto& i : waves) {
         wavesAddition += i(R, time);
     }
@@ -83,5 +84,5 @@ double ChepmanLayer::value(const point &R, const double time) const {
         spotsAddition += i(R, time);
     }
 
-    return (Q + spotsAddition + 0.5 * nmin * wavesAddition) * exp(1 - ksi - exp(-ksi)) / 10;
+    return (Q + spotsAddition + 0.5f * nmin * wavesAddition) * std::exp(1.0f - ksi - std::exp(-ksi)) / 10.0f;
 }

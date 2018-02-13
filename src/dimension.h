@@ -5,19 +5,19 @@
 
 class Dimension {
 public:
-    double left, right;
+    float left, right;
     Dimension() = default;
-    Dimension(const double left, const double right, const unsigned itervals, const bool inDegrees = true);
+    Dimension(const float left, const float right, const unsigned itervals, const bool inDegrees = true);
     void to_radian();
     void to_degrees();
     void expand(const unsigned extra = 16);
     unsigned size() const;
-    double length() const;
-    std::vector<unsigned> sequence(const double i) const; // TODO: come up withe a better name
-    double get(const double x, const double i) const; // TODO: come up with a better name
+    float length() const;
+    std::vector<unsigned> sequence(const float i) const; // TODO: come up withe a better name
+    float get(const float x, const float i) const; // TODO: come up with a better name
     friend std::ostream& operator << (std::ostream& out, const Dimension& dimension);
 private:
     bool inDegrees;
-    double step;
+    float step;
     unsigned intervals;
 };

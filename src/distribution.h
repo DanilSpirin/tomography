@@ -7,42 +7,42 @@
 
 class Spot {
 public:
-    Spot(const point &location, const double peak, const double period, const double intensity, const double size);
-    double operator () (const point& R, const double time) const;
+    Spot(const point &location, const float peak, const float period, const float intensity, const float size);
+    float operator () (const point& R, const float time) const;
 private:
     point location;
-    double peak, period, intensity, size;
+    float peak, period, intensity, size;
 };
 
 class Wave {
 public:
-    Wave(const point &location, const double start, const double period, const double speed);
-    double operator () (const point& R, const double time) const;
+    Wave(const point &location, const float start, const float period, const float speed);
+    float operator () (const point& R, const float time) const;
 private:
     point location;
-    double start, period, speed;
-    double p(const double r, const double v, const double T) const;
-    double f(const double t, const double T, const double n) const;
+    float start, period, speed;
+    float p(const float r, const float v, const float T) const;
+    float f(const float t, const float T, const float n) const;
 };
 
 class ElectronDensityDistribution {
 public:
     virtual ~ElectronDensityDistribution() = default;
-    double operator() (point R, const double t) const;
+    float operator() (point R, const float t) const;
     std::unique_ptr<CoordinateTransformation> coordinateTransformation;
 private:
-    virtual double value(const point &R, const double t) const = 0;
+    virtual float value(const point &R, const float t) const = 0;
 };
 
 class ChepmanLayer : public ElectronDensityDistribution {
 public:
     ChepmanLayer();
     ~ChepmanLayer();
-    void add_spot(const point &location, const double peak, const double period, const double intensity, const double size);
-    void add_wave(const point &location, const double peak, const double period, const double speed);
+    void add_spot(const point &location, const float peak, const float period, const float intensity, const float size);
+    void add_wave(const point &location, const float peak, const float period, const float speed);
 private:
-    double value(const point &R, const double t) const;
-    double nmin, nm, hm, H, d, dt;
+    float value(const point &R, const float t) const;
+    float nmin, nm, hm, H, d, dt;
     
     std::vector<Spot> spots;
     std::vector<Wave> waves;

@@ -12,13 +12,13 @@ int main() {
 
     ChepmanLayer chepmanLayer;
 
-    chepmanLayer.add_spot(point(30, 55), 12, pi / 24, 150, 0.5);
-    chepmanLayer.add_spot(point(2.5, 45), 12, pi / 6, 300, 0.2);
-    chepmanLayer.add_spot(point(12, 40), 12, pi / 4, 300, 0.2);
+    chepmanLayer.add_spot(point(30, 55), 12, pi / 24, 150, 0.5f);
+    chepmanLayer.add_spot(point(2.5, 45), 12, pi / 6, 300, 0.2f);
+    chepmanLayer.add_spot(point(12, 40), 12, pi / 4, 300, 0.2f);
 
-    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1500, 0.3); // 25 minutes
-    chepmanLayer.add_wave(point(20, 60, Re), 54000, 2100, 0.3); // 35 minutes
-    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1800, 0.3); // 20 minutes
+    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1500, 0.3f); // 25 minutes
+    chepmanLayer.add_wave(point(20, 60, Re), 54000, 2100, 0.3f); // 35 minutes
+    chepmanLayer.add_wave(point(10, 40, Re), 32400, 1800, 0.3f); // 20 minutes
 
     const unsigned time_start = 0;
     const unsigned time_finish = 24;

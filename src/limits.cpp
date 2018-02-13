@@ -1,7 +1,7 @@
 #include <cmath>
 #include "limits.h"
 
-void Limits::update(const double value) {
+void Limits::update(const float value) {
     if (_min > value) {
         _min = value;
     }
@@ -11,6 +11,6 @@ void Limits::update(const double value) {
 }
 
 std::ostream& operator << (std::ostream& out, const Limits &limits) {
-    out << floor(limits._min) << ' ' << ceil(limits._max);
+    out << std::floor(limits._min) << ' ' << std::ceil(limits._max);
     return out;
 }
