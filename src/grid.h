@@ -12,7 +12,8 @@ public:
 
     std::size_t size() const { return data.size(); }
 
-    float operator ()(const float x, const float y, const float z) const;
+    float operator()(const float x, const float y, const float z) const;
+
     float& operator[](const std::size_t i) { return  data[i]; }
     const float& operator[](const std::size_t i) const { return data[i]; }
 

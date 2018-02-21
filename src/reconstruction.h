@@ -7,9 +7,10 @@
 
 class Solver {
 public:
-    Solver() {}
+    Solver() = default;
+
     virtual void operator()(Grid &grid, const std::vector<VectorSparse> &a, const std::vector<float> &m, bool onlyPositive=true) const = 0;
-    virtual ~Solver() {}
+    virtual ~Solver() = default;
 };
 
 

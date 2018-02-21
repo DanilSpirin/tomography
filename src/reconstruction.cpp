@@ -64,7 +64,7 @@ void Sirt::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::ve
     const float t = - numerator / denominator;
 
     std::transform(dx.begin(), dx.end(), dx.begin(), [t](auto i) { return t * i;});
-    std::transform(x.begin(), x.end(), dx.begin(), x.begin(), std::plus<float>());
+    std::transform(x.begin(), x.end(), dx.begin(), x.begin(), std::plus<>());
 
     if (onlyPositive) {
         std::transform(x.begin(), x.end(), x.begin(),

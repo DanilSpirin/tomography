@@ -40,7 +40,7 @@ Spline::Spline(const std::vector<float> x, const std::vector<float> y) {
 }
 
 float Spline::operator()(const float x) const {
-    if (!splines.size()) {
+    if (splines.empty()) {
         return std::numeric_limits<float>::quiet_NaN();
     }
 

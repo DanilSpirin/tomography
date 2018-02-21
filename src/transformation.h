@@ -14,5 +14,5 @@ class DecartToGeographic : public CoordinateTransformation {
 public:
     void forward(point &R) override;
     void backward(point &R) override;
-    ~DecartToGeographic() {}
+    ~DecartToGeographic() override = default;
 };

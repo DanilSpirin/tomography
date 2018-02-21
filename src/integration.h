@@ -12,12 +12,12 @@ public:
 
 class Trapezium : public Integration {
 public:
-    virtual float operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
+    float operator() (const BaseRay &ray, const ElectronDensityDistribution &model) override;
     ~Trapezium() {}
 };
 
 class Rectangle : public Integration {
 public:
-    virtual float operator() (const BaseRay &ray, const ElectronDensityDistribution &model);
+    float operator() (const BaseRay &ray, const ElectronDensityDistribution &model) override;
     ~Rectangle() {}
 };

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "ray.h"
 
 
@@ -32,8 +32,8 @@ void Ray::compute_angles() {
     const float c = std::sqrt((cross * cross) * (diff * diff));
     const float ac = std::fmin(a / c, 1.0f);
     angle = std::acos(ac);
-    thetta = asin(cross.R[2] / (Re + h));
-    phi = atan2(cross.R[1], cross.R[0]);
+    thetta = std::asin(cross.R[2] / (Re + h));
+    phi = std::atan2(cross.R[1], cross.R[0]);
 }
 
 void Ray::compute_parameters() {

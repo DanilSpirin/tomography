@@ -42,7 +42,7 @@ int main() {
 
     Sirt solver;
     Solution solution;
-    solution.set_limits(-10.0, 40.0, 30.0, 70.0, time_start, time_finish);
+    solution.set_limits(-10.0f, 40.0f, 30.0f, 70.0f, time_start, time_finish);
     solution.add_data(std::move(data));
     solution.add_grid(8, 24);
     solution.add_grid(36, 240);

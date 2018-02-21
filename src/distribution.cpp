@@ -22,7 +22,7 @@ Wave::Wave(const point &location, const float start, const float period, const f
 float Wave::p(const float r, const float v, const float T) const {
     float r0 = v * T / 2;
     if (r < r0) {
-        return 1 / 2 * (1 - std::cos(pi * r / r0));
+        return 1.0f / 2.0f * (1 - std::cos(pi * r / r0));
     } else {
         return 1;
     }

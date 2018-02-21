@@ -64,7 +64,7 @@ void Solution::print(const std::string& output_path) {
 
     const unsigned density = 100;
 
-    for (unsigned i = static_cast<unsigned>(timeLeft); i < timeRight + 1; ++i) {
+    for (auto i = static_cast<unsigned>(timeLeft); i < timeRight + 1; ++i) {
         auto path = fmt::format("{}{}{:02}{}", output_path, "time_", i, ".txt");
         std::ofstream out(path);
         for (unsigned x = 0; x <= density; ++x) {

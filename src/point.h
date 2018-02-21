@@ -8,7 +8,7 @@ static const float h = 300; // Single layer height above Earth
 class point {
 public:
     float R[3];
-    point(const float x = 0, const float y = 0, const float z = Re);
+    explicit point(const float x = 0, const float y = 0, const float z = Re);
     float length() const;
     float length_squared() const;
     float radius_squared() const;

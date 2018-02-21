@@ -37,11 +37,11 @@ private:
 class ChepmanLayer : public ElectronDensityDistribution {
 public:
     ChepmanLayer();
-    ~ChepmanLayer();
+    ~ChepmanLayer() override;
     void add_spot(const point &location, const float peak, const float period, const float intensity, const float size);
     void add_wave(const point &location, const float peak, const float period, const float speed);
 private:
-    float value(const point &R, const float t) const;
+    float value(const point &R, const float t) const override;
     float nmin, nm, hm, H, d, dt;
     
     std::vector<Spot> spots;
