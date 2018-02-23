@@ -75,11 +75,11 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
                     std::vector<Ray> bundle;
                     bundle.reserve(numberOfRays);
 
-                    Ray ray;
-                    while (gps >> ray) {
-                        if (ray.time >= startTime * 3600 && ray.time <= finishTime * 3600) {
-                            ray.compute_parameters();
-                            bundle.push_back(ray);
+                    point station, satellite;
+                    float time, integral;
+                    while (gps >> station >> satellite >> time >> integral) {
+                        if (time >= startTime * 3600 && time <= finishTime * 3600) {
+                            bundle.emplace_back(Ray {station, satellite, time, integral});
                         }
                     }
                     gps.close();
