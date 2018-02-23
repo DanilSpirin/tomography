@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "point.h"
+#include "point.hpp"
 
 point::point(const float x, const float y, const float z) {
     R[0] = x;

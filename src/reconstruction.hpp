@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "grid.h"
-#include "vector_sparse.h"
+#include "grid.hpp"
+#include "vector_sparse.hpp"
 
 class Solver {
 public:

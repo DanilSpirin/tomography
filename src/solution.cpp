@@ -3,8 +3,8 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
-#include "limits.h"
-#include "solution.h"
+#include "limits.hpp"
+#include "solution.hpp"
 
 
 void Solution::set_limits(float latitudeLeft, float latitudeRight,

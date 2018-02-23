@@ -1,7 +1,7 @@
 #include <cmath>
 
-#include "distribution.h"
-#include "point.h"
+#include "distribution.hpp"
+#include "point.hpp"
 
 Spot::Spot(const point &location, const float peak, const float period, const float intensity, const float size)
     : location(location), peak(peak), period(period), intensity(intensity), size(size) {

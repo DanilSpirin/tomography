@@ -1,6 +1,6 @@
 #pragma once
 
-#include "point.h"
+#include "point.hpp"
 
 class BaseRay {
 public:

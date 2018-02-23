@@ -1,9 +1,9 @@
 #include <fstream>
 #include <fmt/ostream.h>
 
-#include "integration.h"
-#include "tools.h"
-#include "solution.h"
+#include "integration.hpp"
+#include "tools.hpp"
+#include "solution.hpp"
 
 int main() {
 

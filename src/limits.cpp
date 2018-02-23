@@ -1,5 +1,5 @@
 #include <cmath>
-#include "limits.h"
+#include "limits.hpp"
 
 void Limits::update(const float value) {
     if (_min > value) {

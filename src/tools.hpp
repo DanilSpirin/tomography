@@ -3,11 +3,11 @@
 #include <set>
 #include <vector>
 
-#include "distribution.h"
-#include "grid.h"
-#include "ray.h"
-#include "reconstruction.h"
-#include "vector_sparse.h"
+#include "distribution.hpp"
+#include "grid.hpp"
+#include "ray.hpp"
+#include "reconstruction.hpp"
+#include "vector_sparse.hpp"
 
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;

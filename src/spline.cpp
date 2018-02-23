@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <limits>
 
-#include "spline.h"
+#include "spline.hpp"
 
 Spline::Spline(const std::vector<float> x, const std::vector<float> y) {
     auto n = x.size();

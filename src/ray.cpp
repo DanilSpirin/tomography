@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
-#include "ray.h"
+#include "ray.hpp"
 
 
 std::istream& operator >> (std::istream& in, Ray &c) {

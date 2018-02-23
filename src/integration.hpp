@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ray.h"
-#include "distribution.h"
+#include "ray.hpp"
+#include "distribution.hpp"
 
 
 class Integration {

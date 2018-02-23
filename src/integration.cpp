@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "integration.h"
+#include "integration.hpp"
 
 float Trapezium::operator()(const BaseRay &ray, const ElectronDensityDistribution &model) {
     const float r = std::sqrt((ray.satellite - ray.station) * (ray.satellite - ray.station));

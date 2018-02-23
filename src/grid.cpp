@@ -1,5 +1,5 @@
-#include "grid.h"
-#include "spline.h"
+#include "grid.hpp"
+#include "spline.hpp"
 
 const std::vector<float> spline_y = {0, 0.25, 1, 0.25, 0};
 const std::vector<float> spline_x = {-2, -1, 0, 1, 2};

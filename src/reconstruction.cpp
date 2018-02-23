@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <numeric>
 
-#include "reconstruction.h"
+#include "reconstruction.hpp"
 
 
 void Art::operator()(Grid &x, const std::vector<VectorSparse> &a, const std::vector<float> &m, bool onlyPositive) const {

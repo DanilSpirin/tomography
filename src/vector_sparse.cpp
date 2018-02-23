@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "vector_sparse.h"
+#include "vector_sparse.hpp"
 
 
 VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {

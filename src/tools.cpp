@@ -4,7 +4,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
-#include "tools.h"
+#include "tools.hpp"
 
 namespace fs = std::experimental::filesystem;
 

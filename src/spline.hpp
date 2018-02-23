@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class Spline{
+class Spline {
 public:
     Spline(const std::vector<float> x, const std::vector<float> y);
     ~Spline() = default;

@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "dimension.h"
-#include "vector_sparse.h"
+#include "dimension.hpp"
+#include "vector_sparse.hpp"
 
 class Grid {
 public:
