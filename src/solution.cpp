@@ -18,16 +18,11 @@ void Solution::set_limits(float latitudeLeft, float latitudeRight,
     this->timeRight = timeRight;
 }
 
-void Solution::set_model(ElectronDensityDistribution &model) {
-    this->model = &model;
-}
-
 void Solution::add_grid(unsigned spaceIntervals, unsigned timeIntervals) {
     Dimension latitude(latitudeLeft, latitudeRight, spaceIntervals);
     Dimension longitude(longitudeLeft, longitudeRight, spaceIntervals);
     Dimension time(timeLeft * 3600, timeRight * 3600, timeIntervals);
-    Grid grid(latitude, longitude, time);
-    grids.push_back(grid);
+    grids.emplace_back(Grid {latitude, longitude, time});
 }
 
 void Solution::add_data(std::vector<std::vector<Ray>> &&_data) {

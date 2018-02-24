@@ -3,7 +3,6 @@
 #include "tools.hpp"
 
 class Solution {
-    ElectronDensityDistribution *model;
     std::vector<Grid> grids;
     std::vector<std::vector<Ray>> data;
     float latitudeLeft, longitudeLeft, timeLeft;
@@ -14,7 +13,6 @@ public:
     void set_limits(float latitudeLeft, float latitudeRight,
                     float longitudeLeft, float longitudeRight,
                     float timeLeft, float timeRight);
-    void set_model(ElectronDensityDistribution &model);
     void add_grid(unsigned spaceIntervals, unsigned timeIntervals);
     void add_data(std::vector<std::vector<Ray>> &&data);
     void find(const Solver &solver);

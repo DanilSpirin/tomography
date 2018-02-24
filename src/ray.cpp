@@ -11,7 +11,7 @@ void Ray::compute_parameters() {
     const point dr = satellite - station;
     const float rdr = station * dr;
     const float t = (-rdr + std::sqrt(rdr * rdr + (dr * dr) * ((Re + h) * (Re + h) - (station * station)))) / (dr * dr);
-    const point cross = station + t * (satellite - station);
+    const point cross = station + t * dr;
 
     const float a = cross * dr;
     const float c = std::sqrt((cross * cross) * (dr * dr));

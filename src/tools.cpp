@@ -138,19 +138,6 @@ void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<float> 
     }
 }
 
-float degree_to_radian(const float degree) {
-    return degree / 180 * pi;
-}
-
 float radian_to_degree(const float radian) {
     return radian * 180 / pi;
-}
-
-std::vector<unsigned> create_intervals(unsigned first, unsigned last) {
-    std::vector<unsigned> foo;
-    do {
-        foo.push_back(first);
-        first *= 2;
-    } while (first <= last);
-    return foo;
 }

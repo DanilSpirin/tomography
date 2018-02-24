@@ -28,7 +28,4 @@ std::set<std::pair<float, float>> get_stations(const SleMatrix& data);
 
 void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<float> &integrals, const float error, const Solver &solver, const bool onlyPositive = true);
 
-float degree_to_radian(const float degree);
 float radian_to_degree(const float radian);
-
-std::vector<unsigned> create_intervals(const unsigned first, const unsigned last);

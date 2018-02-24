@@ -12,7 +12,6 @@ public:
     void to_degrees();
     void expand(const unsigned extra = 16);
     unsigned size() const;
-    float length() const;
     std::vector<unsigned> sequence(const float i) const; // TODO: come up withe a better name
     float get(const float x, const float i) const; // TODO: come up with a better name
     friend std::ostream& operator << (std::ostream& out, const Dimension& dimension);

@@ -42,10 +42,6 @@ unsigned Dimension::size() const {
     return this->intervals;
 }
 
-float Dimension::length() const {
-    return this->right - this->left;
-}
-
 std::vector<unsigned> Dimension::sequence(const float x) const {
     const unsigned i = static_cast<unsigned>(((x - this->left) / this->step));
     const unsigned start_point = i < 2 ? 0 : (i - 1);
