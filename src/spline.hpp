@@ -13,5 +13,4 @@ private:
         float a, b, c, d, x;
     };
     std::vector<SplineTuple> splines;
-    void build(const std::vector<float> x, const std::vector<float> y);
 };
