@@ -65,7 +65,7 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
     if (fs::exists(path) && fs::is_directory(path)) {
         for (const auto& file : fs::directory_iterator(path)) {
             if (file.path().extension() == ".dat") {
-                std::ifstream gps(file.path().string());
+                std::ifstream gps(file.path());
                 if (!gps) {
                     fmt::print("Can't open file {}\n", file.path().string());
                 } else {
