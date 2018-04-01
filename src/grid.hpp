@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "dimension.hpp"
 #include "vector_sparse.hpp"
 

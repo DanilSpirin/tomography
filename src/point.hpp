@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+
 static const float Re = 6371; // Mean Earth radius
 static const float pi = 3.14159265f; // PI
 static const float h = 300; // Single layer height above Earth

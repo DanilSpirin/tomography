@@ -1,7 +1,6 @@
-#include <cmath>
-
 #include "transformation.hpp"
 
+#include <cmath>
 
 void DecartToGeographic::forward(point &R) {
     point r;

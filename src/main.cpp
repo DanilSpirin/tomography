@@ -2,8 +2,8 @@
 #include <fmt/ostream.h>
 
 #include "integration.hpp"
-#include "tools.hpp"
 #include "solution.hpp"
+#include "tools.hpp"
 
 int main() {
 

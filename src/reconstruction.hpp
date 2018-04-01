@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "grid.hpp"
-#include "vector_sparse.hpp"
 
 class Solver {
 public:

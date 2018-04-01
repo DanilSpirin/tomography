@@ -2,7 +2,6 @@
 
 #include "point.hpp"
 
-
 class CoordinateTransformation {
 public:
     virtual void forward(point &R) = 0;

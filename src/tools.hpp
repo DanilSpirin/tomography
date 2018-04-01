@@ -1,13 +1,11 @@
 #pragma once
 
 #include <set>
-#include <vector>
 
 #include "distribution.hpp"
 #include "grid.hpp"
 #include "ray.hpp"
 #include "reconstruction.hpp"
-#include "vector_sparse.hpp"
 
 using SparseMatrix = std::vector<VectorSparse>;
 using SleMatrix = std::vector<std::vector<Ray>>;
@@ -26,6 +24,7 @@ SleMatrix get_data(const std::string &path, const unsigned startTime = 0, const 
 // Station coordinates
 std::set<std::pair<float, float>> get_stations(const SleMatrix& data);
 
-void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<float> &integrals, const float error, const Solver &solver, const bool onlyPositive = true);
+void solve_sle(Grid &grid, const SparseMatrix &matrix, const std::vector<float> &integrals,
+        const float error, const Solver &solver, const bool onlyPositive = true);
 
 float radian_to_degree(const float radian);

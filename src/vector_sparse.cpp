@@ -1,7 +1,4 @@
-#include <iostream>
-
 #include "vector_sparse.hpp"
-
 
 VectorSparse operator - (const VectorSparse &a, const VectorSparse &b) {
     const auto left_size = a.size();

@@ -1,8 +1,10 @@
+#include "point.hpp"
+
 #include <cmath>
+
 #include <numeric>
 
 #include "dimension.hpp"
-#include "point.hpp"
 
 Dimension::Dimension(const float left, const float right, const unsigned intervals, const bool isInDegrees) {
     this->left = left;

@@ -1,11 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <cmath>
 #include "ray.hpp"
 
+#include <cmath>
 
 BaseRay::BaseRay(const point &station, const point &satellite, float time, float integral)
         : station(station), satellite(satellite), time(time), integral(integral) {}
+
+Ray::Ray(const point &station, const point &satellite, const float time, const float integral)
+        : BaseRay(station, satellite, time, integral) {
+    this->compute_parameters();
+}
 
 void Ray::compute_parameters() {
     const point dr = satellite - station;
@@ -19,9 +22,4 @@ void Ray::compute_parameters() {
     angle = std::acos(ac);
     thetta = std::asin(cross.R[2] / (Re + h));
     phi = std::atan2(cross.R[1], cross.R[0]);
-}
-
-Ray::Ray(const point &station, const point &satellite, const float time, const float integral)
-        : BaseRay(station, satellite, time, integral) {
-    this->compute_parameters();
 }

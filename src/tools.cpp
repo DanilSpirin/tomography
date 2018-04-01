@@ -1,10 +1,10 @@
-#include <fstream>
+#include "tools.hpp"
+
 #include <experimental/filesystem>
+#include <fstream>
 
 #include <fmt/format.h>
 #include <fmt/ostream.h>
-
-#include "tools.hpp"
 
 namespace fs = std::experimental::filesystem;
 
@@ -93,7 +93,7 @@ SleMatrix get_data(const std::string &path, const unsigned startTime, const unsi
     return data;
 }
 
-std::set<std::pair<float, float> > get_stations(const SleMatrix &data) {
+std::set<std::pair<float, float>> get_stations(const SleMatrix &data) {
     std::set<std::pair<float, float>> stations;
     ChepmanLayer chepmanLayer;
     chepmanLayer.coordinateTransformation = std::make_unique<DecartToGeographic>();

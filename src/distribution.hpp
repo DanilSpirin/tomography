@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "transformation.hpp"
 
@@ -43,7 +43,7 @@ public:
 private:
     float value(const point &R, const float t) const override;
     float nmin, nm, hm, H, d, dt;
-    
+
     std::vector<Spot> spots;
     std::vector<Wave> waves;
 };

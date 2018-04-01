@@ -1,6 +1,6 @@
-#include <cmath>
-
 #include "point.hpp"
+
+#include <cmath>
 
 point::point(const float x, const float y, const float z) : R {x, y, z} {}
 
